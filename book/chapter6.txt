@@ -1,0 +1,178 @@
+6. PARALLELISM
+
+The first TensorFlow package, appearing in November 2015, was ready to run on servers with available GPUs and executing the training operation simultaneously in them. In February 2016, an update added the capability to distribute and parallelize the processing.
+
+In this short chapter I’ll introduce how to use the GPUs. For those readers wanting to understand a little bit more of how these devices work, some references will be given in the last section, but. Given the introductory focus of this book, I’ll not enter in detail for the distributed versión, but for those readers interested some references will be given in the last section.
+
+Execution environment with GPUs
+
+The TensorFlow package supporting GPUs requires the CudaToolkit 7.0 and CUDNN 6.5 V2. For installing the environment, we suggest to visit the cuda installation[44] website, for not going deep in details, also the information is up-to-date.
+
+The way to reference those devices in TensorFlow is the following one:
+
+“/cpu:0”: To reference the server’s CPU.
+“/gpu:0”: The server’s GPU, if only one is available.
+“/gpu:1”: The second server’s GPU, and so on.
+ 
+
+To know in which devices our operations and tensors are assigned we need to create a sesion with the option log_device_placement as True. Let’s see it in the following example:
+
+import tensorflow as tf
+a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+c = tf.matmul(a, b)
+
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+printsess.run(c)
+When the reader tests this code in their computer, a similar output should appear:
+
+. . .
+Device mapping:
+/job:localhost/replica:0/task:0/gpu:0 -&gt; device: 0, name: Tesla K40c, pci bus id: 0000:08:00.0
+. . .
+b: /job:localhost/replica:0/task:0/gpu:0
+a: /job:localhost/replica:0/task:0/gpu:0
+MatMul: /job:localhost/replica:0/task:0/gpu:0
+…
+[[ 22.28.]
+[ 49.64.]]
+…
+Also, with the result of the operation, it informs to us where is executed each part.
+
+If we want a specific operation to be executed in a specific device, instead of letting the system select automatically a device we can use the variable tf.device to create a device context, so all the operations in that context will have the same device assigned.
+
+If we have more that a GPU in the system, the GPU with the lower identifier will be selected by default. In case that we want to execute operations in a different GPU, we have to specify this explicitly. For example, if we want the previous code to be executed in GPU #2 we can use tf.device(‘/gpu:2’) as shown here:
+
+import tensorflow as tf
+
+with tf.device('/gpu:2'):
+a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+c = tf.matmul(a, b)
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+printsess.run(c)
+Parallelism with several GPUs
+
+In case that we have more tan one GPU, usually we’d like to use all together to solve the same problem parallelaly. For this, we can build our model to distribute the work among several GPUs. We see it in the next example:
+
+import tensorflow as tf
+
+c = []
+for d in ['/gpu:2', '/gpu:3']:
+with tf.device(d):
+a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3])
+b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2])
+c.append(tf.matmul(a, b))
+with tf.device('/cpu:0'):
+sum = tf.add_n(c)
+
+# Creates a session with log_device_placement set to True.
+sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+print sess.run(sum)
+As we see, the code is equivalent to the previous one but now we have 2 GPUs indicated with tf.device performing a multiplication (both GPUs do the same here, to simplify the example code), and later the CPU performs the addition. Given that we set log_device_placement as true, we can see in the output how the operations are distributed through our devices[45].
+
+. . .
+Device mapping:
+/job:localhost/replica:0/task:0/gpu:0 -&gt; device: 0, name: Tesla K40c
+/job:localhost/replica:0/task:0/gpu:1 -&gt; device: 1, name: Tesla K40c
+/job:localhost/replica:0/task:0/gpu:2 -&gt; device: 2, name: Tesla K40c
+/job:localhost/replica:0/task:0/gpu:3 -&gt; device: 3, name: Tesla K40c
+. . .
+
+
+. . .
+
+Const_3: /job:localhost/replica:0/task:0/gpu:3
+I tensorflow/core/common_runtime/simple_placer.cc:289] Const_3: /job:localhost/replica:0/task:0/gpu:3
+Const_2: /job:localhost/replica:0/task:0/gpu:3
+I tensorflow/core/common_runtime/simple_placer.cc:289] Const_2: /job:localhost/replica:0/task:0/gpu:3
+MatMul_1: /job:localhost/replica:0/task:0/gpu:3
+I tensorflow/core/common_runtime/simple_placer.cc:289] MatMul_1: /job:localhost/replica:0/task:0/gpu:3
+Const_1: /job:localhost/replica:0/task:0/gpu:2
+I tensorflow/core/common_runtime/simple_placer.cc:289] Const_1: /job:localhost/replica:0/task:0/gpu:2
+Const: /job:localhost/replica:0/task:0/gpu:2
+I tensorflow/core/common_runtime/simple_placer.cc:289] Const: /job:localhost/replica:0/task:0/gpu:2
+MatMul: /job:localhost/replica:0/task:0/gpu:2
+I tensorflow/core/common_runtime/simple_placer.cc:289] MatMul: /job:localhost/replica:0/task:0/gpu:2
+AddN: /job:localhost/replica:0/task:0/cpu:0
+I tensorflow/core/common_runtime/simple_placer.cc:289] AddN: /job:localhost/replica:0/task:0/cpu:0
+[[44.56.]
+[98.128.]]
+. . .
+ 
+
+Code example with GPUs
+
+To conclude this brief chapter, we present a snippet of code inspired on the one shared by DamienAymeric in Github[46], computing An+Bn for n=10 comparing the execution time with 1 GPU against 2 GPUs, using the datetime Python package.
+
+First of all, we import the required libraries:
+
+import numpy as np
+import tensorflow as tf
+import datetime
+We create two matrix with random values, using the numpy package:
+
+A = np.random.rand(1e4, 1e4).astype('float32')
+B = np.random.rand(1e4, 1e4).astype('float32')
+
+n = 10
+Then, we create the two structures to store the results:
+
+c1 = []
+c2 = []
+Next, we define the matpow() function as follows:
+
+defmatpow(M, n):
+    if n &lt; 1: #Abstract cases where n &lt; 1
+       return M
+    else:
+       return tf.matmul(M, matpow(M, n-1))
+As we’ve seen, to execute the code in a single GPU, we have to specify this as follows:
+
+with tf.device('/gpu:0'):
+    a = tf.constant(A)
+    b = tf.constant(B)
+    c1.append(matpow(a, n))
+    c1.append(matpow(b, n))
+
+with tf.device('/cpu:0'):
+sum = tf.add_n(c1)
+
+t1_1 = datetime.datetime.now()
+
+with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
+sess.run(sum)
+t2_1 = datetime.datetime.now()
+And for the case with 2 GPUs, the code is as follows:
+
+with tf.device('/gpu:0'):
+    #compute A^n and store result in c2
+    a = tf.constant(A)
+    c2.append(matpow(a, n))
+ 
+with tf.device('/gpu:1'):
+    #compute B^n and store result in c2
+    b = tf.constant(B)
+    c2.append(matpow(b, n))
+
+with tf.device('/cpu:0'):
+    sum = tf.add_n(c2) #Addition of all elements in c2, i.e. A^n + B^n
+    t1_2 = datetime.datetime.now()
+
+with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
+    # Runs the op.
+    sess.run(sum)
+t2_2 = datetime.datetime.now()
+Finally we print the results for the registered computation time:
+
+print "Single GPU computation time: " + str(t2_1-t1_1)
+print "Multi GPU computation time: " + str(t2_2-t1_2)
+Distributed version of TensorFlow
+
+As I previously said at the beginning of this chapter, on February 2016 Google released the distributed version of TensorFlow, which is supported by gRPC, a high performance open source RPC framework for inter-process communication (the same protocol used by TensorFlow Serving).
+
+For its usage, the binaries must be built because the package only provides the sources at this time. Given the introductory scope of this book, I will not explain it in the distributed version, but if the reader wants to learn about it, I recommend to start with the oficial site for this distributed version of TensorFlow[47].
+
+As in previous chapters, the code used in this one, can be found in the book’s Github[48]. I hope that this chapter has been illustrative enough to understand how to speedup the code using GPUs.
+
+[contents link]
