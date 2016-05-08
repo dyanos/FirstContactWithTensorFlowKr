@@ -3,7 +3,7 @@
 
 The first TensorFlow package, appearing in November 2015, was ready to run on servers with available GPUs and executing the training operation simultaneously in them. In February 2016, an update added the capability to distribute and parallelize the processing.
 
-2015년 11월에 출시된 첫 번째 TensorFlow 패키지는 훈련 조작이 GPU와 서버에서 동시에 실행되었다. 2016년 2월에 업데이트 되면서 배포와 병렬처리 기능이 추가 되었다.
+2015년 11월에 출시된 첫 번째 TensorFlow 패키지는 훈련 조작(training operation)이 GPU와 서버에서 동시에 실행되었다. 2016년 2월에 업데이트 되면서 분배(distribution)와 병렬처리 기능이 추가 되었다.
 
 In this short chapter I’ll introduce how to use the GPUs. For those readers wanting to understand a little bit more of how these devices work, some references will be given in the last section, but. Given the introductory focus of this book, I’ll not enter in detail for the distributed versión, but for those readers interested some references will be given in the last section.
 
