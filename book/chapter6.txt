@@ -41,7 +41,7 @@ sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 printsess.run(c)
 
 When the reader tests this code in their computer, a similar output should appear:
-자신의 컴퓨터로 위의 코드를 테스트하면 다음과 유사한 출력이 나타나야 한다:
+자신의 컴퓨터로 위의 코드를 테스트하면 다음과 같은 출력이 나타나야 한다:
 
 . . .
 Device mapping:
@@ -76,7 +76,7 @@ Parallelism with several GPUs
 여러 GPU에서 병렬화
 
 In case that we have more than one GPU, usually we’d like to use all together to solve the same problem parallelly. For this, we can build our model to distribute the work among several GPUs. We see it in the next example:
-한 개 이상의 GPU가 있을 경우 동일한 문제를 병렬적으로 동시에 해결하는 것은 일반적이다. 이를 위해 작업물(work)을 여러 GPU마다 분배하는 모델을 구축할 수 있다. 다음 예제를 통해 살펴보자:
+한 개 이상의 GPU가 있을 경우 동일한 문제를 병렬적으로 동시에 해결하는 것이 일반적이다. 이를 위해 작업물(work)을 여러 GPU마다 분배하는 모델을 구축할 수 있다. 다음 예제를 통해 살펴보자:
 
 import tensorflow as tf
 
@@ -94,6 +94,7 @@ sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 print sess.run(sum)
 
 As we see, the code is equivalent to the previous one but now we have 2 GPUs indicated with tf.device performing a multiplication (both GPUs do the same here, to simplify the example code), and later the CPU performs the addition. Given that we set log_device_placement as true, we can see in the output how the operations are distributed through our devices[45].
+볼 수 있듯이 코드는 이전의 것과 동일하지만, 여기서 tf.device로 표시된 2개의 GPU는 곱셈을 수행하고 CPU는 덧셈을 수행한다. log_device_placement가 참으로 설정되어 있으므로 장치마다 조작이 어떻게 분배되었는지 확인할 수 있다. 
 
 . . .
 Device mapping:
@@ -126,10 +127,13 @@ I tensorflow/core/common_runtime/simple_placer.cc:289] AddN: /job:localhost/repl
  
 
 Code example with GPUs
+GPU code 예시
 
 To conclude this brief chapter, we present a snippet of code inspired on the one shared by DamienAymeric in Github[46], computing An+Bn for n=10 comparing the execution time with 1 GPU against 2 GPUs, using the datetime Python package.
+본 장을 마무리하기 위해,  Github의 DamienAymeric이 공유한 코드를 제시한다. 이것은 날짜 Python 패키지를 사용하여 1개의 GPU와 2개의 GPU에서 n=10일 때 An+Bn을 계산하는데 걸린 시간을 비교하는 것이다.
 
 First of all, we import the required libraries:
+먼저, 필요한 라이브러리를 불러온다.
 
 import numpy as np
 import tensorflow as tf
