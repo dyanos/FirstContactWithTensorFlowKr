@@ -30,8 +30,7 @@ TensorFlow에서 장치를 참조하는 방법은 다음과 같다.
 “/gpu:1”: 서버 GPU(2개일 경우, 숫자는 서버 GPU 개수)
 
 To know in which devices our operations and tensors are assigned we need to create a sesion with the option log_device_placement as True. Let’s see it in the following example:
-
-작동 장치와 tensor가 어디로 할당되었는지 알기 위해서는 세션을 생성해야 하는데 이때 log_device_placement는 참으로 되어 있어야 한다. 이 과정을 다음 예제를 통해 살펴보자.
+작동 장치와 tensor가 어디로 할당되었는지 알기 위해서는 세션을 생성해야 하는데 이때 log_device_placement는 참으로 되있어야 한다. 이 과정을 다음 예제를 통해 살펴보자.
 
 import tensorflow as tf
 a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
@@ -40,7 +39,9 @@ c = tf.matmul(a, b)
 
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 printsess.run(c)
+
 When the reader tests this code in their computer, a similar output should appear:
+자신의 컴퓨터로 위의 코드를 테스트하면 다음과 유사한 출력이 나타나야 한다:
 
 . . .
 Device mapping:
@@ -54,10 +55,13 @@ MatMul: /job:localhost/replica:0/task:0/gpu:0
 [ 49.64.]]
 …
 Also, with the result of the operation, it informs to us where is executed each part.
+또한 조작의 결과와 함께 각 부분이 실행된 장소를 알 수 있다.
 
 If we want a specific operation to be executed in a specific device, instead of letting the system select automatically a device we can use the variable tf.device to create a device context, so all the operations in that context will have the same device assigned.
+시스템이 자동적으로 장치를 선택하지 않고 특정한 조작(operation)이 어떤 장치에서 실행되길 원한다면 tf.device 변수를 이용해 장치 컨텍스트를 생성할 수 있다. 그러면 컨텍스트의 모든 조작은 동일한 장치에 할당된다.
 
 If we have more that a GPU in the system, the GPU with the lower identifier will be selected by default. In case that we want to execute operations in a different GPU, we have to specify this explicitly. For example, if we want the previous code to be executed in GPU #2 we can use tf.device(‘/gpu:2’) as shown here:
+시스템에 여러 GPU가 있을 경우, 낮은 식별자로 된 GPU가 기본(default)으로 선택된다. 다른 GPU에서 조작을 실행하려면 명시적으로 지정하는게 필요하다. 예를 들어, 앞에서 언급된 코드가 GPU #2에서 실행되게 하려면 아래와 같이 tf.device('/gpu:2')를 이용한다. 
 
 import tensorflow as tf
 
@@ -67,9 +71,12 @@ b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
 c = tf.matmul(a, b)
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 printsess.run(c)
-Parallelism with several GPUs
 
-In case that we have more tan one GPU, usually we’d like to use all together to solve the same problem parallelaly. For this, we can build our model to distribute the work among several GPUs. We see it in the next example:
+Parallelism with several GPUs
+여러 GPU에서 병렬화
+
+In case that we have more than one GPU, usually we’d like to use all together to solve the same problem parallelly. For this, we can build our model to distribute the work among several GPUs. We see it in the next example:
+한 개 이상의 GPU가 있을 경우 동일한 문제를 병렬적으로 동시에 해결하는 것은 일반적이다. 이를 위해 작업물(work)을 여러 GPU마다 분배하는 모델을 구축할 수 있다. 다음 예제를 통해 살펴보자:
 
 import tensorflow as tf
 
@@ -85,6 +92,7 @@ sum = tf.add_n(c)
 # Creates a session with log_device_placement set to True.
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 print sess.run(sum)
+
 As we see, the code is equivalent to the previous one but now we have 2 GPUs indicated with tf.device performing a multiplication (both GPUs do the same here, to simplify the example code), and later the CPU performs the addition. Given that we set log_device_placement as true, we can see in the output how the operations are distributed through our devices[45].
 
 . . .
