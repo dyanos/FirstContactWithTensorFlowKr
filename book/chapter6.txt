@@ -126,24 +126,32 @@ First of all, we import the required libraries:
 import numpy as np
 import tensorflow as tf
 import datetime
+
 We create two matrix with random values, using the numpy package:
+numpy 패키지를 이용해 랜덤 값으로 이루어진 두 개의 행렬을 생성한다:
 
 A = np.random.rand(1e4, 1e4).astype('float32')
 B = np.random.rand(1e4, 1e4).astype('float32')
 
 n = 10
+
 Then, we create the two structures to store the results:
+그리고 나서 결과를 저장할 두 개의 구조(structure)을 생성한다:
 
 c1 = []
 c2 = []
+
 Next, we define the matpow() function as follows:
+다음으로 matpow() 함수를 다음과 같이 정의한다:
 
 defmatpow(M, n):
     if n &lt; 1: #Abstract cases where n &lt; 1
        return M
     else:
        return tf.matmul(M, matpow(M, n-1))
+       
 As we’ve seen, to execute the code in a single GPU, we have to specify this as follows:
+확인한 것처럼 한 개의 GPU를 실행하기 위해서는 다음과 같이 명시해야 한다:
 
 with tf.device('/gpu:0'):
     a = tf.constant(A)
@@ -159,7 +167,9 @@ t1_1 = datetime.datetime.now()
 with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
 sess.run(sum)
 t2_1 = datetime.datetime.now()
+
 And for the case with 2 GPUs, the code is as follows:
+GPU가 2개인 경우 코드는 다음과 같다.
 
 with tf.device('/gpu:0'):
     #compute A^n and store result in c2
@@ -179,16 +189,27 @@ with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
     # Runs the op.
     sess.run(sum)
 t2_2 = datetime.datetime.now()
+
 Finally we print the results for the registered computation time:
+마지막으로 등록된 연산 시간에 대한 결과를 출력한다.
 
 print "Single GPU computation time: " + str(t2_1-t1_1)
 print "Multi GPU computation time: " + str(t2_2-t1_2)
+
 Distributed version of TensorFlow
+
+TensonFlow 배포 버전
 
 As I previously said at the beginning of this chapter, on February 2016 Google released the distributed version of TensorFlow, which is supported by gRPC, a high performance open source RPC framework for inter-process communication (the same protocol used by TensorFlow Serving).
 
+앞에서 언급했듯이 2016년 2월 구글은 gRPC가 지원하는 TensorFlow 배포 버전을 발표했는데 여기서 gRPC란 프로세스 간 통신을 위한 고성능 오픈 소스 RPC 프레임워크를 말한다(TensorFlow 서비스에서 사용되는 도일한 프로토콜).
+
 For its usage, the binaries must be built because the package only provides the sources at this time. Given the introductory scope of this book, I will not explain it in the distributed version, but if the reader wants to learn about it, I recommend to start with the oficial site for this distributed version of TensorFlow[47].
 
+TensorFlow 배포 버전을 사용하려면 바이나리를 구축해야 한다. 패키지가 그 시간(바이나리와 관련된 시간)에 한해 소스를 제공하기 때문이다. 이에 대한 자세한 설명은 TensorFlow 배포 버전의 공식 사이트에서 확인할 수 있다. 
+
 As in previous chapters, the code used in this one, can be found in the book’s Github[48]. I hope that this chapter has been illustrative enough to understand how to speedup the code using GPUs.
+
+이전 장과 같이, 배포 버전이 적용된 코드는 본 저서의 Github에서 찾을 수 있다. 이번 장을 통해 GPU를 사용한 코드에서 시간을 단축시키는 방법을 이해할 수 있길 바란다. 
 
 [contents link]
