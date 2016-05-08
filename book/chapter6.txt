@@ -1,5 +1,5 @@
 6. PARALLELISM
-6. 병렬(처리)
+6. 병렬화
 
 The first TensorFlow package, appearing in November 2015, was ready to run on servers with available GPUs and executing the training operation simultaneously in them. In February 2016, an update added the capability to distribute and parallelize the processing.
 
