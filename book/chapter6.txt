@@ -2,29 +2,23 @@
 6. 병렬화
 
 The first TensorFlow package, appearing in November 2015, was ready to run on servers with available GPUs and executing the training operation simultaneously in them. In February 2016, an update added the capability to distribute and parallelize the processing.
-
 2015년 11월에 출시된 첫 번째 TensorFlow 패키지는 훈련 조작(training operation)이 GPU와 서버에서 동시에 실행되었다. 2016년 2월에 업데이트 되면서 분배(distribution)와 병렬처리 기능이 추가 되었다.
 
 In this short chapter I’ll introduce how to use the GPUs. For those readers wanting to understand a little bit more of how these devices work, some references will be given in the last section, but. Given the introductory focus of this book, I’ll not enter in detail for the distributed versión, but for those readers interested some references will be given in the last section.
-
 이번 장은 GPU 사용 방법을 소개한다. 마지막 부분에 제시된 일부 참조는 GPU가 어떻게 작동되는지 좀 더 알고자 하는 독자를 위한 것이다. 본 저서는 간략한 소개에 초점이 맞춰져 있으므로 배포 버전에 대한 세부적인 내용은 마지막 섹션에서 제공된 참조를 통해 도움 받을 수 있다.
 
 Execution environment with GPUs
-
 GPU 환경 실행
 
 The TensorFlow package supporting GPUs requires the CudaToolkit 7.0 and CUDNN 6.5 V2. For installing the environment, we suggest to visit the cuda installation[44] website, for not going deep in details, also the information is up-to-date.
-
 TensorFlow 패키지가 지원되는 GPU는 CUdaToolkit 7.0과 CUDNN 6.5 V2를 요구한다. 설치 환경을 위해 cuta 설치 웹 사이트 방문을 권하며 최신 정보에서 세부적인 사항을 확인하면 된다.
 
 The way to reference those devices in TensorFlow is the following one:
-
 TensorFlow에서 장치를 참조하는 방법은 다음과 같다.
 
 “/cpu:0”: To reference the server’s CPU.
 “/gpu:0”: The server’s GPU, if only one is available.
 “/gpu:1”: The second server’s GPU, and so on.
-
 “/cpu:0”: 서버 CPU 참조
 “/gpu:0”: 서버 GPU(1개일 경우)
 “/gpu:1”: 서버 GPU(2개일 경우, 숫자는 서버 GPU 개수)
