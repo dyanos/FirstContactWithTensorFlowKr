@@ -1,44 +1,50 @@
 3. CLUSTERING IN TENSORFLOW
+3. 텐서 플로우의 군집화
 
 Linear regression, which has been presented in the previous chapter, is a supervised learning algorithm in which we use the data and output values (or labels) to build a model that fits them. But we haven’t always tagged data, and despite this we also want analyze them in some way. In this case, we can use an unsupervised learning algorithm as clustering. The clustering method is widely used because it is often a good approach for preliminary screening data analysis.
+이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 피팅(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 우리는 항상 키워드로 분류된 자료를 갖고 있지 않는데다가, 이러한 데이터를 분석하고 싶어한다. 이러한 경우 우리는 군집화에 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
 
 In this chapter, I will present the clustering algorithm called K-means. It is surely the most popular and widely used to automatically group the data into coherent subsets so that all the elements in a subset are more similar to each other than with the rest. In this algorithm, we do not have any target or outcome variable to predict estimations.
+이번 장에서, K평균 알고리즘을 설명 할 것이다. 이것은 데이터를 자동적으로 질서있는 집합으로 무리지을 때 가장 인기 있고 폭 넓게 쓰이고 있다. 각 부분 집합들의 모든 요소들은 나머지 집합의 요소들 보다 해당 집합내에서 보다 유사성을 갖는다. 
 
 I will also use this chapter to achieve progress in the knowledge of TensorFlow and go into more detail in the basic data structure called tensor. I will start by explaining what this type of data is like and present the transformations that can be performed on it. Then, I will show the use of K-means algorithm in a case study using tensors.
-
+나는 이번 장을 통해서 텐서 플로우에 대한 지식을 확장 시킬 것이고 텐서라고 불리는 기초 구조에 대해 좀 더 구체적으로 진입할 것이다. 나는 이 데이터 형태가 어떠한 것인지 설명하고 그것에 대한 변환 이행을 보여줄 것이다. 
 
 Basic data structure: tensor
+기본 데이터 구조 : 텐서
 
 TensorFlow programs use a basic data structure called tensor to represent all of their datum. A tensor can be considered a dynamically-sized multidimensional data arrays that have as a properties a static data type, which can be from boolean or string to a variety of numeric types. Below is a table of the main types and their equivalent in Python.
-
+텐서플로우 프로그램들은 텐서라는 기본 데이터형을 이용하는데, 이것으로 그들의 모든 데이터 자료를 표현한다. 텐서는 부울이나 문자열, 다양한 수치형 데이터 같은 정적 데이터 속성을 갖는 동적 크기의 다차원 배열이라고 논할 수 있다. 
  
+ Type in TensorFlow | Type in Python | Description
+--------------------|----------------|---------------
+ DT_FLOAT           | tf.float32     | Floating point of 32 bits
+ DT_INT16           | tf.int16       | Integer of 16 bits
+ DT_INT32           | tf.int32       | Integer of 32 bits
+ DT_INT64           | tf.int64       | Integer of 64 bits
+ DT_STRING          | tf.string      | String
+ DT_BOOL            | tf.bool        | Boolean
 
- Type in
- TensorFlow
- Type in
- Python
- Description
- DT_FLOAT   tf.float32  Floating point of 32 bits
- DT_INT16   tf.int16    Integer of 16 bits
- DT_INT32   tf.int32    Integer of 32 bits
- DT_INT64   tf.int64    Integer of 64 bits
- DT_STRING  tf.string   String
- DT_BOOL    tf.bool Boolean
  In addition, each tensor has a rank, which is the number of its dimensions. For example, the following tensor (defined as a list in Python) has rank 2:
+ 참고로, 각기 텐서는 랭크를 갖는데 이것은 그것의 차수를 말한다. 예를 들어 아래 텐서에서 (파이썬 list로 정의된) 랭크 2를 갖는다. 
 
  t = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
  Tensors can have any rank. A rank 2 tensor is usually considered a matrix, and a rank 1 tensor would be a vector. Rank 0 is considered a scalar value.
+ 텐서는 어느 랭크나 가질수 있다. 랭크 2를 갖는 텐서는 행렬이라고 생각할 수 있고 랭크 1을 갖는 텐서는 벡터라 할 수 있따. 랭크 0 는 스칼라라 할 수 있다. 
 
  TensorFlow documentation uses three types of naming conventions to describe the dimension of a tensor: Shape, Rank and Dimension Number. The following table shows the relationship between them in order to make easier the Tensor Flow documentation’s traking easier:
+ 텐서플로우 문서는 형태, 랭크, 차수 라는 3 가지 형태의 네이밍 조항을 쓰고 있는다.  아래 표는 텐서 플로우 문서를 쉽게 이해할 수 있도록 이들의 관계를 표현한 것이다. 
 
- Shape  Rank    Dimension Number
- [] 0   0-D
- [D0]   1   1-D
- [D0, D1]   2   2-D
- [D0, D1, D2]   3   3-D
- …  …   …
- [D0, D1, … Dn] n   n-D
+ Shape             | Rank | Dimension Number
+ --------------    |------|--------------------
+ []                |    0 | 0-D
+ [D0]              |    1 | 1-D
+ [D0, D1]          |    2 | 2-D
+ [D0, D1, D2]      |    3 | 3-D
+           ~       |    ~ |  ~
+ [D0, D1,  ~ Dn]   |    n | n-D
+ 
  These tensors can be manipulated with a series of transformations that supply the TensorFlow package. Below, we discuss some of them in the next table.
 
  Throughout this chapter we will go into more detail on some of them. A comprehensive list of transformations and details of each one can be found on the official website of TensorFlow, Tensor Transformations[18].
