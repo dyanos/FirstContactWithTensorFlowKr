@@ -1,16 +1,23 @@
-CLOSING
-
-Exploration is the engine that drives innovation. Innovation drives economic growth. So let’s all go exploring.
-
-Edith Widder
-
+ CLOSING
+ +마치며
+  
+  Exploration is the engine that drives innovation. Innovation drives economic growth. So let’s all go exploring.
+ -
+ +탐험은 혁신으로 이끄는 엔진입니다. 혁신은 경제 성장을 이끕니다. 자 우리 모두 함께 탐험을 떠납시다. 
+  Edith Widder
+ -
+ +에디쓰 위더(TED 2013 "우리가 어떻게 거대 오징어를 발견했는가?" 발표자. 해양학자이며 발명가)
+   
+   
+  Here I have presented an introductory guide explaining how to use TensorFlow, providing a warm-up with this technology that will undoubtedly have a leading role in the looming technological scenario. There are, indeed, other alternatives to TensorFlow, and each one suit the best a particular problem; I want to invite the reader to explore beyond the TensorFlow package.
+ +여기에 나는 텐서플로우를 어떻게 사용할 것인지를 설명하는 입문 가이드를 제시했으며, 어렴풋한 기술적인 시나리오 안에서 의심의 여지 없이 하나의 선도적인 역할을 하게 될 이 기술에 대한 워밍업을 제공했다.
  
-
-Here I have presented an introductory guide explaining how to use TensorFlow, providing a warm-up with this technology that will undoubtedly have a leading role in the looming technological scenario. There are, indeed, other alternatives to TensorFlow, and each one suit the best a particular problem; I want to invite the reader to explore beyond the TensorFlow package.
-
 There is lots of diversity in these packages. Some are more specialized, others less. Some are more difficult to install than others. Some of them are very well documented while others , despite working well, are more difficult to find detailed information about how to use them.
+이러한 유형의 패키지들에는 매우 많은 다양성이 있다. 일부는 더 많이 특화되어 있으며, 다른 것들은 덜 특화되어 있다. 일부는 다른 것들보다 설치하기 더 많이 어렵다. 그들 중 일부는 매우 잘 문서화 되어 있지만 다른 것들은 잘 작동함에도 불구하고 어떻게 사용하는지에 대한 자세한 정보를 찾기 어렵다.
 
 An important thing: on the following day that TensorFlow was release by Google, I read in a tweet[49] that during the period 2010-2014 a new Deep learning package was released every 47 days, and in 2015 releases were published every 22 days. It is mpressive, isn’t it? As I advanced in the first chapter of the book, as a starting point for the reader, an extensive list can be found at Awesome Deep Learning[50].
+한가지 중요한 사실: 구글에 의해 텐서플로우가 배포된 다음날 나는 트위터[49]에서 2010-2014 기간 중에 새로운 딥러닝 패키지가 매 47일마다 배포되었고, 2015년도에는 매 22일마다 배포판이 나왔다. 이것은 인상적인 일이다, 그렇지 않은가? 내가 책의 첫번째 장에서 독자의 시작 지점으로써 미리 말한대로, Awesome Deep Learning[50]에서 광대한 딥러닝 패키지 목록을 찾을 수 있다.
+
 
 Without any doubt, the landscape of Deep Learning was impacted in November 2015 with the release of Google’s TensorFlow, being now the most popular open source machine learning library on Github by a wide margin[51].
 
