@@ -2,7 +2,7 @@
 3. 텐서 플로우의 군집화
 
 Linear regression, which has been presented in the previous chapter, is a supervised learning algorithm in which we use the data and output values (or labels) to build a model that fits them. But we haven’t always tagged data, and despite this we also want analyze them in some way. In this case, we can use an unsupervised learning algorithm as clustering. The clustering method is widely used because it is often a good approach for preliminary screening data analysis.
-이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 피팅(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 우리는 항상 키워드로 분류된 자료를 갖고 있지 않는데다가, 이러한 데이터를 분석하고 싶어한다. 이러한 경우 우리는 군집화에 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
+이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 피팅(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 우리의 데이터가 항상 키워드로 분류되어 있지 않음에도 불구하고  이러한 데이터를 분석하고 싶어한다. 이러한 경우 우리는 군집화에 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
 
 In this chapter, I will present the clustering algorithm called K-means. It is surely the most popular and widely used to automatically group the data into coherent subsets so that all the elements in a subset are more similar to each other than with the rest. In this algorithm, we do not have any target or outcome variable to predict estimations.
 이번 장에서, K평균 알고리즘을 설명 할 것이다. 이것은 데이터를 자동적으로 질서있는 집합으로 무리지을 때 가장 인기 있고 폭 넓게 쓰이고 있다. 각 부분 집합들의 모든 요소들은 나머지 집합의 요소들 보다 해당 집합내에서 보다 유사성을 갖는다. 
@@ -14,7 +14,7 @@ Basic data structure: tensor
 기본 데이터 구조 : 텐서
 
 TensorFlow programs use a basic data structure called tensor to represent all of their datum. A tensor can be considered a dynamically-sized multidimensional data arrays that have as a properties a static data type, which can be from boolean or string to a variety of numeric types. Below is a table of the main types and their equivalent in Python.
-텐서플로우 프로그램들은 텐서라는 기본 데이터형을 이용하는데, 이것으로 그들의 모든 데이터 자료를 표현한다. 텐서는 부울이나 문자열, 다양한 수치형 데이터 같은 정적 데이터 속성을 갖는 동적 크기의 다차원 배열이라고 논할 수 있다. 
+텐서플로우 프로그램들은 텐서라는 기본 데이터형을 이용하는데, 이것으로 그들의 모든 데이터 자료를 표현한다. 텐서는 부울이나 문자열, 다양한 수치형 데이터 같은 정적 데이터 속성을 갖는 동적 크기의 다차원 배열이라고 논할 수 있다.  아래 표는 주요 데이터 형과 파이썬에 대응하는 데이터형에 대한 것이다.
  
  Type in TensorFlow | Type in Python | Description
 --------------------|----------------|---------------
@@ -51,47 +51,48 @@ TensorFlow programs use a basic data structure called tensor to represent all of
 
   
 
-  Operation Description
-  tf.shape  To find a shape of a tensor
-  tf.size   To find the size of a tensor
-  tf.rank   To find a rank of a tensor
-  tf.reshape    To change the shape of a tensor keeping the same elements contained
-  tf.squeeze    To delete in a tensor dimensions of size 1
-  tf.expand_dims    To insert a dimension to a tensor 
-  tf.slice  To remove a portions of a tensor
-  tf.split  To divide a tensor into several tensors along one dimension
-  tf.tile   To create a new tensor replicating a tensor multiple times
-  tf.concat To concatenate tensors in one dimension
-  tf.reverse    To reverse a specific dimension of a tensor
-  tf.transpose  To transpose dimensions in a tensor
-  tf.gather To collect portions according to an index
+  Operation      | Description
+  ---------------|--------------------------------------------------------------------------
+  tf.shape       | To find a shape of a tensor
+  tf.size        | To find the size of a tensor
+  tf.rank        | To find a rank of a tensor
+  tf.reshape     | To change the shape of a tensor keeping the same elements contained
+  tf.squeeze     | To delete in a tensor dimensions of size 1
+  tf.expand_dims | To insert a dimension to a tensor 
+  tf.slice       | To remove a portions of a tensor
+  tf.split       | To divide a tensor into several tensors along one dimension
+  tf.tile        | To create a new tensor replicating a tensor multiple times
+  tf.concat      | To concatenate tensors in one dimension
+  tf.reverse     | To reverse a specific dimension of a tensor
+  tf.transpose   | To transpose dimensions in a tensor
+  tf.gather      | To collect portions according to an index
    
 
-   For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
+For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
 
-   vectors = tf.constant(conjunto_puntos)
-   extended_vectors = tf.expand_dims(vectors, 0)
-   In this case, tf.expand_dims inserts a dimension into a tensor in the one given in the argument (the dimensions start at zero).
+  vectors = tf.constant(conjunto_puntos)
+  extended_vectors = tf.expand_dims(vectors, 0)
+  In this case, tf.expand_dims inserts a dimension into a tensor in the one given in the argument (the dimensions start at zero).
 
-   Visually, the above transformation is as follows:
+ Visually, the above transformation is as follows:
 
-   image023
+ image023
 
-   As you can see, we now have a 3D tensor, but we cannot determine the size of the new dimension D0 based on function arguments.
+As you can see, we now have a 3D tensor, but we cannot determine the size of the new dimension D0 based on function arguments.
 
-   If we obtain the shape of this tensor with the get_shape() operation, we can see that there is no associated size:
+If we obtain the shape of this tensor with the get_shape() operation, we can see that there is no associated size:
 
-   print expanded_vectors.get_shape()
+  print expanded_vectors.get_shape()
 
-   It appears on the screen like:
+It appears on the screen like:
 
-   TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
+  TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
 
-   Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting, many mathematical manipulation functions of tensors (as presented in the first chapter), are able to discover for themselves the size in the dimension which unspecific size and assign to it this deduced value.
+ Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting, many mathematical manipulation functions of tensors (as presented in the first chapter), are able to discover for themselves the size in the dimension which unspecific size and assign to it this deduced value.
 
-   Data Storage in TensorFlow
+Data Storage in TensorFlow
 
-   Following the presentation of TensorFlow’s package, broadly speaking there are three main ways of obtaining data on a TensorFlow program:
+ Following the presentation of TensorFlow’s package, broadly speaking there are three main ways of obtaining data on a TensorFlow program:
 
    From data files.
    Data preloaded as constants or variables.
