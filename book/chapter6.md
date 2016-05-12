@@ -13,7 +13,7 @@ Execution environment with GPUs
 GPU 환경 실행
 
 The TensorFlow package supporting GPUs requires the CudaToolkit 7.0 and CUDNN 6.5 V2. For installing the environment, we suggest to visit the cuda installation[44] website, for not going deep in details, also the information is up-to-date.
-TensorFlow 패키지가 지원되는 GPU는 CUdaToolkit 7.0과 CUDNN 6.5 V2를 요구한다. 설치 환경을 위해 cuta 설치 웹 사이트를 방문하길 권하며 그 사이트의 최신 정보를 통해 세부적인 사항을 확인하길 바란다.
+TensorFlow 패키지가 지원되는 GPU는 CUdaToolkit 7.0과 CUDNN 6.5 V2를 요구한다. 설치 환경을 위해 cuda 설치 웹 사이트를 방문하길 권하며 그 사이트의 최신 정보를 통해 세부적인 사항을 확인하길 바란다.
 
 The way to reference those devices in TensorFlow is the following one:
 TensorFlow에서 장치를 참조하는 방법은 다음과 같다.
