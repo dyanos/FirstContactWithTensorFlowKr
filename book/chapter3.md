@@ -112,7 +112,7 @@ As a variable using Variable(…)
 TensorFlow package offers different operations that can be used to generate constants. In the table below you can find a summary of the most important:
 
 Operation      | Description
------------------------------------------------------------------------------------------------------
+---------------|-------------------------------------------------------------------------------------
 tf.zeros_like  | Creates a tensor with all elements initialized to 0
 tf.ones_like   | Creates a tensor with all elements initialized to 1
 tf.fill        | Creates a tensor with all elements initialized to a scalar value given as argument
@@ -123,7 +123,7 @@ In TensorFlow, during the training process of the models, the parameters are mai
      
 
 Operation           | Description
----------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------|------------------------------------------------------------------------------------------------------------------------------------
 tf.random_normal    | Random values with a normal distribution
 tf.truncated_normal | Random values with a normal distribution but eliminating those values whose magnitude is more than 2 times the standard deviation
 tf.random_uniform   | Random values with a uniform distribution
@@ -325,7 +325,7 @@ The sqr tensor contains the square of those. In the distance tensor we can see t
 I use this example to explain that TensorFlow provides several operations which can be used to perform mathematical operations that reduce dimensions of a tensor as in the case of tf.reduce_sum. In the table below you can find a summary of the most important ones:
 
 Operation      | Description
---------------------------------------------------------------------------
+---------------|----------------------------------------------------------
 tf.reduce_sum  | Computes the sum of the elements along one dimension
 tf.reduce_prod | Computes the product of the elements along one dimension
 tf.reduce_min  | Computes the minimum of the elements along one dimension
@@ -335,7 +335,7 @@ tf.reduce_mean | Computes the mean of the elements along one dimension
 Finally, the assignation is achieved with tf.argmin, which returns the index with the minimum value of the tensor dimension (in our case D0, which remember that was the centroid). We also have the tf.argmax operation:
 
 Operation  |  Description
--------------------------------------------------------------------------------------------------
+-----------|-------------------------------------------------------------------------------------
 tf.argmin  |  Returns the index of the element with the minimum value along tensor dimension
 tf.argmax  |  Returns the index of the element with the maximum value of the tensor dimension
 
