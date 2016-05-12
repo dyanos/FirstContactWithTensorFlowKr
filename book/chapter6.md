@@ -86,7 +86,9 @@ c.append(tf.matmul(a, b))
 with tf.device('/cpu:0'):
 sum = tf.add_n(c)
 
-# Creates a session with log_device_placement set to True.
+Creates a session with log_device_placement set to True.
+log_device_placement를 참으로 하여 세션을 생성한다.
+
 sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 print sess.run(sum)
 
