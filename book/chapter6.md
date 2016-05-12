@@ -1,8 +1,10 @@
+번역자: 김현서, Hyunseo Kim(boon0720@gmail.com)
+
 6. PARALLELISM
 6. 병렬화
 
 The first TensorFlow package, appearing in November 2015, was ready to run on servers with available GPUs and executing the training operation simultaneously in them. In February 2016, an update added the capability to distribute and parallelize the processing.
-2015년 11월에 출시된 첫 번째 TensorFlow 패키지는 훈련 조작(training operation)이 GPU와 서버에서 동시에 실행되었다. 2016년 2월에 업데이트 되면서 분배(distribution)와 병렬처리 기능이 추가 되었다.
+2015년 11월에 출시된 첫 번째 TensorFlow 패키지는 훈련 조작(training operation)이 GPU와 서버에서 동시에 실행되었다. 추후 2016년 2월에 업데이트 되면서 배포(distribution)와 병렬처리 기능이 추가 되었다.
 
 In this short chapter I’ll introduce how to use the GPUs. For those readers wanting to understand a little bit more of how these devices work, some references will be given in the last section, but. Given the introductory focus of this book, I’ll not enter in detail for the distributed versión, but for those readers interested some references will be given in the last section.
 이번 장은 GPU 사용 방법을 소개한다. 마지막 부분에 제시된 일부 참조는 GPU가 어떻게 작동되는지 좀 더 알고자 하는 독자를 위한 것이다. 본 저서는 간략한 소개에 초점이 맞춰져 있으므로 배포 버전에 대한 세부적인 내용은 마지막 섹션에서 제공된 참조를 통해 도움 받을 수 있다.
@@ -11,7 +13,7 @@ Execution environment with GPUs
 GPU 환경 실행
 
 The TensorFlow package supporting GPUs requires the CudaToolkit 7.0 and CUDNN 6.5 V2. For installing the environment, we suggest to visit the cuda installation[44] website, for not going deep in details, also the information is up-to-date.
-TensorFlow 패키지가 지원되는 GPU는 CUdaToolkit 7.0과 CUDNN 6.5 V2를 요구한다. 설치 환경을 위해 cuta 설치 웹 사이트 방문을 권하며 최신 정보에서 세부적인 사항을 확인하면 된다.
+TensorFlow 패키지가 지원되는 GPU는 CUdaToolkit 7.0과 CUDNN 6.5 V2를 요구한다. 설치 환경을 위해 cuta 설치 웹 사이트를 방문하길 권하며 그 사이트의 최신 정보를 통해 세부적인 사항을 확인하길 바란다.
 
 The way to reference those devices in TensorFlow is the following one:
 TensorFlow에서 장치를 참조하는 방법은 다음과 같다.
@@ -24,7 +26,7 @@ TensorFlow에서 장치를 참조하는 방법은 다음과 같다.
 “/gpu:1”: 서버 GPU(2개일 경우, 숫자는 서버 GPU 개수)
 
 To know in which devices our operations and tensors are assigned we need to create a sesion with the option log_device_placement as True. Let’s see it in the following example:
-작동 장치와 tensor가 어디로 할당되었는지 알기 위해서는 세션을 생성해야 하는데 이때 log_device_placement는 참으로 되있어야 한다. 이 과정을 다음 예제를 통해 살펴보자.
+작동 장치와 tensor가 어디로 할당되었는지 알기 위해서는 세션을 생성해야 하는데 이때 log_device_placement는 참으로 되있어야 한다. 이러한 과정을 다음 예제를 통해 살펴보자.
 
 import tensorflow as tf
 a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
@@ -52,10 +54,10 @@ Also, with the result of the operation, it informs to us where is executed each 
 또한 조작의 결과와 함께 각 부분이 실행된 장소를 알 수 있다.
 
 If we want a specific operation to be executed in a specific device, instead of letting the system select automatically a device we can use the variable tf.device to create a device context, so all the operations in that context will have the same device assigned.
-시스템이 자동적으로 장치를 선택하지 않고 특정한 조작(operation)이 어떤 장치에서 실행되길 원한다면 tf.device 변수를 이용해 장치 컨텍스트를 생성할 수 있다. 그러면 컨텍스트의 모든 조작은 동일한 장치에 할당된다.
+시스템에서 자동적으로 장치를 선택하는 것이 아니라 어떤 장치에서 특정한 조작을 실행하길 원한다면 tf.device 변수를 이용해 장치 컨텍스트를 생성하면 된다. 이렇게 하면 컨텍스트의 모든 조작은 동일한 장치에 할당된다.
 
 If we have more that a GPU in the system, the GPU with the lower identifier will be selected by default. In case that we want to execute operations in a different GPU, we have to specify this explicitly. For example, if we want the previous code to be executed in GPU #2 we can use tf.device(‘/gpu:2’) as shown here:
-시스템에 여러 GPU가 있을 경우, 낮은 식별자로 된 GPU가 기본(default)으로 선택된다. 다른 GPU에서 조작을 실행하려면 명시적으로 지정하는게 필요하다. 예를 들어, 앞에서 언급된 코드가 GPU #2에서 실행되게 하려면 아래와 같이 tf.device('/gpu:2')를 이용한다. 
+시스템에 여러 GPU가 있을 경우, 낮은 식별자로 된 GPU가 기본(default)으로 선택된다. 다른 GPU에서 조작을 실행하려면 명시적으로 지정해야 한다. 예를 들어, 앞에서 언급된 코드가 GPU #2에서 실행되게 하려면 아래와 같이 tf.device('/gpu:2')를 이용한다. 
 
 import tensorflow as tf
 
@@ -127,7 +129,7 @@ To conclude this brief chapter, we present a snippet of code inspired on the one
 본 장을 마무리하기 위해,  Github의 DamienAymeric이 공유한 코드를 제시한다. 이것은 날짜 Python 패키지를 사용하여 1개의 GPU와 2개의 GPU에서 n=10일 때 An+Bn을 계산하는데 걸린 시간을 비교하는 것이다.
 
 First of all, we import the required libraries:
-먼저, 필요한 라이브러리를 불러온다.
+먼저, 필요한 라이브러리를 불러온다:
 
 import numpy as np
 import tensorflow as tf
@@ -197,7 +199,7 @@ with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
 t2_2 = datetime.datetime.now()
 
 Finally we print the results for the registered computation time:
-마지막으로 등록된 연산 시간에 대한 결과를 출력한다.
+마지막으로 등록된 연산 시간에 대한 결과를 출력한다:
 
 print "Single GPU computation time: " + str(t2_1-t1_1)
 print "Multi GPU computation time: " + str(t2_2-t1_2)
