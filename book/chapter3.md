@@ -68,312 +68,348 @@ TensorFlow programs use a basic data structure called tensor to represent all of
   tf.gather      | To collect portions according to an index
    
 
-For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
+   For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
 
-  vectors = tf.constant(conjunto_puntos)
-  extended_vectors = tf.expand_dims(vectors, 0)
-  In this case, tf.expand_dims inserts a dimension into a tensor in the one given in the argument (the dimensions start at zero).
+```python
+vectors = tf.constant(conjunto_puntos)
+extended_vectors = tf.expand_dims(vectors, 0)
+In this case, tf.expand_dims inserts a dimension into a tensor in the one given in the argument (the dimensions start at zero).
+```
+Visually, the above transformation is as follows:
 
- Visually, the above transformation is as follows:
-
- image023
+image023
 
 As you can see, we now have a 3D tensor, but we cannot determine the size of the new dimension D0 based on function arguments.
 
 If we obtain the shape of this tensor with the get_shape() operation, we can see that there is no associated size:
 
-  print expanded_vectors.get_shape()
+print expanded_vectors.get_shape()
 
 It appears on the screen like:
 
-  TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
-
- Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting, many mathematical manipulation functions of tensors (as presented in the first chapter), are able to discover for themselves the size in the dimension which unspecific size and assign to it this deduced value.
+```python
+TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
+```
+Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting, many mathematical manipulation functions of tensors (as presented in the first chapter), are able to discover for themselves the size in the dimension which unspecific size and assign to it this deduced value.
 
 Data Storage in TensorFlow
 
- Following the presentation of TensorFlow’s package, broadly speaking there are three main ways of obtaining data on a TensorFlow program:
+Following the presentation of TensorFlow’s package, broadly speaking there are three main ways of obtaining data on a TensorFlow program:
 
-   From data files.
-   Data preloaded as constants or variables.
-   Those provided by Python code.
-   Below, I briefly describe each of them.
+From data files.
+Data preloaded as constants or variables.
+Those provided by Python code.
+Below, I briefly describe each of them.
 
-   Data files
-   Usually, the initial data is downloaded from a data file. The process is not complex, and given the introductory nature of this book I invite the reader to visit the website of TensorFlow[19] for more details on how to download data from different file types. You can also review the Python code input_data.py[20](available on the Github book), which loads the MNIST data from files (I will use this in the following chapters).
+Data files
+Usually, the initial data is downloaded from a data file. The process is not complex, and given the introductory nature of this book I invite the reader to visit the website of TensorFlow[19] for more details on how to download data from different file types. You can also review the Python code input_data.py[20](available on the Github book), which loads the MNIST data from files (I will use this in the following chapters).
 
-   Variables and constants
-   When it comes to small sets, data can also be found pre-loaded into memory; there are two basic ways to create them, as we have seen in the previous example:
+Variables and constants
+When it comes to small sets, data can also be found pre-loaded into memory; there are two basic ways to create them, as we have seen in the previous example:
 
-   As a constants using constant(…)
-   As a variable using Variable(…)
-   TensorFlow package offers different operations that can be used to generate constants. In the table below you can find a summary of the most important:
+As a constants using constant(…)
+As a variable using Variable(…)
+TensorFlow package offers different operations that can be used to generate constants. In the table below you can find a summary of the most important:
 
-   Operation    Description
-   tf.zeros_like    Creates a tensor with all elements initialized to 0
-   tf.ones_like Creates a tensor with all elements initialized to 1
-   tf.fill  Creates a tensor with all elements initialized to a scalar value given as argument
-   tf.constant  Creates a tensor of constants with the elements listed as an arguments
-    
-    In TensorFlow, during the training process of the models, the parameters are maintained in the memory as variables. When a variable is created, you can use a tensor defined as a parameter of the function as an initial value, which can be a constant or a random value. TensorFlow offers a collection of operations that produce random tensors with different distributions:
+Operation      | Description
+-----------------------------------------------------------------------------------------------------
+tf.zeros_like  | Creates a tensor with all elements initialized to 0
+tf.ones_like   | Creates a tensor with all elements initialized to 1
+tf.fill        | Creates a tensor with all elements initialized to a scalar value given as argument
+tf.constant    | Creates a tensor of constants with the elements listed as an arguments
+ 
+In TensorFlow, during the training process of the models, the parameters are maintained in the memory as variables. When a variable is created, you can use a tensor defined as a parameter of the function as an initial value, which can be a constant or a random value. TensorFlow offers a collection of operations that produce random tensors with different distributions:
 
      
 
-     Operation  Description
-     tf.random_normal   Random values with a normal distribution
-     tf.truncated_normal    Random values with a normal distribution but eliminating those values whose magnitude is more than 2 times the standard deviation
-     tf.random_uniform  Random values with a uniform distribution
-     tf.random_shuffle  Randomly mixed tensor elements in the first dimension
-     tf.set_random_seed Sets the random seed
-      
+Operation           | Description
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+tf.random_normal    | Random values with a normal distribution
+tf.truncated_normal | Random values with a normal distribution but eliminating those values whose magnitude is more than 2 times the standard deviation
+tf.random_uniform   | Random values with a uniform distribution
+tf.random_shuffle   | Randomly mixed tensor elements in the first dimension
+tf.set_random_seed  | Sets the random seed
+ 
 
-      An important detail is that all of these operations require a specific shape of the tensors as the parameters of the function, and the variable that is created has the same shape. In general, the variables have a fixed shape, but TensorFlow provides mechanisms to reshape it if necessary.
+An important detail is that all of these operations require a specific shape of the tensors as the parameters of the function, and the variable that is created has the same shape. In general, the variables have a fixed shape, but TensorFlow provides mechanisms to reshape it if necessary.
 
-      When using variables, these must be explicitly initialized after the graph that has been constructed, and before any operation is executed with the run() function. As we have seen, it can be used tf.initialize_all_variables() for this purpose. Variables also can be saved onto disk during and after training model through TensorFlow tf.train.Saver() class, but this class is beyond the scope of this book.
+When using variables, these must be explicitly initialized after the graph that has been constructed, and before any operation is executed with the run() function. As we have seen, it can be used tf.initialize_all_variables() for this purpose. Variables also can be saved onto disk during and after training model through TensorFlow tf.train.Saver() class, but this class is beyond the scope of this book.
 
-      Provided by Python code
-      Finally, we can use what we have called “symbolic variable” or placeholder to manipulate data during program execution. The call is placeholder(), which includes arguments with the type of the elements and the shape of the tensor, and optionally a name.
+Provided by Python code
+Finally, we can use what we have called “symbolic variable” or placeholder to manipulate data during program execution. The call is placeholder(), which includes arguments with the type of the elements and the shape of the tensor, and optionally a name.
 
-      At the same time as making the calls to Session.run() or Tensor.eval() from the Python code, this tensor is populated with the data specified in the feed_dict parameter. Remember the first code in Chapter 1:
+At the same time as making the calls to Session.run() or Tensor.eval() from the Python code, this tensor is populated with the data specified in the feed_dict parameter. Remember the first code in Chapter 1:
 
-      import tensorflow as tf
-      a = tf.placeholder("float")
-      b = tf.placeholder("float")
-      y = tf.mul(a, b)
-      sess = tf.Session()
-      print   sess.run(y, feed_dict={a: 3, b: 3})
-      In the last line of code, when the call sess.run() is made, it is when we pass the values of the two tensors a and b through feed_dict parameter.
+```python
+import tensorflow as tf
+a = tf.placeholder("float")
+b = tf.placeholder("float")
+y = tf.mul(a, b)
+sess = tf.Session()
+print   sess.run(y, feed_dict={a: 3, b: 3})
+```
+In the last line of code, when the call sess.run() is made, it is when we pass the values of the two tensors a and b through feed_dict parameter.
 
-      With this brief introduction about tensors, I hope that from now on the reader can follow the codes of the following chapters without any difficulty.
+With this brief introduction about tensors, I hope that from now on the reader can follow the codes of the following chapters without any difficulty.
 
-      K-means algorithm
+K-means algorithm
 
-      K-means is a type of unsupervised algorithm which solves the clustering problem. Its procedure follows a simple and easy way to classify a given data set through a certain number of clusters (assume k clusters). Data points inside a cluster are homogeneous and heterogeneous to peer groups, that means that all the elements in a subset are more similar to each other than with the rest.
+K-means is a type of unsupervised algorithm which solves the clustering problem. Its procedure follows a simple and easy way to classify a given data set through a certain number of clusters (assume k clusters). Data points inside a cluster are homogeneous and heterogeneous to peer groups, that means that all the elements in a subset are more similar to each other than with the rest.
 
-      The result of the algorithm is a set of K dots, called centroids, which are the focus of the different groups obtained, and the tag that represents the set of points that are assigned to only one of the K clusters. All the points within a cluster are closer in distance to the centroid than any of the other centroids.
+The result of the algorithm is a set of K dots, called centroids, which are the focus of the different groups obtained, and the tag that represents the set of points that are assigned to only one of the K clusters. All the points within a cluster are closer in distance to the centroid than any of the other centroids.
 
-      Making clusters is a computationally expensive problem if we want to minimize the error function directly (what is known as an NP-hard problem); and therefore it some algorithms that converge rapidly in a local optimum by heuristics have been created. The most commonly used algorithm uses an iterative refinement technique, which converges in a few iterations.
+Making clusters is a computationally expensive problem if we want to minimize the error function directly (what is known as an NP-hard problem); and therefore it some algorithms that converge rapidly in a local optimum by heuristics have been created. The most commonly used algorithm uses an iterative refinement technique, which converges in a few iterations.
 
-      Broadly speaking, this technique has three steps:
+Broadly speaking, this technique has three steps:
 
-      Initial step (step 0): determines an initial set of K centroids.
-      Allocation step (step 1): assigns each observation to the nearest group.
-      Update step (step 2): calculates the new centroids for each new group.
-      There are several methods to determine initial K centroids. One of them is randomly choose K observations in the data set and consider them centroids; this is the one we will use in our example.
+Initial step (step 0): determines an initial set of K centroids.
+Allocation step (step 1): assigns each observation to the nearest group.
+Update step (step 2): calculates the new centroids for each new group.
+There are several methods to determine initial K centroids. One of them is randomly choose K observations in the data set and consider them centroids; this is the one we will use in our example.
 
-      The steps of allocation (step 1) and updating (step 2) are being alternated in a loop until it is considered that the algorithm has converged, which may be for example when allocations of points to groups no longer change.
+The steps of allocation (step 1) and updating (step 2) are being alternated in a loop until it is considered that the algorithm has converged, which may be for example when allocations of points to groups no longer change.
 
-      Since this is a heuristic algorithm, there is no guarantee that it converges to the global optimum, and the outcome depends on the initial groups. Therefore, as the algorithm is generally very fast, it is usual to repeat executions multiple times with different values of the initials centroides, and then weigh the result.
+Since this is a heuristic algorithm, there is no guarantee that it converges to the global optimum, and the outcome depends on the initial groups. Therefore, as the algorithm is generally very fast, it is usual to repeat executions multiple times with different values of the initials centroides, and then weigh the result.
 
-      To start coding our example of K-means in TensorFlow I suggest to first generate some data as a testbed. I propose to do something simple, like generating 2,000 points in a 2D space in a random manner, following two normal distributions to draw up a space that allows us to better understand the outcome. For example, I suggest the following code:
+To start coding our example of K-means in TensorFlow I suggest to first generate some data as a testbed. I propose to do something simple, like generating 2,000 points in a 2D space in a random manner, following two normal distributions to draw up a space that allows us to better understand the outcome. For example, I suggest the following code:
 
-      num_puntos = 2000
-      conjunto_puntos = []
-      for i in xrange(num_puntos):
-         if np.random.random() &gt; 0.5:
-              conjunto_puntos.append([np.random.normal(0.0, 0.9), np.random.normal(0.0, 0.9)])
-                 else:
-                      conjunto_puntos.append([np.random.normal(3.0, 0.5), np.random.normal(1.0, 0.5)])
-                      As we have done in the previous chapter, we can use some Python graphic libraries to plot the data. I propose that we use matplotlib like before, but this time we will also use the visualization package Seaborn based on matplotlib and the data manipulation package pandas, which allows us to work with more complex data structures.
+```python
+num_puntos = 2000
+conjunto_puntos = []
+for i in xrange(num_puntos):
+   if np.random.random() &gt; 0.5:
+        conjunto_puntos.append([np.random.normal(0.0, 0.9), np.random.normal(0.0, 0.9)])
+   else:
+        conjunto_puntos.append([np.random.normal(3.0, 0.5), np.random.normal(1.0, 0.5)])
+```
+As we have done in the previous chapter, we can use some Python graphic libraries to plot the data. I propose that we use matplotlib like before, but this time we will also use the visualization package Seaborn based on matplotlib and the data manipulation package pandas, which allows us to work with more complex data structures.
 
-                      If you do not have these packages installed, you must do it with the pip value before you can run the following codes.
+If you do not have these packages installed, you must do it with the pip value before you can run the following codes.
 
-                      To display the points that have been generated randomly I suggest the following code:
+To display the points that have been generated randomly I suggest the following code:
 
-                      import matplotlib.pyplot as plt
-                      import pandas as pd
-                      import seaborn as sns
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
-                      df = pd.DataFrame({"x": [v[0] for v in conjunto_puntos],
-                              "y": [v[1] for v in conjunto_puntos]})
-                              sns.lmplot("x", "y", data=df, fit_reg=False, size=6)
-                              plt.show()
-                              This code generates a graph of points in a two dimensional space like the following screenshot:
+df = pd.DataFrame({"x": [v[0] for v in conjunto_puntos],
+"y": [v[1] for v in conjunto_puntos]})
+sns.lmplot("x", "y", data=df, fit_reg=False, size=6)
+plt.show()
+```
+This code generates a graph of points in a two dimensional space like the following screenshot:
 
-                              image024
+image024
 
-                              A k-means algorithm implemented in TensorFlow to group the above points, for example in four clusters, can be as follows (based on the model proposed by Shawn Simister in his blog[21]):
+A k-means algorithm implemented in TensorFlow to group the above points, for example in four clusters, can be as follows (based on the model proposed by Shawn Simister in his blog[21]):
 
-                              import numpy as np
-                              vectors = tf.constant(conjunto_puntos)
-                              k = 4
-                              centroides = tf.Variable(tf.slice(tf.random_shuffle(vectors),[0,0],[k,-1]))
+```python
+import numpy as np
+vectors = tf.constant(conjunto_puntos)
+k = 4
+centroides = tf.Variable(tf.slice(tf.random_shuffle(vectors),[0,0],[k,-1]))
 
-                              expanded_vectors = tf.expand_dims(vectors, 0)
-                              expanded_centroides = tf.expand_dims(centroides, 1)
+expanded_vectors = tf.expand_dims(vectors, 0)
+expanded_centroides = tf.expand_dims(centroides, 1)
 
-                              assignments = tf.argmin(tf.reduce_sum(tf.square(tf.sub(expanded_vectors, expanded_centroides)), 2), 0)
+assignments = tf.argmin(tf.reduce_sum(tf.square(tf.sub(expanded_vectors, expanded_centroides)), 2), 0)
 
-                              means = tf.concat(0, [tf.reduce_mean(tf.gather(vectors, tf.reshape(tf.where( tf.equal(assignments, c)),[1,-1])), reduction_indices=[1]) for c in xrange(k)])
+means = tf.concat(0, [tf.reduce_mean(tf.gather(vectors, tf.reshape(tf.where( tf.equal(assignments, c)),[1,-1])), reduction_indices=[1]) for c in xrange(k)])
 
-                              update_centroides = tf.assign(centroides, means)
+update_centroides = tf.assign(centroides, means)
 
-                              init_op = tf.initialize_all_variables()
+init_op = tf.initialize_all_variables()
 
-                              sess = tf.Session()
-                              sess.run(init_op)
+sess = tf.Session()
+sess.run(init_op)
 
-                              for step in xrange(100):
-                                 _, centroid_values, assignment_values = sess.run([update_centroides, centroides, assignments])
-                                 I suggest the reader checks the result in the assignment_values tensor with the following code, which generates a graph as above:
+for step in xrange(100):
+   _, centroid_values, assignment_values = sess.run([update_centroides, centroides, assignments])
+   I suggest the reader checks the result in the assignment_values tensor with the following code, which generates a graph as above:
 
-                                 data = {"x": [], "y": [], "cluster": []}
+   data = {"x": [], "y": [], "cluster": []}
 
-                                 for i in xrange(len(assignment_values)):
-                                   data["x"].append(conjunto_puntos[i][0])
-                                     data["y"].append(conjunto_puntos[i][1])
-                                       data["cluster"].append(assignment_values[i])
+   for i in xrange(len(assignment_values)):
+     data["x"].append(conjunto_puntos[i][0])
+       data["y"].append(conjunto_puntos[i][1])
+         data["cluster"].append(assignment_values[i])
 
-                                       df = pd.DataFrame(data)
-                                       sns.lmplot("x", "y", data=df, fit_reg=False, size=6, hue="cluster", legend=False)
-                                       plt.show()
-                                       The screenshot with the result of the execution of my code it is shown in the following figure:
+         df = pd.DataFrame(data)
+         sns.lmplot("x", "y", data=df, fit_reg=False, size=6, hue="cluster", legend=False)
+         plt.show()
+```         
+The screenshot with the result of the execution of my code it is shown in the following figure:
 
-                                       image026
+image026
 
-                                       New groups
+New groups
 
-                                       I assume that the reader might feel a little overwhelmed with the K-means code presented in the previous section. Well, I propose that we analyze this in detail, step by step, and especially watch the tensors invoved and how they are transformed during the program.
+I assume that the reader might feel a little overwhelmed with the K-means code presented in the previous section. Well, I propose that we analyze this in detail, step by step, and especially watch the tensors invoved and how they are transformed during the program.
 
-                                       The first thing to do is move all our data to tensors. In a constant tensor, we keep our entry points randomly generated:
+The first thing to do is move all our data to tensors. In a constant tensor, we keep our entry points randomly generated:
 
-                                       vectors = tf.constant(conjunto_vectors)
-                                       Following the algorithm presented in the previous section, in order to start we must determine the initial centroids. As I advanced, an option may be randomly choose K observations from the input data. One way to do this is with the following code, which indicates to TensorFlow that it must shuffle randomly the entry point and choose the first K points as centroids:
+```python
+vectors = tf.constant(conjunto_vectors)
+```
+Following the algorithm presented in the previous section, in order to start we must determine the initial centroids. As I advanced, an option may be randomly choose K observations from the input data. One way to do this is with the following code, which indicates to TensorFlow that it must shuffle randomly the entry point and choose the first K points as centroids:
 
-                                       k = 4
-                                       centroides = tf.Variable(tf.slice(tf.random_shuffle(vectors),[0,0],[k,-1]))
-                                       These K points are stored in a 2D tensor. To know the shape of those tensors we can use tf.Tensor.get_shape():
+```python
+k = 4
+centroides = tf.Variable(tf.slice(tf.random_shuffle(vectors),[0,0],[k,-1]))
+These K points are stored in a 2D tensor. To know the shape of those tensors we can use tf.Tensor.get_shape():
 
-                                       print vectors.get_shape()
-                                       print centroides.get_shape()
+print vectors.get_shape()
+print centroides.get_shape()
 
-                                       TensorShape([Dimension(2000), Dimension(2)])
-                                       TensorShape([Dimension(4), Dimension(2)])
-                                       We can see that vectors is an array that dimension D0 contains 2000 positions, one for each, and D1 contains the position x,y for each point. Instead, centroids is a matrix of four positions in the dimension D0, one position for each centroid, and the dimension D1 is equivalent to the dimension D1 of vectors.
+TensorShape([Dimension(2000), Dimension(2)])
+TensorShape([Dimension(4), Dimension(2)])
+```
+We can see that vectors is an array that dimension D0 contains 2000 positions, one for each, and D1 contains the position x,y for each point. Instead, centroids is a matrix of four positions in the dimension D0, one position for each centroid, and the dimension D1 is equivalent to the dimension D1 of vectors.
 
-                                       Next, the algorithm enters in a loop. The first step is to calculate, for each point, its closest centroid by the Squared Euclidean Distance[22] (which can only be used when we want to compare distances):
+Next, the algorithm enters in a loop. The first step is to calculate, for each point, its closest centroid by the Squared Euclidean Distance[22] (which can only be used when we want to compare distances):
 
-                                       image028
+image028
 
-                                       To calculate this value tf.sub(vectors, centroides) is used. We should note that, although the two subtract tensors have both 2 dimensions, they have different sizes in one dimension (2000 vs 4 in dimension D0), which, in fact, also represent different things.
+To calculate this value tf.sub(vectors, centroides) is used. We should note that, although the two subtract tensors have both 2 dimensions, they have different sizes in one dimension (2000 vs 4 in dimension D0), which, in fact, also represent different things.
 
-                                       To fix this problem we could use some of the functions discussed before, for instance tf.expand_dims in order to insert a dimension in both tensors. The aim is to extend both tensors from 2 dimensions to 3 dimensions to make the sizes match in order to perform a subtraction:
+To fix this problem we could use some of the functions discussed before, for instance tf.expand_dims in order to insert a dimension in both tensors. The aim is to extend both tensors from 2 dimensions to 3 dimensions to make the sizes match in order to perform a subtraction:
 
-                                       expanded_vectors = tf.expand_dims(vectors, 0)
-                                       expanded_centroides = tf.expand_dims(centroides, 1)
-                                       tf.expand_dims inserts one dimension in each tensor; in the first dimension (D0) of vectors tensor, and in the second dimension (D1) of centroids tensor. Graphically, we can see that in the extended tensors the dimensions have the same meaning in each of them:
+expanded_vectors = tf.expand_dims(vectors, 0)
+expanded_centroides = tf.expand_dims(centroides, 1)
+tf.expand_dims inserts one dimension in each tensor; in the first dimension (D0) of vectors tensor, and in the second dimension (D1) of centroids tensor. Graphically, we can see that in the extended tensors the dimensions have the same meaning in each of them:
 
-                                       image031
+image031
 
-                                       It seems to be solved, but actually, if you look closely (outlined in bulk in the illustration), in each case there are dimensions that have not been able to determinate the sizes of those dimensions. Remember that the with get_shape() function we can find out:
+It seems to be solved, but actually, if you look closely (outlined in bulk in the illustration), in each case there are dimensions that have not been able to determinate the sizes of those dimensions. Remember that the with get_shape() function we can find out:
 
-                                       print expanded_vectors.get_shape()
-                                       print expanded_centroides.get_shape()
-                                       The output is as follows:
+```python
+print expanded_vectors.get_shape()
+print expanded_centroides.get_shape()
+```
+The output is as follows:
+```python
+TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
+TensorShape([Dimension(4), Dimension(1), Dimension(2)])
+```
+With 1 it is indicating a no assigned size.
 
-                                       TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
-                                       TensorShape([Dimension(4), Dimension(1), Dimension(2)])
-                                       With 1 it is indicating a no assigned size.
+But I have already advanced that TensorFlow allows broadcasting, and therefore the tf.sub function is able to discover for itself how to do the subtraction of elements between the two tensors.
 
-                                       But I have already advanced that TensorFlow allows broadcasting, and therefore the tf.sub function is able to discover for itself how to do the subtraction of elements between the two tensors.
+Intuitively, and observing the previous drawings, we see that the shape of the two tensors match, and in those cases both tensors have the same size in a certain dimension. These math, as happens in dimension D2. Instead, in the dimension D0 only has a defined size the expanded_centroides.
 
-                                       Intuitively, and observing the previous drawings, we see that the shape of the two tensors match, and in those cases both tensors have the same size in a certain dimension. These math, as happens in dimension D2. Instead, in the dimension D0 only has a defined size the expanded_centroides.
+In this case, TensorFlow assumes that the dimension D0 of expanded_vectors tensor have to be the same size if we want to perform a subtraction element to element within this dimension.
 
-                                       In this case, TensorFlow assumes that the dimension D0 of expanded_vectors tensor have to be the same size if we want to perform a subtraction element to element within this dimension.
+And the same happens with the size of the dimension D1 of expended_centroides tensor, where TensorFlow deduces the size of the dimension D1 of expanded_vectors tensor.
 
-                                       And the same happens with the size of the dimension D1 of expended_centroides tensor, where TensorFlow deduces the size of the dimension D1 of expanded_vectors tensor.
+Therefore, in the allocation step (step 1) the algorithm can be expressed in these four lines of TensorFlow´s code, which calculates the Squared Euclidean Distance:
 
-                                       Therefore, in the allocation step (step 1) the algorithm can be expressed in these four lines of TensorFlow´s code, which calculates the Squared Euclidean Distance:
+```python
+diff=tf.sub(expanded_vectors, expanded_centroides)
+sqr= tf.square(diff)
+distances = tf.reduce_sum(sqr, 2)
+assignments = tf.argmin(distances, 0)
+```
+And, if we look at the shapes of tensors, we see that they are respectively for diff, sqr, distances and assignments as follows:
 
-                                       diff=tf.sub(expanded_vectors, expanded_centroides)
-                                       sqr= tf.square(diff)
-                                       distances = tf.reduce_sum(sqr, 2)
-                                       assignments = tf.argmin(distances, 0)
-                                       And, if we look at the shapes of tensors, we see that they are respectively for diff, sqr, distances and assignments as follows:
+```python
+TensorShape([Dimension(4), Dimension(2000), Dimension(2)])
+TensorShape([Dimension(4), Dimension(2000), Dimension(2)])
+TensorShape([Dimension(4), Dimension(2000)])
+TensorShape([Dimension(2000)])
+```
+That is, tf.sub function has returned the tensor dist, that contains the subtraction of the index values for centroids and vector (indicated in the dimension D1, and the centroid indicated in the dimension D0. For each index x,y are indicated in the dimension D2) .
 
-                                       TensorShape([Dimension(4), Dimension(2000), Dimension(2)])
-                                       TensorShape([Dimension(4), Dimension(2000), Dimension(2)])
-                                       TensorShape([Dimension(4), Dimension(2000)])
-                                       TensorShape([Dimension(2000)])
-                                       That is, tf.sub function has returned the tensor dist, that contains the subtraction of the index values for centroids and vector (indicated in the dimension D1, and the centroid indicated in the dimension D0. For each index x,y are indicated in the dimension D2) .
+The sqr tensor contains the square of those. In the distance tensor we can see that it has already reduced one dimension, the one indicated as a parameter in tf.reduce_sum function.
 
-                                       The sqr tensor contains the square of those. In the distance tensor we can see that it has already reduced one dimension, the one indicated as a parameter in tf.reduce_sum function.
+I use this example to explain that TensorFlow provides several operations which can be used to perform mathematical operations that reduce dimensions of a tensor as in the case of tf.reduce_sum. In the table below you can find a summary of the most important ones:
 
-                                       I use this example to explain that TensorFlow provides several operations which can be used to perform mathematical operations that reduce dimensions of a tensor as in the case of tf.reduce_sum. In the table below you can find a summary of the most important ones:
+Operation      | Description
+--------------------------------------------------------------------------
+tf.reduce_sum  | Computes the sum of the elements along one dimension
+tf.reduce_prod | Computes the product of the elements along one dimension
+tf.reduce_min  | Computes the minimum of the elements along one dimension
+tf.reduce_max  | Computes the maximum of the elements along one dimension
+tf.reduce_mean | Computes the mean of the elements along one dimension
 
-                                       Operation    Description
-                                       tf.reduce_sum    Computes the sum of the elements along one dimension
-                                       tf.reduce_prod   Computes the product of the elements along one dimension
-                                       tf.reduce_min    Computes the minimum of the elements along one dimension
-                                       tf.reduce_max    Computes the maximum of the elements along one dimension
-                                       tf.reduce_mean   Computes the mean of the elements along one dimension
-                                       Finally, the assignation is achieved with tf.argmin, which returns the index with the minimum value of the tensor dimension (in our case D0, which remember that was the centroid). We also have the tf.argmax operation:
+Finally, the assignation is achieved with tf.argmin, which returns the index with the minimum value of the tensor dimension (in our case D0, which remember that was the centroid). We also have the tf.argmax operation:
 
-                                       Operation    Description
-                                       tf.argmin    Returns the index of the element with the minimum value along tensor dimension
-                                       tf.argmax    Returns the index of the element with the maximum value of the tensor dimension
-                                       In fact, the 4 instructions seen above could be summarized in only one code line, as we have seen in the previous section:
+Operation  |  Description
+-------------------------------------------------------------------------------------------------
+tf.argmin  |  Returns the index of the element with the minimum value along tensor dimension
+tf.argmax  |  Returns the index of the element with the maximum value of the tensor dimension
 
-                                       assignments = tf.argmin(tf.reduce_sum(tf.square(tf.sub(expanded_vectors, expanded_centroides)), 2), 0)
-                                       But anyway, internal tensors and the operations that they define as nodes and execute the internal graph are like the ones we have described before.
+In fact, the 4 instructions seen above could be summarized in only one code line, as we have seen in the previous section:
 
-                                       Computation of the new centroids
+```python
+assignments = tf.argmin(tf.reduce_sum(tf.square(tf.sub(expanded_vectors, expanded_centroides)), 2), 0)
+```
+But anyway, internal tensors and the operations that they define as nodes and execute the internal graph are like the ones we have described before.
 
-                                       Once we have created new groups on each iteration, we will have to remember that the new step of the algorithm consists in calculating the new centroids of the groups. In the code of the section before we have seen this line of code:
+Computation of the new centroids
 
-                                       means = tf.concat(0, [tf.reduce_mean(tf.gather(vectors, tf.reshape(tf.where( tf.equal(assignments, c)),[1,-1])), reduction_indices=[1]) for c in xrange(k)])
-                                       On that piece of code, we can see that the means tensor is the result of the concatenation of the k tensors that correspond to the mean value of every point that belongs to each k cluster.
+Once we have created new groups on each iteration, we will have to remember that the new step of the algorithm consists in calculating the new centroids of the groups. In the code of the section before we have seen this line of code:
 
-                                       Next, I will comment on each of the TensorFlow operations that are involved in the calculation of the mean value of every points that belongs to each cluster[23]:
+means = tf.concat(0, [tf.reduce_mean(tf.gather(vectors, tf.reshape(tf.where( tf.equal(assignments, c)),[1,-1])), reduction_indices=[1]) for c in xrange(k)])
+On that piece of code, we can see that the means tensor is the result of the concatenation of the k tensors that correspond to the mean value of every point that belongs to each k cluster.
 
-                                       With equal we can obtain a boolean tensor (Dimension(2000)) that indicates (with true value) the positions where the assignment tensor match with the K cluster, which, at the time, we are calculating the average value of the points.
-                                       With where is constructed a tensor (Dimension(1) x Dimension(2000)) with the position where the values true are on the boolean tensor received as a parameter. i.e. a list of the position of these.
-                                       With reshape is constructed a tensor (Dimension(2000) x Dimension(1)) with the index of the points inside vectors tensor that belongs to this c cluster.
-                                       With gather is constructed a tensor (Dimension(1) x Dimension(2000)) which gathers the coordenates of the points that form the c cluster.
-                                       With reduce_mean it is constructed a tensor (Dimension(1) x Dimension(2)) that contains the average value of all points that belongs to the cluster c.
-                                       Anyway, if the reader wants to dig deeper into the code, as I always say, you can find more info for each of these operations, with very illustrative examples, on the TensorFlow API page[24].
+Next, I will comment on each of the TensorFlow operations that are involved in the calculation of the mean value of every points that belongs to each cluster[23]:
 
-                                       Graph execution
+With equal we can obtain a boolean tensor (Dimension(2000)) that indicates (with true value) the positions where the assignment tensor match with the K cluster, which, at the time, we are calculating the average value of the points.
+With where is constructed a tensor (Dimension(1) x Dimension(2000)) with the position where the values true are on the boolean tensor received as a parameter. i.e. a list of the position of these.
+With reshape is constructed a tensor (Dimension(2000) x Dimension(1)) with the index of the points inside vectors tensor that belongs to this c cluster.
+With gather is constructed a tensor (Dimension(1) x Dimension(2000)) which gathers the coordenates of the points that form the c cluster.
+With reduce_mean it is constructed a tensor (Dimension(1) x Dimension(2)) that contains the average value of all points that belongs to the cluster c.
+Anyway, if the reader wants to dig deeper into the code, as I always say, you can find more info for each of these operations, with very illustrative examples, on the TensorFlow API page[24].
 
-                                       Finally, we have to describe the part of the above code that corresponds to the loop and to the part that update the centroids with the new values of the means tensor.
+Graph execution
 
-                                       To do this, we need to create an operator that assigns the value of the variable means tensor into centroids in a way than, when the operation run() is executed, the values of the updated centroids are used in the next iteration of the loop:
+Finally, we have to describe the part of the above code that corresponds to the loop and to the part that update the centroids with the new values of the means tensor.
 
-                                       update_centroides = tf.assign(centroides, means)
-                                       We also have to create an operator to initialize all of the variable before starting to run the graph:
+To do this, we need to create an operator that assigns the value of the variable means tensor into centroids in a way than, when the operation run() is executed, the values of the updated centroids are used in the next iteration of the loop:
 
-                                       init_op = tf.initialize_all_variables()
-                                       At this point everything is ready. We can start running the graph:
+```python
+update_centroides = tf.assign(centroides, means)
+```
+We also have to create an operator to initialize all of the variable before starting to run the graph:
 
-                                       sess = tf.Session()
-                                       sess.run(init_op)
+```python
+init_op = tf.initialize_all_variables()
+```
+At this point everything is ready. We can start running the graph:
+```python
+sess = tf.Session()
+sess.run(init_op)
 
-                                       for step in xrange(num_steps):
-                                          _, centroid_values, assignment_values = sess.run([update_centroides, centroides, assignments])
-                                          In this code, for each iteration, the centroids and the new allocation of clusters for each entry points are updated.
+for step in xrange(num_steps):
+   _, centroid_values, assignment_values = sess.run([update_centroides, centroides, assignments])
+```
+In this code, for each iteration, the centroids and the new allocation of clusters for each entry points are updated.
 
-                                          Notice that the code specifies three operators and it has to go look in the execution of the call run(), and running in this order. Since there are three values to search, sess.run() returns a data structure of three numpy array elements with the contents of the corresponding tensor during the training process.
+Notice that the code specifies three operators and it has to go look in the execution of the call run(), and running in this order. Since there are three values to search, sess.run() returns a data structure of three numpy array elements with the contents of the corresponding tensor during the training process.
 
-                                          As update_centroides is an operation whose result is not the parameter that returns, the corresponding item in the return tuple contains nothing, and therefore be ruled out, indicating it with “_” [25].
+As update_centroides is an operation whose result is not the parameter that returns, the corresponding item in the return tuple contains nothing, and therefore be ruled out, indicating it with “_” [25].
 
-                                          For the other two values, the centroids and the assigning points to each cluster, we are interested in displaying them on screen once they have completed all num_steps iterations.
+For the other two values, the centroids and the assigning points to each cluster, we are interested in displaying them on screen once they have completed all num_steps iterations.
 
-                                          We can use a simple print. The output is as it follows:
+We can use a simple print. The output is as it follows:
 
-                                          print centroid_values
+```python
+print centroid_values
 
-                                          [[ 2.99835277e+00 9.89548564e-01]
-                                          [ -8.30736756e-01 4.07433510e-01]
-                                          [ 7.49640584e-01 4.99431938e-01]
-                                          [ 1.83571398e-03 -9.78474259e-01]]
-                                          I hope that the reader has a similar values on the screen, since this will indicate that he has successfully executed the proposed code in this chapter of the book.
+[[ 2.99835277e+00 9.89548564e-01]
+[ -8.30736756e-01 4.07433510e-01]
+[ 7.49640584e-01 4.99431938e-01]
+[ 1.83571398e-03 -9.78474259e-01]]
+```
+I hope that the reader has a similar values on the screen, since this will indicate that he has successfully executed the proposed code in this chapter of the book.
 
-                                          I suggest that the reader tries to change any of the values in the code, before advancing. For example the num_points, and especially the number of clustersk, and see how it changes the result in the assignment_values tensor with the previous code that generates a graph.
+I suggest that the reader tries to change any of the values in the code, before advancing. For example the num_points, and especially the number of clustersk, and see how it changes the result in the assignment_values tensor with the previous code that generates a graph.
 
-                                          Remember that in order to facilitate testing the code described in this chapter, it can be downloaded from Github[26] . The name of the file that contains this code is Kmeans.py.
+Remember that in order to facilitate testing the code described in this chapter, it can be downloaded from Github[26] . The name of the file that contains this code is Kmeans.py.
 
-                                          In this chapter we have advanced some knowledge of TensorFlow, especially on basic data structure tensor, from a code example in TensorFlow that implements a clustering algorithm K-means.
+In this chapter we have advanced some knowledge of TensorFlow, especially on basic data structure tensor, from a code example in TensorFlow that implements a clustering algorithm K-means.
 
-                                          With this knowledge, we are ready to build a single layer neural network, step by step, with TensorFlow in the next chapter.
+With this knowledge, we are ready to build a single layer neural network, step by step, with TensorFlow in the next chapter.
 
-                                          [contents link]
+[contents link]
