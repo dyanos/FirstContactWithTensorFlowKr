@@ -50,6 +50,7 @@ MatMul: /job:localhost/replica:0/task:0/gpu:0
 [[ 22.28.]
 [ 49.64.]]
 …
+
 Also, with the result of the operation, it informs to us where is executed each part.
 또한 조작의 결과와 함께 각 부분이 실행된 장소를 알 수 있다.
 
