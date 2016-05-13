@@ -1,3 +1,5 @@
+번역자 : 박정환
+
 #FIRST CONTACT WITH TENSORFLOW
 
 ##Get started with with Deep Learning programming
