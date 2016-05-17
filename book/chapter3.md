@@ -118,14 +118,20 @@ Below, I briefly describe each of them.
 Data files
 Usually, the initial data is downloaded from a data file. The process is not complex, and given the introductory nature of this book I invite the reader to visit the website of TensorFlow[19] for more details on how to download data from different file types. You can also review the Python code input_data.py[20](available on the Github book), which loads the MNIST data from files (I will use this in the following chapters).
 데이터 파일
-일반적으로, 초기 데이터는 데이터 파일로부터 다운로드되어진다.
+일반적으로, 초기 데이터는 데이터 파일로부터 다운로드되어진다. 이 과정은 복잡하지 않다. 그리고 이 책의 서두에서 언급한것 처럼, 다른 파일 타입으로부터 어떻게 데이터를 다운받는지에 대한 자세한 사항에 대해서는 텐서플로우[19]의 웹사이트를 방문하길 추천한다. 파일에서 MNIST 데이터를 읽는 input_data.py[20](깃헙6 북 에서도 가능하다) 의 파이썬 코드를 읽어볼 수도 있다.(나는 다음 챕터에서 이것을 사용할 것이다)
 
 Variables and constants
 When it comes to small sets, data can also be found pre-loaded into memory; there are two basic ways to create them, as we have seen in the previous example:
+변수와 상수
+작은 단위의 데이터를 쓸 경우, 메모리에 미리 적재하고 사용할 수도 있다; 앞의 예제에서 본 것 처럼, 이를 만드는데에는 두 가지 기본적인 방법이 있다:
 
 As a constants using constant(…)
 As a variable using Variable(…)
+constant(…) 를 사용한 상수
+Variable(…) 를 사용한 변수
+
 TensorFlow package offers different operations that can be used to generate constants. In the table below you can find a summary of the most important:
+텐서플로우 패키지는 상수를 생성할 수 있는 다양한 명령어들을 제공한다. 하단의 테이블에서, 가장 중요한 것들의 요약정보를 확인할 수 있다.
 
 Operation      | Description
 ---------------|-------------------------------------------------------------------------------------
