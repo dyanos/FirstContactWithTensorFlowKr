@@ -46,7 +46,7 @@ TensorFlow programs use a basic data structure called tensor to represent all of
  [D0, D1,  ~ Dn]   |    n | n-D
  
  These tensors can be manipulated with a series of transformations that supply the TensorFlow package. Below, we discuss some of them in the next table.
- 이들 텐서들은 텐서플로우 패키지를 변환하는 일련의 작업으로 다뤄질 수 있다. 하단에서, 우리는 이들 줄 일부를 다음 표에서 다룬다.
+ 이들 텐서들은 텐서플로우 패키지를 변환하는 일련의 작업으로 다뤄질 수 있다. 하단에서, 우리는 이들 중 일부를 다음 표에서 다룬다.
 
  Throughout this chapter we will go into more detail on some of them. A comprehensive list of transformations and details of each one can be found on the official website of TensorFlow, Tensor Transformations[18].
 이번 장 전반에 걸쳐, 우리는 이들 중 일부를 더 자세히 다룰 것이다. 변환에 대한 포괄적인 항목이나 각 항목의 자세한 사항은 텐서플로우의 공식 웹 사이트 중 텐서 변환[18] 에서 찾을 수 있다.
@@ -97,7 +97,7 @@ It appears on the screen like:
 TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
 ```
 Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting, many mathematical manipulation functions of tensors (as presented in the first chapter), are able to discover for themselves the size in the dimension which unspecific size and assign to it this deduced value.
-나중에 이 장에서, 우리는 (1장에서 다루어 졌던) 텐서의 많은 수학적 변형 함수들이 함수들 스스로 불특정한 크기의 차원의 크기를 발견할 수 있음과 그것을 추론된 값에 할당할 수 있음을 보게될 것이다.
+나중에 이 장에서, 우리는 (1장에서 다루어 졌던) 텐서의 많은 수학적 변형 함수들이 스스로 불특정한 크기의 차원의 크기를 발견할 수 있음과 그것을 추론된 값에 할당할 수 있음을 보게될 것이다.
 
 
 Data Storage in TensorFlow
@@ -141,7 +141,7 @@ tf.fill        | Creates a tensor with all elements initialized to a scalar valu
 tf.constant    | Creates a tensor of constants with the elements listed as an arguments
  
 In TensorFlow, during the training process of the models, the parameters are maintained in the memory as variables. When a variable is created, you can use a tensor defined as a parameter of the function as an initial value, which can be a constant or a random value. TensorFlow offers a collection of operations that produce random tensors with different distributions:
-
+텐서플로우에서, 모델이 훈련되는 동안에, 파라미터들은 메모리 안에 변수로서 존재한다. 변수가 생성될 때, 함수의 파라미터로 정의된 텐서를 사용할 수 있고, 이 텐서들은 상수나 랜덤값이 될 수 있다. 텐서플로우는 다른 분포를 가지는 임의의 텐서를 만드는 일련의 명령어를 제공한다:
      
 
 Operation           | Description
@@ -154,13 +154,19 @@ tf.set_random_seed  | Sets the random seed
  
 
 An important detail is that all of these operations require a specific shape of the tensors as the parameters of the function, and the variable that is created has the same shape. In general, the variables have a fixed shape, but TensorFlow provides mechanisms to reshape it if necessary.
+이 동작들은 함수의 파라미터로써 텐서의 특별한 모습을 필요로 한다. 그리고 만들어지는 변수들도 같은 모습이어야 한다. 일반적으로, 변수들은 고정된 모습을 가지지만, 텐서플로우는 필요한 경우 이들의 형태를 바꿀 수 있는 방법을 제공한다.
 
 When using variables, these must be explicitly initialized after the graph that has been constructed, and before any operation is executed with the run() function. As we have seen, it can be used tf.initialize_all_variables() for this purpose. Variables also can be saved onto disk during and after training model through TensorFlow tf.train.Saver() class, but this class is beyond the scope of this book.
+변수를 사용하는 경우, 그래프의 정의 이후에 명시적으로 초기화되어야만 하며, 초기화 전에는 반드시 run() 함수를 통해 실행되어야만 한다. 우리가 봐온 것처럼, 동일한 목적을 위해, tf.initialize_all_variables() 도 사용될 수 있다. 변수들은 텐서플로우의 tf.train.Saver() 클래스를 이용하면 트레이닝 중이나 후에 디스크로 저장될 수 있다. 그러나 이 클래스를 이 책에서 다루지는 않는다.
+
 
 Provided by Python code
 Finally, we can use what we have called “symbolic variable” or placeholder to manipulate data during program execution. The call is placeholder(), which includes arguments with the type of the elements and the shape of the tensor, and optionally a name.
+파이썬 코드
+마지막으로, 우리는 프로그램 수행 중에 데이터를 처리하는 "symbolic variable" 또는 placeholder 라고 불리는 것을 사용할 것이다. placeholder() 로 호출하면 되며, 원소의 타입과 텐서의 모양, 그리고 선택적으로 이름을 선언한 인수를 포함한다.
 
 At the same time as making the calls to Session.run() or Tensor.eval() from the Python code, this tensor is populated with the data specified in the feed_dict parameter. Remember the first code in Chapter 1:
+파이썬 코드에서, Session.run() 또는 Tensor.eval() 을 호출함과 동시에, 텐서는 feed_dict 의 매개변수에 지정된 데이터로 채워진다. 챕터 1의 첫번째 코드를 기억하라:
 
 ```python
 import tensorflow as tf
@@ -171,10 +177,14 @@ sess = tf.Session()
 print   sess.run(y, feed_dict={a: 3, b: 3})
 ```
 In the last line of code, when the call sess.run() is made, it is when we pass the values of the two tensors a and b through feed_dict parameter.
+코드의 마지막 라인에서, sess,run() 이 호출될 때가 feed_dict 파라미터로 a 와 b 두 텐서의 값이 전달되는 때이다.
 
 With this brief introduction about tensors, I hope that from now on the reader can follow the codes of the following chapters without any difficulty.
+텐서에 대한 간략한 소개와 더불어, 나는 독자들이 이어지는 챕터의 코드들을 어려움 없이 이해할 수 있으리라 기대한다.
+
 
 K-means algorithm
+K-평균 알고리즘
 
 K-means is a type of unsupervised algorithm which solves the clustering problem. Its procedure follows a simple and easy way to classify a given data set through a certain number of clusters (assume k clusters). Data points inside a cluster are homogeneous and heterogeneous to peer groups, that means that all the elements in a subset are more similar to each other than with the rest.
 
