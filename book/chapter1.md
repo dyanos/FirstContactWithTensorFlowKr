@@ -34,6 +34,28 @@ TensorFlow is constructed around the basic idea of building and manipulating a c
 Another strength of this new package is its visual TensorBoard module that allows a lot of information about how the algorithm is running to be monitored and displayed. Being able to measure and display the behavior of algorithms is extremely important in the process of creating better models. I have a feeling that currently many models are refined through a little blind process, through trial and error, with the obvious waste of resources and, above all, time.
 텐서플로우의 또 하나의 강점은 알고리즘이 어떻게 수행되는지 알려주기 위한 많은 정보를 모니터링하고 표현 해주는 텐서보드 모듈이다. 더 좋은 모델을 만드는 프로세스에서 알고리즘의 동작을 측정하고 표현하는 것은 매우 중요하다. 내 생각에 최근 시행착오를 통해 많은 모델을 만들고 있는데 이건 분명히 리소스 (무엇보다도 시간) 낭비이다.
 
+TensorFlow Serving
+텐서플로우 서빙
+
+Recently Google launched TensorFlow Serving[3], that helps developers to take their TensorFlow machine learning models (and, even so, can be extended to serve other types of models) into production. TensorFlow Serving is an open source serving system (written in C++) now available on GitHub under the Apache 2.0 license.
+구글은 개발자가 텐서플로우 머신러닝 모델(게다가 심지어 다른 종류의 모델로까지로도 확장)을 배포 할 수 있도록 도와주는 텐서플로우 서빙을 런칭했다. 텐서플로우 서빙은 C++로 구현된 오픈소스 서빙 시스템이며, 아파치 2.0 라이센스로 깃허브에 공개되어 있다.
+
+What is the difference between TensorFlow and TensorFlow Serving?  While in TensorFlow it is easier for the developers to build machine learning algorithms and train them for certain types of data inputs, TensorFlow Serving specializes in making these models usable in production environments. The idea is that developers train their models using TensorFlow and then they use TensorFlow Serving’s APIs to react to input from a client.
+텐서플로우와 텐서플로우 서빙의 차이점은 무엇일까? 텐서플로우가 입력된 데이터로 개발자가 쉽게 머신러닝 알고리즘을 만들고 모델을 훈련시키는 걸 도와주는 것이라면 텐서플로우 서빙은 이 모델을 운영환경에서 사용할 수 있도록 특화되어있다. 이 아이디어는 개발자가 텐서플로우를 이용하여 모델을 훈련시키고 클라이언트로부터 들어오는 입력 데이터에 대응하기 위해 텐서플로우 서빙 API를 이용하는 것이다.
+
+This allows developers to experiment with different models on a large scale that change over time, based on real-world data, and maintain a stable architecture and API in place.
+이것은 개발자들이 실 데이터로 대규모의 모델들을 바꿔가면서 실험해볼 수 있고, 안정적인 시스템과 API를 유지할 수 있다.
+
+The typical pipeline is that a training data is fed to the learner, which outputs a model, which after being validated is ready to be deployed to the TensorFlow serving system. It is quite common to launch and iterate on our model over time, as new data becomes available, or as you improve the model. In fact, in the google post [4] they mention that at Google, many pipelines are running continuously, producing new model versions as new data becomes available.
+전형적인 파이프라인(pipeline)은 학습기에 훈련 데이터를 공급하고 모델을 만든 다음 검증 절차를 거치면 텐서플로우 서빙 시스템에 배포할 준비가 된다. 모델을 런칭하고 반복적으로 수행할 때 새로운 디이터가 들어오거나 모델을 개선하기위해 이와 같은 작업은 일반적이다. 실제로 구글이 포스트에서 언급했듯이 많은 파이프라인이 지속적으로 수행되고 있고 새러운 데이터가 들어옴에 따라 새로운 버전의 모델을 만들고 있다.
+
+Developers use to communicate with TensorFlow Serving a front-end implementation based on gRPC, a high performance, open source RPC framework from Google.
+개발자는 텐서플로우 서빙과 통신하기 위해서 구글에서 오픈소스로 공개한 고성능 RPC 프레임워크인 gRPC를 사용한다. 
+
+If you are interested in learning more about TensorFlow Serving, I suggest you start by by reading the Serving architecture overview [5] section, set up your environment and start to do a basic tutorial[6] .
+텐서플로우 서빙에 대해 더 알고 싶다면 서빙 아키텍처 개요를 읽어보고 환경설정을 한 뒤에 기본 튜토리얼을 따라하길 추천한다.
+
+
 TensorFlow Installation
 텐서플로우 설치
 
