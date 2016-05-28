@@ -1,7 +1,7 @@
 번역자 : 권갑진 kwonssi@naver.com
 
  CLOSING
- +마치며
+ +마무리
   
   Exploration is the engine that drives innovation. Innovation drives economic growth. So let’s all go exploring.
  -
