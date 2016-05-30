@@ -187,23 +187,34 @@ K-means algorithm
 K-평균 알고리즘
 
 K-means is a type of unsupervised algorithm which solves the clustering problem. Its procedure follows a simple and easy way to classify a given data set through a certain number of clusters (assume k clusters). Data points inside a cluster are homogeneous and heterogeneous to peer groups, that means that all the elements in a subset are more similar to each other than with the rest.
+K평균 알고리즘은 군집 문제를 해결하는 비지도학습의 종류 이다. 이것의 동작은 특정한 수의 클러스터(k cluster)를 통한 간단하고 쉬운 분석을 구분 작업 수행이다. 군집 내 데이터 좌표는 동질성이 있고, 타 그룹에 대하여 구분된 특질이 있다. 군집내 요소들은 나머지 요소들보다 동질성이 있다는 것을 의미한다.
 
 The result of the algorithm is a set of K dots, called centroids, which are the focus of the different groups obtained, and the tag that represents the set of points that are assigned to only one of the K clusters. All the points within a cluster are closer in distance to the centroid than any of the other centroids.
+이 알고리즘의 결과물로는 중심값(Centroid)라고 불리는 K점들이다. 이것은 구분되는 그룹들 간의 주요점이 된다. 그리고 K클러스터에만 유일하게 할당되는 점들의 집합을 대표하는 식별자가 된다.   
 
 Making clusters is a computationally expensive problem if we want to minimize the error function directly (what is known as an NP-hard problem); and therefore it some algorithms that converge rapidly in a local optimum by heuristics have been created. The most commonly used algorithm uses an iterative refinement technique, which converges in a few iterations.
+만일 군집화 작업을 우리가 직접적으로 에러를 최소화하는 방향으로 작업할 때, 계산에 드는 비용이 상당히 문제이다. (NP-hard라고 알려진 문제), 그러므로 휴리스틱하게 지역적 최적값으로 빠르게 수렴하는 알고리즘들이 몇가지 개발 되었다. 가장 일반적으로 쓰여지는 알고리즘은 수회의 반복을 통하여 반복적인 정제 작업을 수행한다. 
 
 Broadly speaking, this technique has three steps:
+개략적으로 말하면, 이 기술은 3가지 단계가 있다. 
 
 Initial step (step 0): determines an initial set of K centroids.
 Allocation step (step 1): assigns each observation to the nearest group.
 Update step (step 2): calculates the new centroids for each new group.
 There are several methods to determine initial K centroids. One of them is randomly choose K observations in the data set and consider them centroids; this is the one we will use in our example.
+초기 단계 (step 0): 초기 K중심값 결정
+할당 단계 (step 1): 가장 관측값에서 가까운 그룹에 할당
+업데이트 단계 (step 2): 각 그룹에서 새로운 중심치 도출
+초기 K중심값을 결정하는 방법은 여러가지가 있다. 그 방법 중 하나는 랜덤하게 K개 관측점을 데이터 집합에서 선별하여 중심값으로 고려한다. 이 방법을 우리의 예제에서 이용할 것이다.    
 
 The steps of allocation (step 1) and updating (step 2) are being alternated in a loop until it is considered that the algorithm has converged, which may be for example when allocations of points to groups no longer change.
+핟당 단계(step 1)과 업데이트 단계(step 2)는 알고리즘이 수렴되었다고 여겨질 때 까지 번갈아가며 수행된다. 수렴은 예를들어 할당 결과가 더이상 바뀌지 않을 때가 될 수 있다.
 
 Since this is a heuristic algorithm, there is no guarantee that it converges to the global optimum, and the outcome depends on the initial groups. Therefore, as the algorithm is generally very fast, it is usual to repeat executions multiple times with different values of the initials centroides, and then weigh the result.
+이것은 휴리스틱한 알고리즘이므로, 전체적으로 최적값으로 수렴한다는 보장을 할 수 없다. 그리고 결과물은 초기 그룹에 영향을 받는다.  그러므로 (이 알고리즘이 일반적을 빠른 종류이므로 ) 대개 다양한 초기 중심치값들을 두고 많은 회차를 수행하면서 결과를 비교한다.
 
 To start coding our example of K-means in TensorFlow I suggest to first generate some data as a testbed. I propose to do something simple, like generating 2,000 points in a 2D space in a random manner, following two normal distributions to draw up a space that allows us to better understand the outcome. For example, I suggest the following code:
+
 
 ```python
 num_puntos = 2000
