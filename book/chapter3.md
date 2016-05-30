@@ -214,7 +214,8 @@ Since this is a heuristic algorithm, there is no guarantee that it converges to 
 이것은 휴리스틱한 알고리즘이므로, 전체적으로 최적값으로 수렴한다는 보장을 할 수 없다. 그리고 결과물은 초기 그룹에 영향을 받는다.  그러므로 (이 알고리즘이 일반적을 빠른 종류이므로 ) 대개 다양한 초기 중심치값들을 두고 많은 회차를 수행하면서 결과를 비교한다.
 
 To start coding our example of K-means in TensorFlow I suggest to first generate some data as a testbed. I propose to do something simple, like generating 2,000 points in a 2D space in a random manner, following two normal distributions to draw up a space that allows us to better understand the outcome. For example, I suggest the following code:
-우리의 텐서플로우를 이용한 K평균 예제 코딩을 시작하기 위하여, 나는 먼저 테스트 데이터를 생성하는 것을 권한다. 나는 간단하게 2차 평면에서 랜덤하게 2,000개의 포인트를 생성할 것을 제시한다. 해당 포인트는 2개의 정규 분포가 공간에 분포 될 것이고, 이것을 통해 결과물에 대한 이해를 높이게 될 것이다. 예로 아래와 같이 제시한다. 
+텐서플로우로 K-평균 예제를 작성하기 위해, 나는 시험대로써 일부 데이터를 먼저 만들어보길 제안한다. 나는 난수를 2차원 공간에 2000 개의 점을 발생시키는 것이나, 결과를 더 잘 이해하기 위해 두개의 정규 분포를 공간상에 그려보는 것 등의 간단한 작업을 할 것을 제안한다. 한 예로, 나는 다음의 코드를 제안한다:
+
 
 ```python
 num_puntos = 2000
@@ -226,31 +227,32 @@ for i in xrange(num_puntos):
         conjunto_puntos.append([np.random.normal(3.0, 0.5), np.random.normal(1.0, 0.5)])
 ```
 As we have done in the previous chapter, we can use some Python graphic libraries to plot the data. I propose that we use matplotlib like before, but this time we will also use the visualization package Seaborn based on matplotlib and the data manipulation package pandas, which allows us to work with more complex data structures.
-이전 장에서 작업했던 것과 같이, 우리는 데이터를 도식화 할 때 파이썬 그래픽 라이브러리를 이용할 수 있다. 나는 이전과 같이 matpplotlib을 이용할 것을 제안하며, matplotlib에 기반한 Seaborn 이라는 시각화 패키지를 이용하고, pandas라는 데이터 처리 패키지를 이용할 것이다. 우리는 보다 복잡한 구조의 데이터를 pandas를 통해 해결할 것이다. 
+앞 장에서 우리가 했던 것처럼, 데이터를 표시하기 위해 파이썬 그래픽 라이브러리를 사용할 것이다. 나는 이전처럼 matplotlib 를 사용할 것을 제안한다. 그러나, 이번엔 matplotlib 에 기반한 시각화 패키지인 Seaborn 와 데이터 처리 패키지인 pandas 또한 사용할 것이다. 
 
 If you do not have these packages installed, you must do it with the pip value before you can run the following codes.
-만을 이러한 패키지가 설치 되지 않을 경우, 아래 코드를 실행하기 전에 pip 과정을 통해 반드시 완료하여야 한다.
+이러한 패키지가 설치되어 있지 않은 경우, 다음과 같은 코드를 실행하기 전에 당신은 pip value 명령을 수행해야합니다.
 
 To display the points that have been generated randomly I suggest the following code:
-랜덤하게 생성된 포인트들이 보여지기 위하여 아래와 같이 코드를 제시한다.
+임의의 난수로 발생한 점들을 표현하기 위해, 나는 다음의 코드를 제안한다:
 
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-df = pd.DataFrame({"x": [v[0] for v in set_points],
-"y": [v[1] for v in set_points]})
+df = pd.DataFrame({"x": [v[0] for v in conjunto_puntos],
+"y": [v[1] for v in conjunto_puntos]})
 sns.lmplot("x", "y", data=df, fit_reg=False, size=6)
 plt.show()
 ```
 This code generates a graph of points in a two dimensional space like the following screenshot:
-이 코드는 아래 그림과 같이 2차 평면에 포인트 그래프를 생성한다.
+이 코드는 다음 스크린샷과 같은 2 차원의 점의 그래프를 생성한다:
 
 image024
 
 A k-means algorithm implemented in TensorFlow to group the above points, for example in four clusters, can be as follows (based on the model proposed by Shawn Simister in his blog[21]):
-위에 생성된 포인트들을 텐서플로우를 이용한 K평균 알고리즘으로 4개의 군집을 구현한 예는 아래와 같다. ( Shawn Simister의 블로그에서 구현된 모델 기반) 
+텐서플로우에서 구현된 K-평균 알고리즘(예를 들면 4개의 클러스터 예제)은 다음과 같다(Shawn Simister 의 블로그[21]에 제안된 모델을 바탕으로 함)
+
 ```python
 import numpy as np
 vectors = tf.constant(conjunto_puntos)
@@ -287,33 +289,29 @@ for step in xrange(100):
          plt.show()
 ```         
 The screenshot with the result of the execution of my code it is shown in the following figure:
-이 코드를 수행한 결과물의 스크린샷은 아래 그림에서 보여준다.
+코드의 실행결과 화면은 다음과 같다:
 
 image026
 
 New groups
 새 그룹
 
-I assume that the reader might feel a little overwhelmed with the K-means code presented in the previous section. Well, I propose that we analyze this in detail, step by step, and especially watch the tensors invoved and how they are transformed during the program.
-나는 독자들이 이전 섹션에서 보여진 K평균 코드로 인해 약간의 어려움을 겪을 것이라 느낀다. 그렇지만 우리는 이것을 좀더 자세히 단계별로 특히 구현외 관여된 텐서들이 프로그램이 실행되는 과정에서 변환되는 과정을 분석 할 것이다. 
+I assume that the reader might feel a little overwhelmed with the K-means code presented in the previous section. Well, I propose that we analyze this in detail, step by step, and especially watch the tensors involved and how they are transformed during the program.
+이전 섹션에 나온 K-평균 코드로 인해 독자들이 약간 당황했을 수 있다고 생각한다. 단계별로 상세한 내용을 분석하고, 특별히  연관된 텐서들을 관찰하고, 그것들이 프로그램을 통해 어떻게 변형되는지 볼 것을 제안한다.
+
 The first thing to do is move all our data to tensors. In a constant tensor, we keep our entry points randomly generated:
-첫 번 째로 할 일은 모든 우리의 데이터를 텐서로 옮기는 것이다. 상수텐서로 우리가 랜덤하게 생성한 포인트들을 치환한다.
+첫번째 해야할 일은 모든 데이터를 텐서로 이동시키는 것이다. 상수 텐서안에, 우리는 임의로 만들어진 진입점들을 보관한다.
+
 ```python
 vectors = tf.constant(conjunto_vectors)
 ```
 Following the algorithm presented in the previous section, in order to start we must determine the initial centroids. As I advanced, an option may be randomly choose K observations from the input data. One way to do this is with the following code, which indicates to TensorFlow that it must shuffle randomly the entry point and choose the first K points as centroids:
-이전장에서 보여주었듯이 다음 알고리즘은, 시작하기 위하여 초기 중심값을 결정하는 것이다. 시작하기 전에 입력 데이터 중 K개 관측값이 랜덤하게 결정 될 수 있다. 이러한 과정이 다음 코드에 나타나 있는데, 초기 중심치 포인트 K를 결정하는 과정을 텐서플로우가 랜덤하게 섞는 것을 나타낸 것이다. 
 
 ```python
 k = 4
 centroides = tf.Variable(tf.slice(tf.random_shuffle(vectors),[0,0],[k,-1]))
-```
-These K points are stored in a 2D tensor. To know the shape of those tensors K
-we can use tf.Tensor.get_shape():
-K 포인트들은 2D 텐서에 보관되어 있다. 이러한 텐서 K의 형태를 알고 싶으면 
-tf.Tensor.get_shape() 를 이용하면된다.
+These K points are stored in a 2D tensor. To know the shape of those tensors we can use tf.Tensor.get_shape():
 
-```python
 print vectors.get_shape()
 print centroides.get_shape()
 
@@ -321,50 +319,37 @@ TensorShape([Dimension(2000), Dimension(2)])
 TensorShape([Dimension(4), Dimension(2)])
 ```
 We can see that vectors is an array that dimension D0 contains 2000 positions, one for each, and D1 contains the position x,y for each point. Instead, centroids is a matrix of four positions in the dimension D0, one position for each centroid, and the dimension D1 is equivalent to the dimension D1 of vectors.
-우리는 벡터가 D0차원에서 2000개의 각각의 위치를, D1차원에서 좌표 x, y를 담고 있는 배열임을 볼 수 있다. 반면에 중심치는 4개의 위치 정보를 D0차원에 각각 담고, D1차원에 벡터의 D1과 동등한 정보를 갖고 있다. 
 
 Next, the algorithm enters in a loop. The first step is to calculate, for each point, its closest centroid by the Squared Euclidean Distance[22] (which can only be used when we want to compare distances):
-다음으로, 알고리즘이 반복 구문으로 진입한다. 첫번째 단계는 각 포인트들에 대해서 연산하는 것인이고, 유클리디안 제곱 거리를 이용한 최 근접 중심치를 연산한다. (이것은 우리가 거리를 비교할 때 이용할 수 있다.)
+
 image028
 
 To calculate this value tf.sub(vectors, centroides) is used. We should note that, although the two subtract tensors have both 2 dimensions, they have different sizes in one dimension (2000 vs 4 in dimension D0), which, in fact, also represent different things.
-이 계산을 하기 위해서 tf.sub(vectors, centroides)가 이용된다. 반드시 알아야 할 점은 감산을 할 텐서가 2개의 차원을 가졌는데, 1차원에서 다른 길이를 갖는 점이다. (D0 내 2000 대 4), 사실 D0은 각각 다른 정보를 담고 있다. 
 
 To fix this problem we could use some of the functions discussed before, for instance tf.expand_dims in order to insert a dimension in both tensors. The aim is to extend both tensors from 2 dimensions to 3 dimensions to make the sizes match in order to perform a subtraction:
-이러한 문제를 고치기 위하여 우리는 이전에 몇가지 함수에 대해서 논의 할 수 있었다. 예를들어, tf.expand_dims를 이용하여 양측 텐서에 새로운 차원을 삽입한다. 이것의 목적은 양측 텐서를 2차원에서 3차원으로 확장하여 감산 연산을 수행할 수 있도록 크기를 맞추는 것이다.  
 
-```python
 expanded_vectors = tf.expand_dims(vectors, 0)
 expanded_centroides = tf.expand_dims(centroides, 1)
-```
 tf.expand_dims inserts one dimension in each tensor; in the first dimension (D0) of vectors tensor, and in the second dimension (D1) of centroids tensor. Graphically, we can see that in the extended tensors the dimensions have the same meaning in each of them:
-tf.expand_dim은 각 텐서에 1개 차원을 삽입한다. 벡터 텐서에는 1차 차원을(D0), 중심치 텐서에는 2차 차원(D1)을 넣는다. 우리는 여기서 그래픽 하게 각 차원의 의미가 각 텐서에서의 같은 의미를 갖는 것을 볼 수 있다.
 
 image031
 
 It seems to be solved, but actually, if you look closely (outlined in bulk in the illustration), in each case there are dimensions that have not been able to determinate the sizes of those dimensions. Remember that the with get_shape() function we can find out:
-문제는 풀린 것으로 보이지만 그림에서 빗금친 영역을 자세히 들여다 보면, 각 차원에서 각각의 사이즈가 결정 되지 않은 것을 볼 수 있다.
-get_shape()함수를 이용하여 상황을 확인할 수 있다는 것을 기억해야 한다.
 
 ```python
 print expanded_vectors.get_shape()
 print expanded_centroides.get_shape()
 ```
 The output is as follows:
-결과물은 아래와 같다.
-
 ```python
 TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
 TensorShape([Dimension(4), Dimension(1), Dimension(2)])
 ```
 With 1 it is indicating a no assigned size.
-1이 의미하는 바는 사이즈가 할당 되지 않았다는 것을 의미한다.
 
 But I have already advanced that TensorFlow allows broadcasting, and therefore the tf.sub function is able to discover for itself how to do the subtraction of elements between the two tensors.
-그러나 나는 이전에 텐서플로으가 브로드캐스팅을 지원한다고 확인했었고, 이것은 tf.sub 함수는 2개의 텐서 사이에 어떻게 감산을 하여야 하는지 스스로 찾아낼 수 있다는 것이다. 
 
 Intuitively, and observing the previous drawings, we see that the shape of the two tensors match, and in those cases both tensors have the same size in a certain dimension. These math, as happens in dimension D2. Instead, in the dimension D0 only has a defined size the expanded_centroides.
-직관적으로, 이전 도해를 관찰 했을 때 우리는 두 텐서의 형태가 맞출 수 있는 형태이고, 이 형태는 특정한 차원 영역에서 같은 크기의 경우를 갖는다. 이 연산은 D2 차원에서 일어난다. 
 
 In this case, TensorFlow assumes that the dimension D0 of expanded_vectors tensor have to be the same size if we want to perform a subtraction element to element within this dimension.
 
