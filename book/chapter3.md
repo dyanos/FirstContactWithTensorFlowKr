@@ -498,9 +498,12 @@ I hope that the reader has a similar values on the screen, since this will indic
 I suggest that the reader tries to change any of the values in the code, before advancing. For example the num_points, and especially the number of clustersk, and see how it changes the result in the assignment_values tensor with the previous code that generates a graph.
 
 Remember that in order to facilitate testing the code described in this chapter, it can be downloaded from Github[26] . The name of the file that contains this code is Kmeans.py.
+이 장에서 설명하는 코드의 테스트 용이하게하기 위해 기억하자, 그것은 Github[26]에서 다운로드 할 수 있다. 이 코드가 포함 된 파일의 이름은 Kmeans.py 이다.
 
 In this chapter we have advanced some knowledge of TensorFlow, especially on basic data structure tensor, from a code example in TensorFlow that implements a clustering algorithm K-means.
+이 장에서 우리는 클러스터링 알고리즘 K-평균을 구현한 TensorFlow의 코드 예제를 통해, 특히 기본 데이터 구조 텐서에 대해서  TensorFlow의 지식을 습득했다.
 
 With this knowledge, we are ready to build a single layer neural network, step by step, with TensorFlow in the next chapter.
+이러한 지식을 바탕으로, 우리는 다음 챕터에서 텐서플로우를 사용한 단일층의 신경 네트워크 구축을 다룰 준비가 되었다.
 
 [contents link]
