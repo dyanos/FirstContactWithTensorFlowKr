@@ -148,34 +148,34 @@ In this code, after importing the Python module tensorflow, we define “symboli
 The main ones are shown in the following table:
 중요 함수들은 다음 테이블과 같다.
               
-Operation | Description
-----------+-----------
-tf.add    | sum
-tf.sub |    substraction
-tf.mul |    multiplication
-tf.div |    division
-tf.mod |    module
-tf.abs |    return the absolute value
-tf.neg |    return negative value
-tf.sign |   return the sign
-tf.inv   |  returns the inverse
-tf.square | calculates the square
-tf.round |  returns the nearest integer
-tf.sqrt |   calculates the square root
-tf.pow |    calculates the power
-tf.exp |    calculates the exponential
-tf.log |    calculates the logarithm
-tf.maximum |    returns the maximum
-tf.minimum |    returns the minimum
-tf.cos |    calculates the cosine
-tf.sin |    calculates the sine
-               
+| Operation | Description |
+| ----------|-------------|
+| tf.add    | sum | 
+| tf.sub |    substraction | 
+| tf.mul |    multiplication | 
+| tf.div |    division | 
+| tf.mod |    module | 
+| tf.abs |    return the absolute value | 
+| tf.neg |    return negative value | 
+| tf.sign |   return the sign | 
+| tf.inv   |  returns the inverse | 
+| tf.square | calculates the square | 
+| tf.round |  returns the nearest integer | 
+| tf.sqrt |   calculates the square root | 
+| tf.pow |    calculates the power | 
+| tf.exp |    calculates the exponential | 
+| tf.log |    calculates the logarithm | 
+| tf.maximum |    returns the maximum | 
+| tf.minimum |    returns the minimum | 
+| tf.cos |    calculates the cosine | 
+| tf.sin |    calculates the sine | 
+
 
 TensorFlow also offers the programmer a number of functions to perform mathematical operations on matrices. Some are listed below:
 텐서플로우는 행렬 연산을 위한 함수도 제공한다. 몇 가지를 나열하면 아래와 같다.
 
 Operation | Description
-----------+------------
+----------|------------
 tf.diag | returns a diagonal tensor with a given diagonal values
 tf.transpose | returns the transposes of the argument
 tf.matmul |    returns a tensor product of multiplying two tensors listed as arguments
@@ -207,7 +207,7 @@ Parallelism is therefore one of the factors that enables us to speed up the exec
 병렬처리는 계산비용이 많이 드는 복잡한 알고리즘을 빠르게 실행할 수 있는 특징이 있고, 또한 텐서 플로우는 이미 복잡한 연산들을 효율적으로 구현해 놓았다. 게다가 이런 연산들은 대부분 연산들의 대부분은 GPU와 같은 특정 디바이스를 위해 연산이 구현된 관련 커널을 가지고 있다. 다음 표는 중요한 연산/커널을 요약했다.
 
 Operations groups | Operations
-------------------+-------------
+------------------|-------------
 Maths |   Add, Sub, Mul, Div, Exp, Log, Greater, Less, Equal
 Array |   Concat, Slice, Split, Constant, Rank, Shape, Shuffle
 Matrix |  MatMul, MatrixInverse, MatrixDeterminant
