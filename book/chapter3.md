@@ -367,10 +367,13 @@ Intuitively, and observing the previous drawings, we see that the shape of the t
 직관적으로, 이전 도해를 관찰 했을 때 우리는 두 텐서의 형태가 맞출 수 있는 형태이고, 이 형태는 특정한 차원 영역에서 같은 크기의 경우를 갖는다. 이 연산은 D2 차원에서 일어난다. 
 
 In this case, TensorFlow assumes that the dimension D0 of expanded_vectors tensor have to be the same size if we want to perform a subtraction element to element within this dimension.
+이러한 경우, 만일 우리가 이 차원(D2) 차원에서 점대 점 감산 연산을 하고자 한다면 텐서플로우는 expaneded_vectors의 텐서를 같은 사이즈로 가정하정 하도록 한다.
 
 And the same happens with the size of the dimension D1 of expended_centroides tensor, where TensorFlow deduces the size of the dimension D1 of expanded_vectors tensor.
+그리고 D1 차원의 expended_centroid 텐서공간에서 expandec_vector 텐서와 같은 사이즈를 도출할 때에도 같은 작업을 하게 된다. 
 
 Therefore, in the allocation step (step 1) the algorithm can be expressed in these four lines of TensorFlow´s code, which calculates the Squared Euclidean Distance:
+그러므로, 할당 단계(step 1) 알고리즘은 제곱유클리디안거리를 계산하는 4줄의 텐서플로우의 코드로 표현할 수 있다. 
 
 ```python
 diff=tf.sub(expanded_vectors, expanded_centroides)
