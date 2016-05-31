@@ -482,8 +482,10 @@ Notice that the code specifies three operators and it has to go look in the exec
 As update_centroides is an operation whose result is not the parameter that returns, the corresponding item in the return tuple contains nothing, and therefore be ruled out, indicating it with “_” [25].
 
 For the other two values, the centroids and the assigning points to each cluster, we are interested in displaying them on screen once they have completed all num_steps iterations.
+중심값과 각 클러스터에 할당된 포인트들, 두 가지의 값에 대해, 우리는 모든 num_steps 이터레이션을 완료한 후 그것들을 화면에 표시하는데 관심이 있습니다.
 
 We can use a simple print. The output is as it follows:
+간단한 출력을 해보자. 결과는 다음과 같다:
 
 ```python
 print centroid_values
@@ -494,8 +496,10 @@ print centroid_values
 [ 1.83571398e-03 -9.78474259e-01]]
 ```
 I hope that the reader has a similar values on the screen, since this will indicate that he has successfully executed the proposed code in this chapter of the book.
+나는 독자들이 화면의 결과와 비슷한 값을 얻기를 바란다. 그것은 이번 챕터에서 제공한 코드의 실행 결과가 성공적임을 나타내주기 때문이다.
 
 I suggest that the reader tries to change any of the values in the code, before advancing. For example the num_points, and especially the number of clustersk, and see how it changes the result in the assignment_values tensor with the previous code that generates a graph.
+다음 단계로 나아가기 전에, 코드의 값들 중 어떤 것이라도 바뀌보기를 권장한다. 예를 들면 num_points, 특히 clustersk 의 값들이 그것이다. 그리고 그래프를 그리는 이전의 코드와 비교해서 assignment_values 텐서의 결과가 어떻게 바뀌는지 보기 바란다.
 
 Remember that in order to facilitate testing the code described in this chapter, it can be downloaded from Github[26] . The name of the file that contains this code is Kmeans.py.
 이 장에서 설명하는 코드의 테스트 용이하게하기 위해 기억하자, 그것은 Github[26]에서 다운로드 할 수 있다. 이 코드가 포함 된 파일의 이름은 Kmeans.py 이다.
