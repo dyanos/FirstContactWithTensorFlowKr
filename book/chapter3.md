@@ -454,20 +454,26 @@ reduce_mean 연산으로 c군집내 속한 모든 포인트들의 평균 값을 
 어쨌든 만일 독자중에 이 코드에 대해 좀더 자세히 들어가고 싶다면 나는 항상 말하는데, 독자 여러분은 TensorFlow API page[24]에서 아주 설명에 도움이 되는 실례를 찾을 수 있다.
 
 Graph execution
+그래프 실행
 
 Finally, we have to describe the part of the above code that corresponds to the loop and to the part that update the centroids with the new values of the means tensor.
+마지막으로, 루프 및 평균 텐서의 새로운 값으로 중심값들을 갱신하는 부분에 대응하는 코드를 설명한다.
 
 To do this, we need to create an operator that assigns the value of the variable means tensor into centroids in a way than, when the operation run() is executed, the values of the updated centroids are used in the next iteration of the loop:
+이를 위해, 오퍼레이션 run() 이 실행될 때, 평균 텐서의 값들을 중심값들에 할당하는 연산자를 만들어야 한다. 업데이트 된 중심값들의 값은 루프의 다음 이터레이션에서 사용된다:
 
 ```python
 update_centroides = tf.assign(centroides, means)
 ```
 We also have to create an operator to initialize all of the variable before starting to run the graph:
+또한 그래프의 실행을 시작하기 전에, 모든 변수를 초기화하는 연산자도 만들어야 한다:
 
 ```python
 init_op = tf.initialize_all_variables()
 ```
 At this point everything is ready. We can start running the graph:
+모든 준비가 끝났다. 이제 그래프를 그려보자:
+
 ```python
 sess = tf.Session()
 sess.run(init_op)
@@ -476,10 +482,13 @@ for step in xrange(num_steps):
    _, centroid_values, assignment_values = sess.run([update_centroides, centroides, assignments])
 ```
 In this code, for each iteration, the centroids and the new allocation of clusters for each entry points are updated.
+이 코드에선, 각 이터레이션에 대해 중심값과 각 지점들에 대한 클러스터의 새로운 할당이 갱신된다.
 
 Notice that the code specifies three operators and it has to go look in the execution of the call run(), and running in this order. Since there are three values to search, sess.run() returns a data structure of three numpy array elements with the contents of the corresponding tensor during the training process.
+세 개의 연산자를 지정하는 코드에 주의하라. run() 호출의 실행으로 가야하며 위의 순서대로 실행된다. 찾아야 할 값이 3개이므로, sess.run() 는 트레이닝 진행 과정에서 해당 텐서의 내용과 함께 3개의 numpy 배열 요소의 데이터 구조를 리턴한다.
 
 As update_centroides is an operation whose result is not the parameter that returns, the corresponding item in the return tuple contains nothing, and therefore be ruled out, indicating it with “_” [25].
+update_centroides 는 리턴되는 파라미터가 아닌 동작이기 때문에, 리턴되는 투플의 해당 아이템은 아무것도 포함하지 않는다. 따라서 "_" 로 지정하면 제외된다[25]
 
 For the other two values, the centroids and the assigning points to each cluster, we are interested in displaying them on screen once they have completed all num_steps iterations.
 중심값과 각 클러스터에 할당된 포인트들, 두 가지의 값에 대해, 우리는 모든 num_steps 이터레이션을 완료한 후 그것들을 화면에 표시하는데 관심이 있습니다.
