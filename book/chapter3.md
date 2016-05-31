@@ -361,7 +361,7 @@ With 1 it is indicating a no assigned size.
 1이 의미하는 바는 사이즈가 할당 되지 않았다는 것을 의미한다.
 
 But I have already advanced that TensorFlow allows broadcasting, and therefore the tf.sub function is able to discover for itself how to do the subtraction of elements between the two tensors.
-그러나 나는 이전에 텐서플로으가 브로드캐스팅을 지원한다고 확인했었고, 이것은 tf.sub 함수는 2개의 텐서 사이에 어떻게 감산을 하여야 하는지 스스로 찾아낼 수 있다는 것이다. 
+그러나 나는 이전에 텐서플로우가 브로드캐스팅을 지원한다고 확인했었고, 이것은 tf.sub 함수는 2개의 텐서 사이에 어떻게 감산을 하여야 하는지 스스로 찾아낼 수 있다는 것이다. 
 
 Intuitively, and observing the previous drawings, we see that the shape of the two tensors match, and in those cases both tensors have the same size in a certain dimension. These math, as happens in dimension D2. Instead, in the dimension D0 only has a defined size the expanded_centroides.
 직관적으로, 이전 도해를 관찰 했을 때 우리는 두 텐서의 형태가 맞출 수 있는 형태이고, 이 형태는 특정한 차원 영역에서 같은 크기의 경우를 갖는다. 이 연산은 D2 차원에서 일어난다. 
@@ -382,7 +382,7 @@ distances = tf.reduce_sum(sqr, 2)
 assignments = tf.argmin(distances, 0)
 ```
 And, if we look at the shapes of tensors, we see that they are respectively for diff, sqr, distances and assignments as follows:
-
+그리고, 텐서의 형태를 관찰한다면 우리는 'diff', 'sqr', 'distances', 'assignment' 각각의 형태를 아래와 같이 볼 수 있다.
 ```python
 TensorShape([Dimension(4), Dimension(2000), Dimension(2)])
 TensorShape([Dimension(4), Dimension(2000), Dimension(2)])
@@ -390,10 +390,14 @@ TensorShape([Dimension(4), Dimension(2000)])
 TensorShape([Dimension(2000)])
 ```
 That is, tf.sub function has returned the tensor dist, that contains the subtraction of the index values for centroids and vector (indicated in the dimension D1, and the centroid indicated in the dimension D0. For each index x,y are indicated in the dimension D2) .
+즉, tf.sub 함수는 텐서 거리를 반환하고 이것은 중심치와 벡터의 감산들의 인덱스 값의 차를 갖고 있다. 
+(이것은 D1 차원을 가리키고, 중심치는 D0 차원을 가리킨다. 각각 x, y 는 D2차원을 가리키고 있다.)
 
 The sqr tensor contains the square of those. In the distance tensor we can see that it has already reduced one dimension, the one indicated as a parameter in tf.reduce_sum function.
+sqr 텐서는 이것들의 제곱 값을 갖고 있고,  tf.reduce_sum 함수의 파라메터로 축약된 차원의 거리값 텐서의  결과물을 볼 수 있다. 
 
 I use this example to explain that TensorFlow provides several operations which can be used to perform mathematical operations that reduce dimensions of a tensor as in the case of tf.reduce_sum. In the table below you can find a summary of the most important ones:
+나는 이 예제를 텐서플로우의 제공된 다수의 연산들, 예를들어 tf.reduce_sum과 같이 차원 축약에 쓰이는 텐서의 수학적 연산들, 을 설명하는데 이용하였다. 아래 표에서 여러분은 이러한 종류의 중요한 연산들의 요약을 볼 수 있다. 
 
 Operation      | Description
 ---------------|----------------------------------------------------------
@@ -404,6 +408,7 @@ tf.reduce_max  | Computes the maximum of the elements along one dimension
 tf.reduce_mean | Computes the mean of the elements along one dimension
 
 Finally, the assignation is achieved with tf.argmin, which returns the index with the minimum value of the tensor dimension (in our case D0, which remember that was the centroid). We also have the tf.argmax operation:
+마지막으로 tf.argmin으로 부터 획득한 최소값의 텐서 차원(우리의 경우 중심치를 갖고 있는 D0 차원)의 인덱스를 할당하는 것이 달성 되었다. 
 
 Operation  |  Description
 -----------|-------------------------------------------------------------------------------------
@@ -411,20 +416,28 @@ tf.argmin  |  Returns the index of the element with the minimum value along tens
 tf.argmax  |  Returns the index of the element with the maximum value of the tensor dimension
 
 In fact, the 4 instructions seen above could be summarized in only one code line, as we have seen in the previous section:
+사실 이전 섹션에서 봤던 저 4 가지 명령문은 한줄로 요약될 수 있다. 
 
 ```python
 assignments = tf.argmin(tf.reduce_sum(tf.square(tf.sub(expanded_vectors, expanded_centroides)), 2), 0)
 ```
 But anyway, internal tensors and the operations that they define as nodes and execute the internal graph are like the ones we have described before.
+이렇게 되더라도,  내부 텐서와 노드로 정의된 연산들 그리고 내부 그래프는 이전에 구술한것과 유사하다.
 
 Computation of the new centroids
+새 중심치 계산
 
 Once we have created new groups on each iteration, we will have to remember that the new step of the algorithm consists in calculating the new centroids of the groups. In the code of the section before we have seen this line of code:
+각 반복을 통해 우리가 새 그룹을 만들었다면, 명심해야 할 것은 다음 단계의 알고리즘은 해당 그룹에서 새로운 중심치를 계산하는 것으로 이루어 진다는 것이다. 이전 섹션에서 우리는 이 코드를 보았다.
 
+```python
 means = tf.concat(0, [tf.reduce_mean(tf.gather(vectors, tf.reshape(tf.where( tf.equal(assignments, c)),[1,-1])), reduction_indices=[1]) for c in xrange(k)])
+```
 On that piece of code, we can see that the means tensor is the result of the concatenation of the k tensors that correspond to the mean value of every point that belongs to each k cluster.
+이 코드 한줄로 우리는 평균값 텐서를 볼 수 있다.  평균값 텐서는 각각의 k군집에 속해있는 모든 포인트들의 평균 값에 대응하는 k 텐서의 연립으로 된 결과물이다. 
 
 Next, I will comment on each of the TensorFlow operations that are involved in the calculation of the mean value of every points that belongs to each cluster[23]:
+각 군집에 속하여있는 모든 포인트들의 평균 값의 연산에 참여하는 텐서 연산에 대하여 설명할 것이다.
 
 With equal we can obtain a boolean tensor (Dimension(2000)) that indicates (with true value) the positions where the assignment tensor match with the K cluster, which, at the time, we are calculating the average value of the points.
 With where is constructed a tensor (Dimension(1) x Dimension(2000)) with the position where the values true are on the boolean tensor received as a parameter. i.e. a list of the position of these.
@@ -432,6 +445,13 @@ With reshape is constructed a tensor (Dimension(2000) x Dimension(1)) with the i
 With gather is constructed a tensor (Dimension(1) x Dimension(2000)) which gathers the coordenates of the points that form the c cluster.
 With reduce_mean it is constructed a tensor (Dimension(1) x Dimension(2)) that contains the average value of all points that belongs to the cluster c.
 Anyway, if the reader wants to dig deeper into the code, as I always say, you can find more info for each of these operations, with very illustrative examples, on the TensorFlow API page[24].
+
+equal 연산으로 오리는 논리형(bool) 텐서를 구할 것이고(길이 2000의 차원), 이것은 k군집과 대응하는 assignments 텐서의 위치를 나태고 있다. 이와 동시에 우리는 그 점들의 평균값을 계산하고 있다. 
+where 연산을 통해, 파라메터로 받은 논리값(bool) 텐서의 참 값의 위치로 (길이 1 차원 x 길이 2000 차원)의 텐서를 형성하고 (이를테면 참값들의 list)
+reshape 연산을 이용하여, c클러스터에 속한 벡터 텐서 내부에 있는 포인트들의 인덱스들을 구성한다 (길이 2000 차원 x 길이 1 차원)
+gather 연산으로 c군집을 형성하는 포인트들의 좌표들을 수집하여 텐서를 형성하고 (길이 1 차원 x 길이 2000 차원)
+reduce_mean 연산으로 c군집내 속한 모든 포인트들의 평균 값을 같는 텐서(길이 1 차원 x 길이 2 차원)을 형성한다. 
+어쨌든 만일 독자중에 이 코드에 대해 좀더 자세히 들어가고 싶다면 나는 항상 말하는데, 독자 여러분은 TensorFlow API page[24]에서 아주 설명에 도움이 되는 실례를 찾을 수 있다.
 
 Graph execution
 
