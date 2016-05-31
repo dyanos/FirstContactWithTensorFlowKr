@@ -7,7 +7,7 @@ Education is the most powerful weapon which you can use to change the world. Nel
 교육은 세상을 바꿀 수 있는 가장 강력한 무기이다. 넬슨 만델라(Nelson Mandela)
 
 The purpose of this book is to help to spread this knowledge among engineers who want to expand their wisdom in the exciting world of Machine Learning. I believe that anyone with an engineering background may find applications of Deep Learning, and Machine Learning in general, valuable to their work.
-이 책의 목적은 머신러닝(Machine Learning)의 흥미로운 세계에서 지혜를 확장시키길 원하는 엔지니어(engineer)들에게 이 지식을 퍼뜨리는것을 도와주기 위한 것이다. 엔지니어링(engineering)에 경험이 있는 사람이라면, 그들의 일에 가치가 있는 머신러닝(Machine Learning), 딥러닝(Deep Learning)을 활용할 수 있을거라 나는 믿는다.
+이 책의 목적은 머신러닝(Machine Learning)의 흥미로운 세계에서 지혜를 확장시키길 원하는 엔지니어(engineer)들에게 이 지식을 퍼뜨리는것을 도와주기 위한 것이다. 엔지니어링(engineering)에 경험이 있는 사람이라면, 그들의 작업에 가치가 있는 머신러닝(Machine Learning), 딥러닝(Deep Learning)을 활용할 수 있을거라 나는 믿는다.
 
 Given my background, the reader probably will wonder why I have proposed this challenge of writing about this new Deep Learning technology. My research focus is gradually moving from supercomputing architectures and runtimes to execution middleware’s for big data workloads, and more recently to platforms for Machine Learning on massive data.
 내 배경을 토대로, 아마 독자들은 이 새로운 딥러닝(Deep Learning) 기술에 대해 집필하게 된 이유를 궁금해 할 것이다. 내 연구의 중점은 점차 슈퍼컴퓨팅 아키텍쳐(supercomputing architectures), 런타임(runtimes)에서 빅데이터(Big Data)업무를 위한 미들웨어(Middleware)의 수행으로 옮겨졌고, 최근에는 매시브 데이터(massive data)를 이용한 머신러닝(Machine Learning)을 위한 플랫폼으로 옮겨졌다.	
