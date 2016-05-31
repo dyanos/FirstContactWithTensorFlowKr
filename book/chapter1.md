@@ -71,6 +71,7 @@ In general, when you are working in Python, you should use the virtual environme
 First, you should install pip and virtualenv if they are not already installed, like the follow script shows:
 우선 pip와 virtualenv가 설치되어 있지 않다면, 아래의 스크립트로 설치해보자. 
 
+```
 # Ubuntu/Linux 64-bit
 $ sudo apt-get install python-pip python-dev python-virtualenv 
 
@@ -85,16 +86,20 @@ $ virtualenv --system-site-packages ~/tensorflow
 $ source ~/tensorflow/bin/activate #  with bash 
 $ source ~/tensorflow/bin/activate.csh #  with csh
 (tensorflow)$
+```
+
 The name of the virtual environment in which we are working will appear at the beginning of each command line from now on. Once the virtualenv is activated, you can use pip to install TensorFlow inside it:
 이제는 명령줄 시작 부분에 현재 작업하고 있는 가상환경 이름이 나타나게 된다. virtualenv가 활성화 되었으므로 pip를 이용해 텐서플로우를 설치할 수 있다.
 
-
+```
 # Ubuntu/Linux 64-bit, CPU only:
 (tensorflow)$ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.7.1-cp27-none-linux_x86_64.whl 
 
 # Mac OS X, CPU only:
 (tensorflow)$ sudo easy_install --upgrade six
 (tensorflow)$ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/mac/tensorflow-0.7.1-cp27-none-any.whl
+```
+
 I recommend that you visit the official documentation indicated here, to be sure that you are installing the latest available version.
 최신 버전을 설치하려면 공식 문서인 여기를 참고하는 것을 추천한다.
 
@@ -103,7 +108,10 @@ If the platform where you are running your code has a GPU, the package to use wi
 
 Finally, when you’ve finished, you should disable the virtual environment as follows:
 마지막으로 작업을 끝났을때는 아래와 같이 가상 환경을 빠져나와야 한다.
+
+```
 (tensorflow)$ deactivate
+```
 
 Given the introductory nature of this book, we suggest that the reader visits the mentioned official documentation page to find more information about other ways to install Tensorflow.
 이 책은 입문서로 쓰여 졌기에 텐서플로우를 설치하는 다른 방법에 대한 정보를 더 찾기 위해서는 공식 문서를 추천 한다.
@@ -120,107 +128,117 @@ From now on, it is best to use any text editor to write python code and save it 
 To get a first impression of what a TensorFlow’s program is, I suggest doing a simple multiplication program; the code looks like this:
 텐서플로우 프로그래밍 무엇인지 처음 느껴보기 위해서 간단한 곱셈 프로그램을 만들어보는 것을 추천한다. 코드는 아래와 같다.
 
+```
 import tensorflow as tf
   
-   a = tf.placeholder("float")
-    b = tf.placeholder("float")
-      
-       y = tf.mul(a, b)
-         
-          sess = tf.Session()
-            
-             print sess.run(y, feed_dict={a: 3, b: 3})
+a = tf.placeholder("float")
+b = tf.placeholder("float")
+  
+y = tf.mul(a, b)
+
+sess = tf.Session()
+
+print sess.run(y, feed_dict={a: 3, b: 3})
+```
+
+In this code, after importing the Python module tensorflow, we define “symbolic” variables, called placeholder in order to manipulate them during the program execution. Then, we move these variables as a parameter in the call to the function multiply that TensorFlow offers. tf.mul is one of the many mathematical operations that TensorFlow offers to manipulate the tensors. In this moment, tensors can be considered dynamically-sized, multidimensional data arrays.
+이 코드에서 tensorflow라는 python 모듈을 import 하고 나서 프로그램 실행중에 다루기 위해서 placeholder를 호출하는 "symbolic" 변수를 정의하였다. 그리고 나서 이 변수들을 텐서플로우가 제공하는 곱셈연산 함수의 파라미터로 넘긴다. tf.mul은 텐서를 다루기 위해 텐서플로우가 제공하는 많은 수학 연산 함수 중 하나이다. 여기서 텐서는 동적 사이즈 다차원 데이터 배열이라고 생각하면 된다.
+
+
+The main ones are shown in the following table:
+중요 함수들은 다음 테이블과 같다.
               
-
-              In this code, after importing the Python module tensorflow, we define “symbolic” variables, called placeholder in order to manipulate them during the program execution. Then, we move these variables as a parameter in the call to the function multiply that TensorFlow offers. tf.mul is one of the many mathematical operations that TensorFlow offers to manipulate the tensors. In this moment, tensors can be considered dynamically-sized, multidimensional data arrays.
-              이 코드에서 tensorflow라는 python 모듈을 import 하고 나서 프로그램 실행중에 다루기 위해서 placeholder를 호출하는 "symbolic" 변수를 정의하였다. 그리고 나서 이 변수들을 텐서플로우가 제공하는 곱셈연산 함수의 파라미터로 넘긴다. tf.mul은 텐서를 다루기 위해 텐서플로우가 제공하는 많은 수학 연산 함수 중 하나이다. 여기서 텐서는 동적 사이즈 다차원 데이터 배열이라고 생각하면 된다.
-
-
-              The main ones are shown in the following table:
-              중요 함수들은 다음 테이블과 같다.
-              
-              Operation Description
-              tf.add    sum
-              tf.sub    substraction
-              tf.mul    multiplication
-              tf.div    division
-              tf.mod    module
-              tf.abs    return the absolute value
-              tf.neg    return negative value
-              tf.sign   return the sign
-              tf.inv    returns the inverse
-              tf.square calculates the square
-              tf.round  returns the nearest integer
-              tf.sqrt   calculates the square root
-              tf.pow    calculates the power
-              tf.exp    calculates the exponential
-              tf.log    calculates the logarithm
-              tf.maximum    returns the maximum
-              tf.minimum    returns the minimum
-              tf.cos    calculates the cosine
-              tf.sin    calculates the sine
+Operation | Description
+----------+-----------
+tf.add    | sum
+tf.sub |    substraction
+tf.mul |    multiplication
+tf.div |    division
+tf.mod |    module
+tf.abs |    return the absolute value
+tf.neg |    return negative value
+tf.sign |   return the sign
+tf.inv   |  returns the inverse
+tf.square | calculates the square
+tf.round |  returns the nearest integer
+tf.sqrt |   calculates the square root
+tf.pow |    calculates the power
+tf.exp |    calculates the exponential
+tf.log |    calculates the logarithm
+tf.maximum |    returns the maximum
+tf.minimum |    returns the minimum
+tf.cos |    calculates the cosine
+tf.sin |    calculates the sine
                
 
-               TensorFlow also offers the programmer a number of functions to perform mathematical operations on matrices. Some are listed below:
-               텐서플로우는 행렬 연산을 위한 함수도 제공한다. 몇 가지를 나열하면 아래와 같다.
+TensorFlow also offers the programmer a number of functions to perform mathematical operations on matrices. Some are listed below:
+텐서플로우는 행렬 연산을 위한 함수도 제공한다. 몇 가지를 나열하면 아래와 같다.
 
-               Operation    Description
-               tf.diag  returns a diagonal tensor with a given diagonal values
-               tf.transpose returns the transposes of the argument
-               tf.matmul    returns a tensor product of multiplying two tensors listed as arguments
-               tf.matrix_determinant    returns the determinant of the square matrix specified as an argument
-               tf.matrix_inverse    returns the inverse of the square matrix specified as an argument
+Operation | Description
+----------+------------
+tf.diag | returns a diagonal tensor with a given diagonal values
+tf.transpose | returns the transposes of the argument
+tf.matmul |    returns a tensor product of multiplying two tensors listed as arguments
+tf.matrix_determinant |    returns the determinant of the square matrix specified as an argument
+tf.matrix_inverse |    returns the inverse of the square matrix specified as an argument
                
-               The next step, one of the most important, is to create a session to evaluate the specified symbolic expression. Indeed, until now nothing has yet been executed in this TensorFlowcode. Let me emphasize that TensorFlow is both, an interface to express Machine Learning’s algorithms and an implementation to run them, and this is a good example.
-               다음 단계로 가장 중요한 것 중에 하나인 심볼릭 표현을 평가하기 위해 세션을 만드는 것이다. 실제로 텐서플로우 코드에서 아직 아무것도 시작되지 않았다. 텐서플로우가 머신러닝 알고리즘을 표현하기 위한 인터페이스와 알고리즘을 실행하는 프로그램으로서의 측면을 가지고 있다고 강조하고 싶다. 이것은 좋은 예제이다.
+The next step, one of the most important, is to create a session to evaluate the specified symbolic expression. Indeed, until now nothing has yet been executed in this TensorFlowcode. Let me emphasize that TensorFlow is both, an interface to express Machine Learning’s algorithms and an implementation to run them, and this is a good example.
+다음 단계로 가장 중요한 것 중에 하나인 심볼릭 표현을 평가하기 위해 세션을 만드는 것이다. 실제로 텐서플로우 코드에서 아직 아무것도 시작되지 않았다. 텐서플로우가 머신러닝 알고리즘을 표현하기 위한 인터페이스와 알고리즘을 실행하는 프로그램으로서의 측면을 가지고 있다고 강조하고 싶다. 이것은 좋은 예제이다.
 
-               Programs interact with Tensorflow libraries by creating a session with Session(); it is only from the creation of this session when we can call the run() method, and that is when it really starts to run the specified code. In this particular example, the values of the variables are introduced into the run() method with a feed_dict argument. That’s when the associated code solves the expression and exits from the display a 9 as a result of multiplication.
-               프로그램은 Session()을 통해 세션을 생성함으로써 텐서 플로우와 상호작용하게 된다. 세션을 만든 다음 run() 함수를 호출 할 때 진짜로 입력된 코드가 실행된다. 이 예제에서 run() 함수에 전달될 변수들의 값은 feed_dict의 인자로 넘기면 된다. 입력된 코드가 수행되면 곱셈의 결과인 9를 화면에 출력하고 종료된다.
+Programs interact with Tensorflow libraries by creating a session with Session(); it is only from the creation of this session when we can call the run() method, and that is when it really starts to run the specified code. In this particular example, the values of the variables are introduced into the run() method with a feed_dict argument. That’s when the associated code solves the expression and exits from the display a 9 as a result of multiplication.
+프로그램은 Session()을 통해 세션을 생성함으로써 텐서 플로우와 상호작용하게 된다. 세션을 만든 다음 run() 함수를 호출 할 때 진짜로 입력된 코드가 실행된다. 이 예제에서 run() 함수에 전달될 변수들의 값은 feed_dict의 인자로 넘기면 된다. 입력된 코드가 수행되면 곱셈의 결과인 9를 화면에 출력하고 종료된다.
 
-               With this simple example, I tried to introduce the idea that the normal way to program in TensorFlow is to specify the whole problem first, and eventually create a session to allow the running of the associated computation.
-               간단한 이 예제에서 텐서플로우 프로그램의 일반적인 방법은 전체 알고리즘을 정의하고 그 다음 최종적으로 관련 계산을 수행하기 위해 세션을 생성시킨다.
+With this simple example, I tried to introduce the idea that the normal way to program in TensorFlow is to specify the whole problem first, and eventually create a session to allow the running of the associated computation.
+간단한 이 예제에서 텐서플로우 프로그램의 일반적인 방법은 전체 알고리즘을 정의하고 그 다음 최종적으로 관련 계산을 수행하기 위해 세션을 생성시킨다.
 
-               Sometimes however, we are interested in having more flexibility in order to structure the code, inserting operations to build the graph with operations running part of it. It happens when we are, for example, using interactive environments of Python such as IPython [8]. For this purpose, TesorFlow offers the tf.InteractiveSession() class.
-               그러나 때로는 일부의 부분만 계산을 수행하면서 그래프를 만들기 위해 연산을 추가하는 등의 구조화된 코드를 위해서 더 복잡한 것이 필요할 때가 있다. 예를 들어 IPython과 같은 인터액티브 환경을 사용하여 개발할 때 이런 일은 빈번히 발생할 수 있다. 이런 목적으로 텐서플로우는 tf.InteractiveSession() 클래스를 제공한다.
+Sometimes however, we are interested in having more flexibility in order to structure the code, inserting operations to build the graph with operations running part of it. It happens when we are, for example, using interactive environments of Python such as IPython [8]. For this purpose, TesorFlow offers the tf.InteractiveSession() class.
+그러나 때로는 일부의 부분만 계산을 수행하면서 그래프를 만들기 위해 연산을 추가하는 등의 구조화된 코드를 위해서 더 복잡한 것이 필요할 때가 있다. 예를 들어 IPython과 같은 인터액티브 환경을 사용하여 개발할 때 이런 일은 빈번히 발생할 수 있다. 이런 목적으로 텐서플로우는 tf.InteractiveSession() 클래스를 제공한다.
 
-               The motivation for this programming model is beyond the reach of this book. However, to continue with the next chapter, we only need to know that all information is saved internally in a graph structure that contains all the information operations and data.
-               이런 프로그래밍 모델을 채택하게 된 이유를 설명하는 것은 이 책의 범위를 벗어난다. 그러나 다음 장으로 넘어가기 위해서는 그래프 구조에 모든 정보 (operation과 data)를 내부적으로 저장하고 있다는 것은 기억하고 넘어가도록 하자.
+The motivation for this programming model is beyond the reach of this book. However, to continue with the next chapter, we only need to know that all information is saved internally in a graph structure that contains all the information operations and data.
+이런 프로그래밍 모델을 채택하게 된 이유를 설명하는 것은 이 책의 범위를 벗어난다. 그러나 다음 장으로 넘어가기 위해서는 그래프 구조에 모든 정보 (operation과 data)를 내부적으로 저장하고 있다는 것은 기억하고 넘어가도록 하자.
 
-               This graph describes mathematical computations. The nodes typically implement mathematical operations, but they can also represent points of data entry, output results, or read/write persistent variables. The edges describe the relationships between nodes with their inputs and outputs and at the same time carry tensors, the basic data structure of TensorFlow.
-               이 그래프 구조는 수학적인 계산을 묘사한다. 노드는 일반적으로 수학 연산을 나타내고 데이터 엔트리의 포인트와, 아웃풋 결과 또는 저장된 변수의 입.출력을 한다. 엣지는 입력과 출력의 노드 사이에 관계를 표현하고 그와 동시에 텐서플로우의 기본 데이터 구조인 텐서를 옮긴다.
+This graph describes mathematical computations. The nodes typically implement mathematical operations, but they can also represent points of data entry, output results, or read/write persistent variables. The edges describe the relationships between nodes with their inputs and outputs and at the same time carry tensors, the basic data structure of TensorFlow.
+이 그래프 구조는 수학적인 계산을 묘사한다. 노드는 일반적으로 수학 연산을 나타내고 데이터 엔트리의 포인트와, 아웃풋 결과 또는 저장된 변수의 입.출력을 한다. 엣지는 입력과 출력의 노드 사이에 관계를 표현하고 그와 동시에 텐서플로우의 기본 데이터 구조인 텐서를 옮긴다.
 
-               The representation of the information as a graph allows TensorFlow to know the dependencies between transactions and assigns operations to devices asynchronously, and in parallel, when these operations already have their associated tensors (indicated in the edges input) available.
-               텐서플로우는 그래프로 표현된 정보를 이용하여 트랜잭션간의 의존성을 파악하고, 연산들이 관련된 텐서가 이미 있을 경우 병렬로 디바이스 비동기적 연산을 할당한다.
+The representation of the information as a graph allows TensorFlow to know the dependencies between transactions and assigns operations to devices asynchronously, and in parallel, when these operations already have their associated tensors (indicated in the edges input) available.
+텐서플로우는 그래프로 표현된 정보를 이용하여 트랜잭션간의 의존성을 파악하고, 연산들이 관련된 텐서가 이미 있을 경우 병렬로 디바이스 비동기적 연산을 할당한다.
 
-               Parallelism is therefore one of the factors that enables us to speed up the execution of some computationally expensive algorithms, but also because TensorFlow has already efficiently implemented a set of complex operations. In addition, most of these operations have associated kernels which are implementations of operations designed for specific devices such as GPUs. The following table summarizes the most important operations/kernels[9]:
-               병렬처리는 계산비용이 많이 드는 복잡한 알고리즘을 빠르게 실행할 수 있는 특징이 있고, 또한 텐서 플로우는 이미 복잡한 연산들을 효율적으로 구현해 놓았다. 게다가 이런 연산들은 대부분 연산들의 대부분은 GPU와 같은 특정 디바이스를 위해 연산이 구현된 관련 커널을 가지고 있다. 다음 표는 중요한 연산/커널을 요약했다.
+Parallelism is therefore one of the factors that enables us to speed up the execution of some computationally expensive algorithms, but also because TensorFlow has already efficiently implemented a set of complex operations. In addition, most of these operations have associated kernels which are implementations of operations designed for specific devices such as GPUs. The following table summarizes the most important operations/kernels[9]:
+병렬처리는 계산비용이 많이 드는 복잡한 알고리즘을 빠르게 실행할 수 있는 특징이 있고, 또한 텐서 플로우는 이미 복잡한 연산들을 효율적으로 구현해 놓았다. 게다가 이런 연산들은 대부분 연산들의 대부분은 GPU와 같은 특정 디바이스를 위해 연산이 구현된 관련 커널을 가지고 있다. 다음 표는 중요한 연산/커널을 요약했다.
 
-               Operations groups    Operations
-               Maths    Add, Sub, Mul, Div, Exp, Log, Greater, Less, Equal
-               Array    Concat, Slice, Split, Constant, Rank, Shape, Shuffle
-               Matrix   MatMul, MatrixInverse, MatrixDeterminant
-               Neuronal Network SoftMax, Sigmoid, ReLU, Convolution2D, MaxPool
-               Checkpointing    Save, Restore
-               Queues and syncronizations   Enqueue, Dequeue, MutexAcquire, MutexRelease
-               Flow control Merge, Switch, Enter, Leave, NextIteration
+Operations groups | Operations
+------------------+-------------
+Maths |   Add, Sub, Mul, Div, Exp, Log, Greater, Less, Equal
+Array |   Concat, Slice, Split, Constant, Rank, Shape, Shuffle
+Matrix |  MatMul, MatrixInverse, MatrixDeterminant
+Neuronal | Network SoftMax, Sigmoid, ReLU, Convolution2D, MaxPool
+Checkpointing |   Save, Restore
+Queues and syncronizations  | Enqueue, Dequeue, MutexAcquire, MutexRelease
+Flow control | Merge, Switch, Enter, Leave, NextIteration
                
-               Display panel Tensorboard
-               디스플레이 패널 텐서보드
+Display panel Tensorboard
+디스플레이 패널 텐서보드
 
-               To make it more comprehensive, TensorFlow includes functions to debug and optimize programs in a visualization tool called TensorBoard. TensorBoard can view different types of statistics about the parameters and details of any part of the graph computing graphically.
-               더 범용적인 툴로 만들기 위해 텐서플로우는 텐서보드라고 불리는 시각화 툴에 디버깅하고 프로그램을 최적화하는 기능을 포함시켰다. 텐서보드에서는 도식화한 그래프의 각 부분의 파라미터와 상세 정보에 대한 여러가지 통계를 볼 수 있다.
-
-
-               The data displayed with TensorBoard module is generated during the execution of TensorFlow and stored in trace files whose data is obtained from the summary operations. In the documentation page[10] of TensorFlow, you can find detailed explanation of the Python API.
-               텐서보드 모듈에 나타나는 데이터는 텐서플로우가 실행되는 동안 생성되며 summary 연산으로 얻을 수 있는 데이터로서 추적 파일에 저장된다. 텐서플로우의 도큐먼트 페이지에서 파이썬 API의 자세하게 설명문서를 참고하자.
+To make it more comprehensive, TensorFlow includes functions to debug and optimize programs in a visualization tool called TensorBoard. TensorBoard can view different types of statistics about the parameters and details of any part of the graph computing graphically.
+더 범용적인 툴로 만들기 위해 텐서플로우는 텐서보드라고 불리는 시각화 툴에 디버깅하고 프로그램을 최적화하는 기능을 포함시켰다. 텐서보드에서는 도식화한 그래프의 각 부분의 파라미터와 상세 정보에 대한 여러가지 통계를 볼 수 있다.
 
 
-               The way we can invoke it is very simple: a service with Tensorflow commands from the command line, which will include as an argument the file that contains the trace.
-               텐서보드를 실행하는 것은 간단한다. 커맨드라인에서 trace가 담겨있는 파일을 인자로 지정하여 실행시키면 된다.
+The data displayed with TensorBoard module is generated during the execution of TensorFlow and stored in trace files whose data is obtained from the summary operations. In the documentation page[10] of TensorFlow, you can find detailed explanation of the Python API.
+텐서보드 모듈에 나타나는 데이터는 텐서플로우가 실행되는 동안 생성되며 summary 연산으로 얻을 수 있는 데이터로서 추적 파일에 저장된다. 텐서플로우의 도큐먼트 페이지에서 파이썬 API의 자세하게 설명문서를 참고하자.
 
-               (tensorflow)$ tensorboard --logdir=&lt;trace file&gt;
-               You simply need to access the local socket 6006 from the browser[11] with http://localhost:6006/ .
 
-               The visualization tool called TensorBoard is beyond the reach of this book. For more details about how Tensorboard works, the reader can visit the section TensorBoard Graph Visualization[12]from the TensorFlow tutorial page.
-               [contents link]
-               텐서보드에 대한 자세한 설명은 이 책의 범위를 벗어난다. 텐서보드가 어떻게 동작하는지에 대한 자세한 것은 텐서플로우 튜토리얼 페이지의 텐서보드 그래프 시각화 부분을 참고하자.
+The way we can invoke it is very simple: a service with Tensorflow commands from the command line, which will include as an argument the file that contains the trace.
+텐서보드를 실행하는 것은 간단한다. 커맨드라인에서 trace가 담겨있는 파일을 인자로 지정하여 실행시키면 된다.
+
+```
+(tensorflow)$ tensorboard --logdir=&lt;trace file&gt;
+```
+
+You simply need to access the local socket 6006 from the browser[11] with http://localhost:6006/ .
+당신은 인터넷 브라우저를 이용하여 로컬 소켓 6006에 접근할 필요가 있다.
+
+The visualization tool called TensorBoard is beyond the reach of this book. For more details about how Tensorboard works, the reader can visit the section TensorBoard Graph Visualization[12]from the TensorFlow tutorial page.
+텐서보드에 대한 자세한 설명은 이 책의 범위를 벗어난다. 텐서보드가 어떻게 동작하는지에 대한 자세한 것은 텐서플로우 튜토리얼 페이지의 텐서보드 그래프 시각화 부분을 참고하자.
+
+[contents link]
+
