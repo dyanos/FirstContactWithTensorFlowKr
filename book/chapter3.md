@@ -1,18 +1,18 @@
 3. CLUSTERING IN TENSORFLOW 텐서 플로우의 군집화
 ===============================
 Linear regression, which has been presented in the previous chapter, is a supervised learning algorithm in which we use the data and output values (or labels) to build a model that fits them. But we haven’t always tagged data, and despite this we also want analyze them in some way. In this case, we can use an unsupervised learning algorithm as clustering. The clustering method is widely used because it is often a good approach for preliminary screening data analysis.
-이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 피팅(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 데이터가 항상 키워드로 분류되어 있는것은 아니다. 그럼에도, 우리는 이러한 데이터를 어떻게 해서든 분석하고 싶어한다. 이러한 경우 우리는 군집화라고 불리는 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
+이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 적합(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 데이터가 항상 키워드로 분류되어 있는것은 아니다. 그럼에도, 우리는 이러한 데이터를 어떻게 해서든 분석하고 싶어한다. 이러한 경우 우리는 군집화라는 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
 
 In this chapter, I will present the clustering algorithm called K-means. It is surely the most popular and widely used to automatically group the data into coherent subsets so that all the elements in a subset are more similar to each other than with the rest. In this algorithm, we do not have any target or outcome variable to predict estimations.
 이번 장에서, K평균 알고리즘을 설명 할 것이다. 이것은 데이터를 자동적으로 질서있는 집합으로 무리지을 때 가장 인기 있고 폭 넓게 쓰이고 있다. 각 부분 집합들의 모든 요소들은 나머지 집합의 요소들 보다 해당 집합내에서 보다 유사성을 갖는다. 
 
 I will also use this chapter to achieve progress in the knowledge of TensorFlow and go into more detail in the basic data structure called tensor. I will start by explaining what this type of data is like and present the transformations that can be performed on it. Then, I will show the use of K-means algorithm in a case study using tensors.
-나는 이번 장을 통해서 텐서 플로우에 대한 지식을 확장 시킬 것이고 텐서라고 불리는 기본 데이터 구조에 대해 좀 더 구체적으로 진입할 것이다. 나는 이 데이터 형태가 어떠한 것인지 설명하고 그것에 대한 변환 이행을 보여줄 것이다. 그 뒤, 나는 텐서를 이용한 K평균 알고리즘의 사용을 바여줄 것이다.
+나는 이번 장을 통해서 텐서 플로우에 대한 지식을 확장 시킬 것이고 텐서라고 불리는 기본 데이터 구조에 대해 좀 더 구체적으로 접근할 것이다. 나는 이 데이터 형태가 어떠한 것인지 설명하고 그것에 대한 변환 이행을 보여줄 것이다. 그 뒤, 나는 텐서를 이용한 K평균 알고리즘의 사용을 보여줄 것이다.
 
 ## Basic data structure: tensor 기본 데이터 구조 : 텐서
 
 TensorFlow programs use a basic data structure called tensor to represent all of their datum. A tensor can be considered a dynamically-sized multidimensional data arrays that have as a properties a static data type, which can be from boolean or string to a variety of numeric types. Below is a table of the main types and their equivalent in Python.
-텐서플로우 프로그램들은 모든 데이터 자료를 표현하는데 있어서 텐서라는 기본 데이터형을 이용한다. 텐서는 불 연산자나 문자열, 다양한 수치형 데이터 같은 정적 데이터 속성을 갖는 동적 크기의 다차원 배열이라고 말할 수 있다.  아래 표는 주요 데이터 형과 파이썬에 대응하는 데이터형에 대한 것이다.
+텐서플로우 프로그램들은 모든 데이터 자료를 표현하는데 있어서 텐서라는 기본 데이터형을 이용한다. 텐서는 논리형 연산자나 문자열, 다양한 수치형 데이터 같은 정적 데이터 속성을 갖는 동적 크기의 다차원 배열이라고 말할 수 있다.  아래 표는 주요 데이터 형과 파이썬에 대응하는 데이터형에 대한 것이다.
  
  Type in TensorFlow | Type in Python | Description
 --------------------|----------------|---------------
@@ -32,7 +32,7 @@ TensorFlow programs use a basic data structure called tensor to represent all of
  텐서는 어느 랭크나 가질수 있다. 랭크 2를 갖는 텐서는 행렬을 의미한다. 랭크 1을 갖는 텐서는 벡터라 할 수 있다. 랭크 0 는 스칼라값을 말한다. 
 
  TensorFlow documentation uses three types of naming conventions to describe the dimension of a tensor: Shape, Rank and Dimension Number. The following table shows the relationship between them in order to make easier the Tensor Flow documentation’s traking easier:
- 텐서플로우 문서는 형태, 랭크, 차수 라는 3 가지 형태의 네이밍 조항을 쓰고 있는다.  아래 표는 텐서 플로우 문서를 쉽게 이해할 수 있도록 이들의 관계를 표현한 것이다. 
+ 텐서플로우 문서는 형태, 랭크, 차수 라는 3 가지 형태의 호칭 규칙을 쓰고 있는다.  아래 표는 텐서 플로우 문서를 쉽게 이해할 수 있도록 이들의 관계를 표현한 것이다. 
 
  Shape             | Rank | Dimension Number
  --------------    |------|--------------------
@@ -48,27 +48,26 @@ TensorFlow programs use a basic data structure called tensor to represent all of
 
  Throughout this chapter we will go into more detail on some of them. A comprehensive list of transformations and details of each one can be found on the official website of TensorFlow, Tensor Transformations[18].
 이번 장 전반에 걸쳐, 우리는 이들 중 일부를 더 자세히 다룰 것이다. 변환에 대한 포괄적인 항목이나 각 항목의 자세한 사항은 텐서플로우의 공식 웹 사이트 중 텐서 변환[18] 에서 찾을 수 있다.
-  
+ 
 
-  Operation      | Description
-  ---------------|--------------------------------------------------------------------------
-  tf.shape       | To find a shape of a tensor
-  tf.size        | To find the size of a tensor
-  tf.rank        | To find a rank of a tensor
-  tf.reshape     | To change the shape of a tensor keeping the same elements contained
-  tf.squeeze     | To delete in a tensor dimensions of size 1
-  tf.expand_dims | To insert a dimension to a tensor 
-  tf.slice       | To remove a portions of a tensor
-  tf.split       | To divide a tensor into several tensors along one dimension
-  tf.tile        | To create a new tensor replicating a tensor multiple times
-  tf.concat      | To concatenate tensors in one dimension
-  tf.reverse     | To reverse a specific dimension of a tensor
-  tf.transpose   | To transpose dimensions in a tensor
-  tf.gather      | To collect portions according to an index
-   
+ Operation      | Description
+ ---------------|--------------------------------------------------------------------------
+ tf.shape       | To find a shape of a tensor
+ tf.size        | To find the size of a tensor
+ tf.rank        | To find a rank of a tensor
+ tf.reshape     | To change the shape of a tensor keeping the same elements contained
+ tf.squeeze     | To delete in a tensor dimensions of size 1
+ tf.expand_dims | To insert a dimension to a tensor 
+ tf.slice       | To remove a portions of a tensor
+ tf.split       | To divide a tensor into several tensors along one dimension
+ tf.tile        | To create a new tensor replicating a tensor multiple times
+ tf.concat      | To concatenate tensors in one dimension
+ tf.reverse     | To reverse a specific dimension of a tensor
+ tf.transpose   | To transpose dimensions in a tensor
+ tf.gather      | To collect portions according to an index
 
-   For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
-   실례로, 2x2000 의 2차원 텐서 어레이를 3차원 텐서 형태로 확장한다고 해보자. 우리는 텐서 안에 차원을 추가해주는 tf.expand_dims 함수를 사용할 수 있다.
+ For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
+ 실례로, 2x2000 의 2차원 텐서 어레이를 3차원 텐서 형태로 확장한다고 해보자. 우리는 텐서 안에 차원을 추가해주는 tf.expand_dims 함수를 사용할 수 있다.
 
 ```python
 vectors = tf.constant(conjunto_puntos)
@@ -89,13 +88,13 @@ get_shape() 함수를 통해 이 텐서의 모양을 알아낸다면, 우리는 
 print expanded_vectors.get_shape()
 
 It appears on the screen like:
-화면에 다음과 같이 나온다:
+화면에 다음과 같이 나타난다.
 
 ```python
 TensorShape([Dimension(1), Dimension(2000), Dimension(2)])
 ```
 Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting, many mathematical manipulation functions of tensors (as presented in the first chapter), are able to discover for themselves the size in the dimension which unspecific size and assign to it this deduced value.
-나중에 이 장에서, 우리는 (1장에서 다루어 졌던) 텐서의 많은 수학적 변형 함수들이 스스로 불특정한 크기의 차원의 크기를 발견할 수 있음과 그것을 추론된 값에 할당할 수 있음을 보게될 것이다.
+고맙게도 플로우의 형태 전개(bradcasting)기능이 있어서, 이 장 다음에 우리는 (1장에서 다루어 졌던)  텐서의 많은 수학적 변형 함수들이 스스로 불특정한 크기의 차원의 크기를 스스로 발견할 수 있음과,  그것을 추론된 값에 할당할 수 있음을 보게될 것이다.
 
 
 ## Data Storage in TensorFlow 텐서 플로우에서의 데이터 저장
@@ -175,7 +174,7 @@ In the last line of code, when the call sess.run() is made, it is when we pass t
 코드의 마지막 라인에서, sess,run() 이 호출될 때가 feed_dict 파라미터로 a 와 b 두 텐서의 값이 전달되는 때이다.
 
 With this brief introduction about tensors, I hope that from now on the reader can follow the codes of the following chapters without any difficulty.
-텐서에 대한 간략한 소개와 더불어, 나는 독자들이 이어지는 챕터의 코드들을 어려움 없이 이해할 수 있으리라 기대한다.
+텐서에 대한 간략한 소개와 더불어, 나는 독자들이 지금부터 이어지는 챕터의 코드들을 어려움 없이 이해할 수 있으리라 기대한다.
 
 
 K-means algorithm K-평균 알고리즘
@@ -221,7 +220,7 @@ for i in xrange(num_puntos):
         conjunto_puntos.append([np.random.normal(3.0, 0.5), np.random.normal(1.0, 0.5)])
 ```
 As we have done in the previous chapter, we can use some Python graphic libraries to plot the data. I propose that we use matplotlib like before, but this time we will also use the visualization package Seaborn based on matplotlib and the data manipulation package pandas, which allows us to work with more complex data structures.
-이전 장에서 작업했던 것과 같이, 우리는 데이터를 도식화 할 때 파이썬 그래픽 라이브러리를 이용할 수 있다. 나는 이전과 같이 matpplotlib을 이용할 것을 제안하며, matplotlib에 기반한 Seaborn 이라는 시각화 패키지를 이용하고, pandas라는 데이터 처리 패키지를 이용할 것이다. 우리는 보다 복잡한 구조의 데이터를 pandas를 통해 해결할 것이다. 
+이전 장에서 작업했던 것과 같이, 우리는 데이터를 도식화 할 때 파이썬 그래픽 라이브러리를 이용할 수 있다. 나는 이전과 같이 matplotlib을 이용할 것을 제안하며, matplotlib에 기반한 Seaborn 이라는 시각화 패키지를 이용하고, pandas라는 데이터 처리 패키지를 이용할 것이다. 우리는 보다 복잡한 구조의 데이터를 pandas를 통해 해결할 것이다. 
 
 If you do not have these packages installed, you must do it with the pip value before you can run the following codes.
 만을 이러한 패키지가 설치 되지 않을 경우, 아래 코드를 실행하기 전에 pip 과정을 통해 반드시 완료하여야 한다.
@@ -367,7 +366,7 @@ And the same happens with the size of the dimension D1 of expended_centroides te
 그리고 D1 차원의 expended_centroid 텐서공간에서 expandec_vector 텐서와 같은 사이즈를 도출할 때에도 같은 작업을 하게 된다. 
 
 Therefore, in the allocation step (step 1) the algorithm can be expressed in these four lines of TensorFlow´s code, which calculates the Squared Euclidean Distance:
-그러므로, 할당 단계(step 1) 알고리즘은 제곱유클리디안거리를 계산하는 4줄의 텐서플로우의 코드로 표현할 수 있다. 
+그러므로, 할당 단계(step 1) 알고리즘은 유클리디안 제곱 거리를 계산하는 4줄의 텐서플로우의 코드로 표현할 수 있다. 
 
 ```python
 diff=tf.sub(expanded_vectors, expanded_centroides)
@@ -439,7 +438,7 @@ With gather is constructed a tensor (Dimension(1) x Dimension(2000)) which gathe
 With reduce_mean it is constructed a tensor (Dimension(1) x Dimension(2)) that contains the average value of all points that belongs to the cluster c.
 Anyway, if the reader wants to dig deeper into the code, as I always say, you can find more info for each of these operations, with very illustrative examples, on the TensorFlow API page[24].
 
-equal 연산으로 오리는 논리형(bool) 텐서를 구할 것이고(길이 2000의 차원), 이것은 k군집과 대응하는 assignments 텐서의 위치를 나태고 있다. 이와 동시에 우리는 그 점들의 평균값을 계산하고 있다. 
+equal 연산으로 우리는 논리형(bool) 텐서를 구할 것이고(길이 2000의 차원), 이것은 k군집과 대응하는 assignments 텐서의 위치를 나태고 있다. 이와 동시에 우리는 그 점들의 평균값을 계산하고 있다. 
 where 연산을 통해, 파라메터로 받은 논리값(bool) 텐서의 참 값의 위치로 (길이 1 차원 x 길이 2000 차원)의 텐서를 형성하고 (이를테면 참값들의 list)
 reshape 연산을 이용하여, c클러스터에 속한 벡터 텐서 내부에 있는 포인트들의 인덱스들을 구성한다 (길이 2000 차원 x 길이 1 차원)
 gather 연산으로 c군집을 형성하는 포인트들의 좌표들을 수집하여 텐서를 형성하고 (길이 1 차원 x 길이 2000 차원)
