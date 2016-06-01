@@ -1,6 +1,5 @@
-3. CLUSTERING IN TENSORFLOW
-3. 텐서 플로우의 군집화
-
+3. CLUSTERING IN TENSORFLOW 텐서 플로우의 군집화
+===============================
 Linear regression, which has been presented in the previous chapter, is a supervised learning algorithm in which we use the data and output values (or labels) to build a model that fits them. But we haven’t always tagged data, and despite this we also want analyze them in some way. In this case, we can use an unsupervised learning algorithm as clustering. The clustering method is widely used because it is often a good approach for preliminary screening data analysis.
 이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 피팅(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 데이터가 항상 키워드로 분류되어 있는것은 아니다. 그럼에도, 우리는 이러한 데이터를 어떻게 해서든 분석하고 싶어한다. 이러한 경우 우리는 군집화라고 불리는 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
 
@@ -10,8 +9,7 @@ In this chapter, I will present the clustering algorithm called K-means. It is s
 I will also use this chapter to achieve progress in the knowledge of TensorFlow and go into more detail in the basic data structure called tensor. I will start by explaining what this type of data is like and present the transformations that can be performed on it. Then, I will show the use of K-means algorithm in a case study using tensors.
 나는 이번 장을 통해서 텐서 플로우에 대한 지식을 확장 시킬 것이고 텐서라고 불리는 기본 데이터 구조에 대해 좀 더 구체적으로 진입할 것이다. 나는 이 데이터 형태가 어떠한 것인지 설명하고 그것에 대한 변환 이행을 보여줄 것이다. 그 뒤, 나는 텐서를 이용한 K평균 알고리즘의 사용을 바여줄 것이다.
 
-Basic data structure: tensor
-기본 데이터 구조 : 텐서
+## Basic data structure: tensor 기본 데이터 구조 : 텐서
 
 TensorFlow programs use a basic data structure called tensor to represent all of their datum. A tensor can be considered a dynamically-sized multidimensional data arrays that have as a properties a static data type, which can be from boolean or string to a variety of numeric types. Below is a table of the main types and their equivalent in Python.
 텐서플로우 프로그램들은 모든 데이터 자료를 표현하는데 있어서 텐서라는 기본 데이터형을 이용한다. 텐서는 불 연산자나 문자열, 다양한 수치형 데이터 같은 정적 데이터 속성을 갖는 동적 크기의 다차원 배열이라고 말할 수 있다.  아래 표는 주요 데이터 형과 파이썬에 대응하는 데이터형에 대한 것이다.
@@ -80,7 +78,7 @@ In this case, tf.expand_dims inserts a dimension into a tensor in the one given 
 Visually, the above transformation is as follows:
 위의 변환을 시각화하면 다음과 같다.
 
-image023
+![image023](http://www.jorditorres.org/wp-content/uploads/2016/02/image023.gif)
 
 As you can see, we now have a 3D tensor, but we cannot determine the size of the new dimension D0 based on function arguments.
 보는바와 같이, 이제 우리는 3차원 텐서를 가지게 되었다. 그러나, 우리는 함수 인수에 기반한 새로운 차원의 D0 의 사이즈는 알 수 없다.
@@ -100,8 +98,7 @@ Later in this chapter, we will see that, thanks to TensorFlow shape broadcasting
 나중에 이 장에서, 우리는 (1장에서 다루어 졌던) 텐서의 많은 수학적 변형 함수들이 스스로 불특정한 크기의 차원의 크기를 발견할 수 있음과 그것을 추론된 값에 할당할 수 있음을 보게될 것이다.
 
 
-Data Storage in TensorFlow
-텐서 플로우에서의 데이터 저장
+## Data Storage in TensorFlow 텐서 플로우에서의 데이터 저장
 
 Following the presentation of TensorFlow’s package, broadly speaking there are three main ways of obtaining data on a TensorFlow program:
 이어지는 텐서 플로우 패키지 안내를 통해, 텐서 플로우 프로그램에서 일반적으로 사용되는 3가지의 주된 데이터 적재 방법을 다룰 것이다.
@@ -115,14 +112,12 @@ Below, I briefly describe each of them.
 이러한 것들은 파이썬 코드로 제공된다
 아래에, 각각의 방법을 간단히 기술한다
 
-Data files
+## Data files 데이터 파일
 Usually, the initial data is downloaded from a data file. The process is not complex, and given the introductory nature of this book I invite the reader to visit the website of TensorFlow[19] for more details on how to download data from different file types. You can also review the Python code input_data.py[20](available on the Github book), which loads the MNIST data from files (I will use this in the following chapters).
-데이터 파일
 일반적으로, 초기 데이터는 데이터 파일로부터 다운로드되어진다. 이 과정은 복잡하지 않다. 그리고 이 책의 서두에서 언급한것 처럼, 다른 파일 타입으로부터 어떻게 데이터를 다운받는지에 대한 자세한 사항에 대해서는 텐서플로우[19]의 웹사이트를 방문하길 추천한다. 파일에서 MNIST 데이터를 읽는 input_data.py[20](깃헙6 북 에서도 가능하다) 의 파이썬 코드를 읽어볼 수도 있다.(나는 다음 챕터에서 이것을 사용할 것이다)
 
-Variables and constants
+## Variables and constants 변수와 상수
 When it comes to small sets, data can also be found pre-loaded into memory; there are two basic ways to create them, as we have seen in the previous example:
-변수와 상수
 작은 단위의 데이터를 쓸 경우, 메모리에 미리 적재하고 사용할 수도 있다; 앞의 예제에서 본 것 처럼, 이를 만드는데에는 두 가지 기본적인 방법이 있다:
 
 As a constants using constant(…)
@@ -160,7 +155,7 @@ When using variables, these must be explicitly initialized after the graph that 
 변수를 사용하는 경우, 그래프의 정의 이후에 명시적으로 초기화되어야만 하며, 초기화 전에는 반드시 run() 함수를 통해 실행되어야만 한다. 우리가 봐온 것처럼, 동일한 목적을 위해, tf.initialize_all_variables() 도 사용될 수 있다. 변수들은 텐서플로우의 tf.train.Saver() 클래스를 이용하면 트레이닝 중이나 후에 디스크로 저장될 수 있다. 그러나 이 클래스를 이 책에서 다루지는 않는다.
 
 
-Provided by Python code
+## Provided by Python code
 Finally, we can use what we have called “symbolic variable” or placeholder to manipulate data during program execution. The call is placeholder(), which includes arguments with the type of the elements and the shape of the tensor, and optionally a name.
 파이썬 코드
 마지막으로, 우리는 프로그램 수행 중에 데이터를 처리하는 "symbolic variable" 또는 placeholder 라고 불리는 것을 사용할 것이다. placeholder() 로 호출하면 되며, 원소의 타입과 텐서의 모양, 그리고 선택적으로 이름을 선언한 인수를 포함한다.
@@ -183,8 +178,8 @@ With this brief introduction about tensors, I hope that from now on the reader c
 텐서에 대한 간략한 소개와 더불어, 나는 독자들이 이어지는 챕터의 코드들을 어려움 없이 이해할 수 있으리라 기대한다.
 
 
-K-means algorithm
-K-평균 알고리즘
+K-means algorithm K-평균 알고리즘
+----------------------------------
 
 K-means is a type of unsupervised algorithm which solves the clustering problem. Its procedure follows a simple and easy way to classify a given data set through a certain number of clusters (assume k clusters). Data points inside a cluster are homogeneous and heterogeneous to peer groups, that means that all the elements in a subset are more similar to each other than with the rest.
 K평균 알고리즘은 군집 문제를 해결하는 비지도학습의 종류 이다. 이것의 동작은 특정한 수의 클러스터(k cluster)를 통한 간단하고 쉬운 분석을 구분 작업 수행이다. 군집 내 데이터 좌표는 동질성이 있고, 타 그룹에 대하여 구분된 특질이 있다. 군집내 요소들은 나머지 요소들보다 동질성이 있다는 것을 의미한다.
@@ -247,7 +242,7 @@ plt.show()
 This code generates a graph of points in a two dimensional space like the following screenshot:
 이 코드는 아래 그림과 같이 2차 평면에 포인트 그래프를 생성한다.
 
-image024
+![image024](http://www.jorditorres.org/wp-content/uploads/2016/02/image024.png)
 
 A k-means algorithm implemented in TensorFlow to group the above points, for example in four clusters, can be as follows (based on the model proposed by Shawn Simister in his blog[21]):
 위에 생성된 포인트들을 텐서플로우를 이용한 K평균 알고리즘으로 4개의 군집을 구현한 예는 아래와 같다. ( Shawn Simister의 블로그에서 구현된 모델 기반) 
@@ -289,10 +284,9 @@ for step in xrange(100):
 The screenshot with the result of the execution of my code it is shown in the following figure:
 이 코드를 수행한 결과물의 스크린샷은 아래 그림에서 보여준다.
 
-image026
+![image026](http://www.jorditorres.org/wp-content/uploads/2016/02/image026.png)
 
-New groups
-새 그룹
+## New groups 새 그룹
 
 I assume that the reader might feel a little overwhelmed with the K-means code presented in the previous section. Well, I propose that we analyze this in detail, step by step, and especially watch the tensors invoved and how they are transformed during the program.
 나는 독자들이 이전 섹션에서 보여진 K평균 코드로 인해 약간의 어려움을 겪을 것이라 느낀다. 그렇지만 우리는 이것을 좀더 자세히 단계별로 특히 구현외 관여된 텐서들이 프로그램이 실행되는 과정에서 변환되는 과정을 분석 할 것이다. 
@@ -325,7 +319,7 @@ We can see that vectors is an array that dimension D0 contains 2000 positions, o
 
 Next, the algorithm enters in a loop. The first step is to calculate, for each point, its closest centroid by the Squared Euclidean Distance[22] (which can only be used when we want to compare distances):
 다음으로, 알고리즘이 반복 구문으로 진입한다. 첫번째 단계는 각 포인트들에 대해서 연산하는 것인이고, 유클리디안 제곱 거리를 이용한 최 근접 중심치를 연산한다. (이것은 우리가 거리를 비교할 때 이용할 수 있다.)
-image028
+![image028](http://www.jorditorres.org/wp-content/uploads/2016/02/image028.jpg)
 
 To calculate this value tf.sub(vectors, centroides) is used. We should note that, although the two subtract tensors have both 2 dimensions, they have different sizes in one dimension (2000 vs 4 in dimension D0), which, in fact, also represent different things.
 이 계산을 하기 위해서 tf.sub(vectors, centroides)가 이용된다. 반드시 알아야 할 점은 감산을 할 텐서가 2개의 차원을 가졌는데, 1차원에서 다른 길이를 갖는 점이다. (D0 내 2000 대 4), 사실 D0은 각각 다른 정보를 담고 있다. 
@@ -340,7 +334,7 @@ expanded_centroides = tf.expand_dims(centroides, 1)
 tf.expand_dims inserts one dimension in each tensor; in the first dimension (D0) of vectors tensor, and in the second dimension (D1) of centroids tensor. Graphically, we can see that in the extended tensors the dimensions have the same meaning in each of them:
 tf.expand_dim은 각 텐서에 1개 차원을 삽입한다. 벡터 텐서에는 1차 차원을(D0), 중심치 텐서에는 2차 차원(D1)을 넣는다. 우리는 여기서 그래픽 하게 각 차원의 의미가 각 텐서에서의 같은 의미를 갖는 것을 볼 수 있다.
 
-image031
+![image031](http://www.jorditorres.org/wp-content/uploads/2016/02/image031.gif)
 
 It seems to be solved, but actually, if you look closely (outlined in bulk in the illustration), in each case there are dimensions that have not been able to determinate the sizes of those dimensions. Remember that the with get_shape() function we can find out:
 문제는 풀린 것으로 보이지만 그림에서 빗금친 영역을 자세히 들여다 보면, 각 차원에서 각각의 사이즈가 결정 되지 않은 것을 볼 수 있다.
@@ -424,8 +418,7 @@ assignments = tf.argmin(tf.reduce_sum(tf.square(tf.sub(expanded_vectors, expande
 But anyway, internal tensors and the operations that they define as nodes and execute the internal graph are like the ones we have described before.
 이렇게 되더라도,  내부 텐서와 노드로 정의된 연산들 그리고 내부 그래프는 이전에 구술한것과 유사하다.
 
-Computation of the new centroids
-새 중심치 계산
+# . Computation of the new centroids 새 중심치 계산
 
 Once we have created new groups on each iteration, we will have to remember that the new step of the algorithm consists in calculating the new centroids of the groups. In the code of the section before we have seen this line of code:
 각 반복을 통해 우리가 새 그룹을 만들었다면, 명심해야 할 것은 다음 단계의 알고리즘은 해당 그룹에서 새로운 중심치를 계산하는 것으로 이루어 진다는 것이다. 이전 섹션에서 우리는 이 코드를 보았다.
@@ -453,8 +446,7 @@ gather 연산으로 c군집을 형성하는 포인트들의 좌표들을 수집�
 reduce_mean 연산으로 c군집내 속한 모든 포인트들의 평균 값을 같는 텐서(길이 1 차원 x 길이 2 차원)을 형성한다. 
 어쨌든 만일 독자중에 이 코드에 대해 좀더 자세히 들어가고 싶다면 나는 항상 말하는데, 독자 여러분은 TensorFlow API page[24]에서 아주 설명에 도움이 되는 실례를 찾을 수 있다.
 
-Graph execution
-그래프 실행
+## Graph execution 그래프 실행
 
 Finally, we have to describe the part of the above code that corresponds to the loop and to the part that update the centroids with the new values of the means tensor.
 마지막으로, 루프 및 평균 텐서의 새로운 값으로 중심값들을 갱신하는 부분에 대응하는 코드를 설명한다.
