@@ -1,4 +1,4 @@
-번역자 : 신성진(sungjin7127@gmail.com)
+번역자 : 신성진(sungjin7127@gmail.com), 송치성(daydrilling@gmail.com)
 
 4. SINGLE LAYER NEURAL NETWORK IN TENSORFLOW
 
@@ -239,73 +239,176 @@ The interesting fact of such function is that a good prediction will have one ou
 
 Programming in TensorFlow
 
+
 After this brief description of what the algorithm does to recognize digits, we can implement it in TensorFlow. For this, we can make a quick look at how the tensors should be to store our data and the parameters for our model. For this purpose, the following schema depicts the data structures and their relations (to help the reader recall easily each piece of our problem):
 
-image066First of all we create two variables to contain the weights W and the bias b:
+이 알고리즘이 숫자를 인식하는 간단한 설명 후에 우리는 이것을 TensorFlow로 시행 할 수 있다. 이를 위해, 우리는 어떻게 텐서가 모델을 위해 데이터와 파라미터들을 저장할 수 있게 되는지 빠르게 살펴볼 수 있다. 이 목적을 위해서 다음의 도식은 데이터 구조와 그 관계를 묘사해서 독자들이 문제에 있는 각각의 부분을 쉽게 연상할 수 있도록 한다.
 
+image066
+
+First of all we create two variables to contain the weights W and the bias b:
+
+우선 가중치 W와 편향 b를 포함하는 두가지 변수를 만든다.
+
+```
 W = tf.Variable(tf.zeros([784,10]))
 b = tf.Variable(tf.zeros([10]))
+```
+
 Those variables are created using the tf.Variable function and the initial value for the variables; in this case we initialize the tensor with a constant tensor containing zeros.
+
+이러한 변수들은 tf.Variable 함수와 변수를 위한 초기값을 이용해 만들 수 있다. 이 경우에 0으로 구성된 상수 텐서로 텐서를 초기화한다.
+
 
 We see that W is shaped as [Dimension(784), Dimension(10)], defined by its argument, a constant tensor tf.zeros[784,10] dimensioned like W. The same happens with the bias b, shaped by its argument as [Dimension(10)].
 
+W가 [784,10]차원의 형태인데, 이것은 W와 같은 차원인 tensor tf.zeros[784,10]으로 정의할 수 있다. 편향 b의 경우도 마찬가지로 b는 [10]차원의 형태로 형성된다.
+
+
 Matrix W has that size because we want to multiply the image vector of 784 positions for each one of the 10 possible digits, and produce a tensor of evidences after adding b.
+
+행렬 W는 우리가 10개의 숫자에 대해 784개의 위치값(position)을 가진 이미지 벡터를 곱해야 하기 때문에 그 크기인 것이다. 그리고 b가 더해진 이후에 evidence의 텐서가 생성된다.
+
 
 In this case of study using MNIST, we also create a tensor of two dimensions to keep the information of the x points, with the following line of code:
 
+MNIST를 이용하는 경우에 우리는 다음의 코드를 통해 x 포인트??의 정보를 유지하기 위해 2차원의 텐서를 만든다.
+
+```
 x = tf.placeholder("float", [None, 784])
+```
+
 The tensor x will be used to store the MNIST images as a vector of 784 floating point values (using None we indicate that the dimension can be any size; in our case it will be equal to the number of elements included in the learning process).
+
+텐서 x는 784개의 부동소수로 된 하나의 벡터로써 MNIST 이미지를 저장하는데 사용될 것이다. ("None"을 사용하여 어떤 크기의 차원이 올 수 있도록 하는데, 우리의 경우에 이것은 학습 과정에 포함된 요소의 갯수와 같다.)
+
 
 Now we have the tensors defined, and we can implement our model. For this, TensorFlow provides several operations, being tf.nn.softmax(logits, name=None) one of the available ones, implementing the previously described softmax function. The arguments must be a tensor, and optionally, a name. The function returns a tensor of the same kind and shape of the tensor passed as argument.
 
+이제 우리는 정의된 텐서를 가지고 있고, 모델을 시행할 수 있다. 이를 위해 TensorFlow는 몇가지 연산을 제공하는데, 그 중 하나는 tf.nn.softmax(logits, name=None) 로 앞서 설명한 softmax 함수를 시행하는 것이다. 이 때의 변수는 텐서여야 하고, 경우에 따라 이름(name??)이어야 한다. 이 함수는 시행된 뒤에 입력된 변수와 같은 종류와 형태의 텐서를 반환한다.
+
+
 In our case, we provide to this function the resulting tensor of multiplying the image vector x and the weight matrix W, adding b:
 
+이 경우에 우리는 이 함수에 이미지 벡터 x와 가중치 행렬 W의 곱에 b를 더한 결과 텐서를 제공한다.
+
+```
 y = tf.nn.softmax(tf.matmul(x,W) + b)
+```
+
 Once specified the model implementation, we can specify the necessary code to obtain the weights for W and bias b using an iterative training algorithm. For each iteration, the training algorithm gets the training data, applies the neural network and compares the obtained result with the expected one.
+
+한번 모델의 시행이 정해지면, 우리는 반복적인 학습 알고리즘을 이용해 가중치 W와 편향 b를 얻기 위한 필수적인 코드를 구체적으로 작성할 수 있다. 각각의 반복에서 학습 알고리즘은 학습 데이터를 얻고, 신경망에 적용하고, 얻어진 결과값을 예측값과 비교한다.
+
 
 To decide when a model is good enough or not we have to define what “good enough” means. As seen in prevous chapters, the usual methodology is to define the opposite: how “bad” a model is using cost functions. In this case, the goal is to obtain values of W and b that minimizes the function indicating how “bad” the model is.
 
+모델이 충분히 좋거나 그렇지 않을때를 결정하기 위해서 우리는 먼저 "좋다"의 의미가 뭔지 정의해야 한다. 이전 챕터에서 봤듯이, 보통의 방법론은 반대를 정의한다. cost function을 이용하여 모델이 얼마나 "나쁜지"를 결정한다. 이 경우에 우리의 목표는 cost function이 가리키는 얼마나 모델이 "나쁜지"가 최소화되는 W와 b의 값을 얻는 것이다.
+
+
 There are different metrics for the degree of error between resulting outputs and expected outputs on training data. One common metric is the mean squared error or the squared Euclidean distance, which have been previously seen. Even though, some research lines propose other metrics for such purpose in neural networks, like the cross entropy error, used in our example. This metric is computed like this:
+
+학습데이터의 결과의? 출력?과 예측된 출력 사이의 에러의 정도를 위한 다른 측정법이 있다. 한가지 보통의 측정법은 mean squared error 혹은 squared Euclidean distance인데, 이것은 이전에 미리 봤다. 그럼에도 불구하고, 몇몇 연구 분야?들은 신경망의 그러한 목적을 위해 우리의 예시에 사용된 cross entropy error와 같은 다른 측정법을 제안한다.
+
 
 image068
 
 Where y is the predicted distribution of probability and y’ is the real distribution, obtained from the labeling of the training data-set. We will not enter into details of the maths behind the cross-entropy and its place in neural networks, as it is far more complex than the intended scope of this book; just indicate that the minimum value is obtained when the two distributions are the same. Again, if the reader wants to learn the insights of this function, we recommend reading Neural Networks and Deep Learning [36].
 
+y가 예측된 확률 분포이고 y'이 실제 학습 데이터셋의 라벨링으로 부터 얻어지는 분포이다. 우리는 본 교재가 의도한 범위보다 훨씬 더 복잡하기 때문에 cross-entropy와 신경망의 그 위치에 대한 자세한 수식에 대해 다루지 않을 것이다. 단지 두 분포가 같을 때 최소의 값이 얻어진다는 것을 명시한다. 다시, 만약 독자가 이 함수의 통찰을 배우고 싶다면, 우리는 Neural Networks and Deep Learning를 읽는 것을 권장한다.[36]
+
+
+
 To implement the cross-entropy measurement we need a new placeholder for the correct labels:
 
+cross-entropy 측정을 구현하기위해 우리는 정확한 라벨을 위한 새로운 placeholder가 필요하다.
+
+```
 y_ = tf.placeholder("float", [None,10])
+```
+
 Using this placeholder, we can implement the cross-entropy with the following line of code, representing our cost function:
 
+이 placeholder를 이용하면, 우리는 cost function을 표현하는 다음의 코드를 통해 cross-entropy를 시행할수있다.
+
+```
 cross_entropy = -tf.reduce_sum(y_*tf.log(y))
+```
+
 First, we calculate the logarithm of each element y with the built-in function in TensorFlow tf.log(), and then we multiply it for each y_ element. Finally, using tf.reduce_sum we sum all the elements of the tensor (later we will see that the images are visited in bundles, and in this case the value of cross-entropy corresponds to the bundle of images y and not a single image).
+
+먼저, 각 요소에 TensorFlow의 내장함수(built-in function)인 tf.log()를 이용하여 로그를 취한다. 그리고 그것에 각각의 y_ 요소를 곱한다. 마지막으로 tf.reduce_sum()을 이용하여 우리는 텐서의 모든 요소를 합한다. (later we will see that the images are visited in bundles, and in this case the value of cross-entropy corresponds to the bundle of images y and not a single image)
+
 
 Iteratively, once determined the error for a sample, we have to correct the model (modifying the parameters W and b, in our case) to reduce the difference between computed and expected outputs in the next iteration.
 
+반복하여, 한번 샘플의 에러가 결정되면 계산된 출력과 예측된 출력의 차이를 다음 반복에서는 줄일 수 있도록 모델을 수정해야한다. (우리의 경우에는 매개변수 W와 b를 변경)
+
+
 Finally, it only remains to specify this iterative minimization process. There are several algorithms for this purpose in neural networks; we will use the backpropagation (backward propagation of errors) algorithm, and as its name indicates, it propagates backwards the error obtained at the outputs to recompute the weights of W, especially important for multi-layer neural network.
+
+마지막으로 반복되는 최소화 과정이 남아있다. 신경망에서는 이 목적을 위한 몇가지 알고리즘이 있는데, 우리는 역전파(역방향의 오류 전파) 알고리즘을 사용한다. 이 이름이 말하는 것처럼 이것은 가중치 W를 재연산하기위해 출력에서 얻어진 오류가 역으로 전파된다. 특히, 다중 신경망에서 가중치 W는 중요하다.
+
 
 This method is used together with the previously seen gradient descent method, which using the cross-entropy cost function allows us to compute how much the parameters must change on each iteration in order to reduce the error using the available local information at each moment. In our case, intuitively it consist on changing the weights W a little bit on each iteration (this little bit expressed by a learning rate hyperparameter, indicating the speed of change) to reduce the error.
 
+(----)
+
+
+
 Due that in our case we only have one layer neural network we will not enter into backpropagation methods. Only remember that TensorFlow knows the entire computing graph, allowing it to apply optimization algorithms to find the proper gradients for the cost function to train the model.
+
+이 경우, 우리는 하나의 레이어 층만 가지고 있기 때문에 우리는 역전파 방법을 시작하지 않을 것이다. 오직 기억해야 할 것은 TensorFlow는 전체 연산 그래프를 알고 있다는 것인데, 그 것은 모델을 학습하기 위한 cost 함수에 대한 적절한 경사를 찾기 위한 최적화 알고리즘을 적용할 수 있도록 한다.
+
 
 So, in our example using the MNIST images, the following line of code indicates that we are using the backpropagation algorithm to minimize the cross-entropy using the gradient descent algorithm and a learning rate of 0.01:
 
+그래서 MNIST 이미지를 사용하는 우리 예제에서 아래의 코드를 통해 우리가 cross-entropy를 최소화하는데 역전파 알고리즘을 사용한다고 명시한다. 또한, 이 때 gradient descent 알고리즘을 사용하고 learning rate가 0.01이다.
+
+```
 train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+```
+
 Once here, we have specified all the problem and we can start the computation by instantiating tf.Session() in charge of executing the TensorFlow operations in the available devices on the system, CPUs or GPUs:
 
+(---)
+
+```
 sess = tf.Session()
+```
+
 Next, we can execute the operation initializing all the variables:
 
+다음으로 모든 변수를 초기화하는 작업을 실행할 수 있다.
+
+```
 sess.run(tf.initialize_all_variables())
+```
+
 From this moment on, we can start training our model. The returning parameter for train_step, when executed, will apply the gradient descent to the involved parameters. So training the model can be achieved by repeating the train_step execution. Let’s say that we want to iterate 1.000 times our train_step; we have to indicate the following lines of code:
 
+이 때부터, 우리의 모델이 학습되기 시작한다. 학습이 시작되면 train_step에 대해 반환되는 파라미터는 관련된 파라미터에 대해 gradient descent를 적용할 것이다. 그래서 학습 모델은 반복되는 train_step 시행을 통해 완성될 수 있다. 1000번의 train_step을 반복하기를 원한다고 할 때, 다음의 코드로 이를 나타낸다.
+
+```
 for i in range(1000):
    batch_xs, batch_ys = mnist.train.next_batch(100)
    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+```   
+
 The first line inside the loop specifies that, for each iteration, a bundle of 100 inputs of data, randomly sampled from the training data-set, are picked. We could use all the training data on each iteration, but in order to make this first example more agile we are using a small sample each time. The second line indicates that the previously obtained inputs must feed the respective placeholders.
+
+반복문의 첫 번째 라인은 매 반복마다 학습 데이터셋에서 무작위로 샘플링된 100개의 꾸러미의 입력값이 있다는 것을 말한다. 우리는 매 반복마다 모든 학습 데이터를 사용할 수도 있지만, 이 첫번째 예제를 더 빠르게 하기 위해 매번 작게 샘플링한다. 두 번째 라인은 이전에 얻은 입력이 각각의 placeholder를 넣어야 한다는 것을 나타낸다.
+
 
 Finally, just mention that the Machine Learning algorithms based in gradient descent can take advantage from the capabilities of automatic differentiation of TensorFlow. A TensorFlow user only has to define the computational architecture of the predictive model, combine it with the target function, and then just add the data.
 
+마침내 gradient descent를 기초로하는 기계학습 알고리즘 TensorFlow의 자동미분의 능력을 활용할 수 있다는 것을 말한다. TensorFlow 사용자는 오직 예측 모델의 계산적 구조에 정의하고, 이를 목적 함수와 결합하고, 그리고 데이터를 더하기만 하면 된다.
+
+
 TensorFlow already manages the associated calculus of derivatives behind the learning process. When the minimize() method is executed, TensorFlow identifies the set of variables on which loss function depends, and computes gradients for each of these. If you are interested to know how the differentiation is implemented you can inspect the ops/gradients.py file [37].
+
+TensorFlow는 학습 과정의 뒤에서 이미 파생물의 계산으로 연합된 계산식을 관리한다. minimize() 방법이 실행되면, TensorFlow는 각각의 loss 함수가 의존하는 변수들의 셋을 확인하고, 각각에 대해 기울기를 계산한다. 만약 어떻게 시행이 구별되는지 궁금하다면, ops/gradients.py 파일을 살펴보아라.[37]
+
 
 Model evaluation
 
