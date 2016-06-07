@@ -190,36 +190,66 @@ Evidence of belonging
 
 Measuring the evidence of a certain image to belong to a specific class/label, a usual approximation is to compute the weighted sum of pixel intensities. That weight is negative when a pixel with high intensity happens to not to be in a given class, and positive if the pixel is frequent in that class.
 
+어떤 이미지가 특정한 클래스 혹은 레이블에 속해 있다는 것을 측정하는 일반적인 접근 방법은 픽셀의 세기들의 가중된 합을 계산하는 것이다. 그 가중치는 고밀도의 픽셀이 주어진 클래스에 있지 않을때 음수이고, 픽셀이 그 클래스에서 자주 있다면 양수이다.
+
+
 Let’s show a graphical example: suppose a learned model for the digit “0” (we will see how this is learned later). At this time, we define a model as “something” that contains information to know whether a number belongs to a specific class. In this case, we chose a model like the one below, where the red (or bright gray for the b/n edition) represents negative examples (this is, reduce the support for those pixels present in “0”), while the blue (the darker gray for b/n edition) represents the positive examples. Look at it:
+
+시각적인 예를 살펴보자: 숫자 "0"에 대한 학습 모델을 가정해보자. (우리는 다음에 이것이 어떻게 학습되는지 볼것이다.) 이 때, 우리는 이 모델을 어떤 클래스에 속하고 있는 숫자인지 알수있는 정보를 포함한 '어떤 것'으로 정의한다. 이 경우에 우리는 아래에서처럼 모델을 선택한다. 빨간색(또는 b/n 에디션의 밝은 회색)이 음의 사례를 표현하고, 파랑색(b/n 에디션의 짙은 회색)이 양의 사례를 표현한다. 한번 살펴보자.
+
 
 image050
 
+
 Think in a white paper sheet of 28×28 pixels and draw a “0” on it. Generally our zero would be drawn in the blue zone (remember that we left some space around the 20×20 drawing zone, centering it later).
+
+가로세로 28x28 픽셀로 된 하얀 종이 위에 "0"을 쓴다고 생각해보자. 일반적으로 0은 파란색 영역에 쓸 것이다. (remember that we left some space around the 20×20 drawing zone, centering it later)
+
 
 It is clear that in those cases where our drawing crosses the red zone, it is most probably that we are not drawing a zero. So, using a metric based in rewarding those pixels, stepping on the blue region and penalizing those stepping the red zone seems reasonable.
 
+그러한 경우에서 우리가 빨간 영역은 지나서 그린다는 것이 확실한데, 이것은 거의 대게는 0을 쓰지 않는다. 그래서 이러한 픽셀들에 대한 리워드를 주는 측량법을 이용한다면, 파란 영역을 따라가고, 빨간 영역을 지나간다면 벌점을 주는 방식이면 적당해보인다.
+
+
+
 Now think of a “3”: it is clear that the red zone of our model for “0” will penalize the probabilities of it being a “0”. But if the reference model is the following one, generally the pixels forming the “3” will follow the blue region; also the drawing of a “0” would step into a red zone.
+
+이제 한번 "3"에 대해 생각해보자. "0"을 위한 우리의 모델의 빨간 영역은 그것이 "0"일 확률에 패널티를 줄 것이다. 하지만 만약 참조하는 모델이 다음과 같은 것이라면, 일반적으로 "3"의 형태로 된 픽셀이 파란 영역을 지나갈 것이고, "0"은 빨간 영역을 지나갈 것이다.
+
 
 image052
 
 I hope that the reader, seeing those two examples, understands how the explained approximation allows us to estimate which number represent those drawings.
 The following figure shows an example of the ten different labels/classes learned from the MNIST data-set (extracted from the examples of Tensorflow[35]). Remember that red (bright gray) represents negative weights and blue (dark gray) represents the positive ones.
 
+나는 이 두가지 사례를 본 여러분들이 어떤 숫자가 그 그림을 표현하는지에 대해 우리가 어떻게 짐작할 수 있는지 이해하기를 바란다. 다음 사진은 MNIST 데이터셋에서 학습된 10개의 다른 레이블과 클래스의 예시라는 것을 보여준다. (Tensorflow 예제에서 발췌했다.[35]) 빨간색(밝은 회색)은 부정적인 가중치이고 파란색(어두운 회색)은 긍정적인 가중치를 표현한다는 것을 기억해라.
  
 
 image054
 
 In a more formal way, we can say that the evidence for a class i given an input x is expressed as:
 
+더 공식적인 방법으로, 입력값으로 받은 x의 class i의 증거는 다음과 같이 말할 수 있다.
+
+
 image056
 
 Where i indicates the class (in our situation, between 0 and 9), and j is an index to sum the indexes of our input image. Finally Wi represents the aforementioned weights.
 
+i가 클래스(이 경우에서는 0부터 9까지의 숫자)를 나타낼때, j는 입력한 이미지의 인덱스를 합산하기 위한 인덱스이다. 마지막으로 Wi는 앞서말한 가중치를 표현한다.
+
+
 Remember that, in general, the models also include an extra parameter representing the bias, adding some base uncertainty. In our situation, the formula would end like this:
+
+일반적으로, 모델은 기본적인 불확실성을 더하는 편향을 표현하는 추가적인 매개변수를 포함한다는 것을 기억해라. 이 경우에서 결국 그 공식은 다음과 같을 것이다.
+
 
 image058
 
 For each i (between 0 and 9) we have a matrix Wi of 784 elements (28×28), where each element j is multiplied by the corresponding component j of the input image, with 784 components, then added bi. A graphical view of the matrix calculus and indexes is this:
+
+0과 9사이의 각각의 i에 대해 우리는 784개의 요소(28x28)를 가진 Wi행렬이 있고, 그 행렬에서의 각 요소 j는 입력 이미지에 상응하는 성분 j에 의해 곱해지고, bi가 더해진다. 이 행렬 연산을 표현한 그림은 다음과 같다.
+
 
 image061
 
@@ -227,15 +257,27 @@ Probability of belonging
 
 We commented that the second step consisted on computing probabilities. Specifically we turn the sum of evidences into predicted probabilities, indicated as y, using the softmax function:
 
+우리는 두번째 과정은 확률을 계산하는 과정으로 되어 있다고 말했었다. 특히 우리는 증거들의 합을 softmax 함수를 사용하고 y가 나타내는 예측된 확률로 보았다.
+
+
 image062
 
 Remember that the output vector must be a probability function with sum equals 1. To normalize each component, the softmax function uses the exponential value of each of its inputs and then normalizes them as follows:
+
+출력되는 벡터는 총합이 1인 확률 함수라는 것을 명심해라. 각각의 구성요소를 정규화하기 위해, softmax 함수는 다음과 같이 그 입력의 각각의 지수 값을 사용하고 이를 정규화 한다.
+
 
 image064
 
 The obtained effect when using exponentials is a multiplication effect in weights. Also, when the evidence for a class is small, this class support is reduced by a fraction of its previous weight. Furthermore, softmax normalizes the weights making them to sum 1, creating a probability distribution.
 
+지수 값을 사용할때 얻어지는 효과는 가중치의 증폭 효과이다. 또한, 클래스를 위한 증거가 적을때, 이 클래스의 지지는 이전 가중치의 비율로 감소된다. 게다가 softmax는 확률분포를 만들어서 그들의 합을 1로 만들도록 가중치를 정규화한다.
+
+
 The interesting fact of such function is that a good prediction will have one output with a value near 1, while all the other outputs will be near zero; and in a weak prediction, some labels may show similar support.
+
+이러한 함수의 흥미로운 사실은 좋은 예측은 모든 다른 출력값은 0에 가까운 반면 하나의 출력값은 1에 가깝다는 것이다. 그리고 약한 예측에서는 몇개의 레이블이 유사한 값을 갖게 된다.
+
 
 Programming in TensorFlow
 
@@ -414,8 +456,16 @@ Model evaluation
 
 A model must be evaluated after training to see how much “good” (or “bad”) is. For example, we can compute the percentage of hits and misses in our prediction, seeing which examples were correctly predicted. In previous chapters, we saw that the tf.argmax(y,1) function returns the index of the highest value of a tensor according a given axis. In effect, tf.argmax(y,1) is the label in our model with higher probability for each input, while tf.argmax(y_,1) is the correct label. Using tf.equal method we can compare if our prediction coincides with the correct label:
 
+훈련이 된 뒤에는 모델이 얼마나 "좋은지" 혹은 "나쁜지"를 알기위해 평가를 해야한다. 예를 들어, 우리는 어떤 것들이 정확하게 예측되었는지를 보면서 얼마나 맞추었거나 틀렸는지에 대한 확률을 계산할 수 있다. 이전 장에서 우리는 tf.argmax(y,1) 함수가 주어진 축을 따른 텐서의 최대값의 인덱스를 반환하는 것을 봤다. 사실 tf.argmax(y,1)는 각 입력에 대한 높은 확률로 우리의 모델의 레이블이다. tf.equal 방법을 사용해서 우리의 예측과 정확한 레이블과 얼마나 일치하는지를 비교할 수 있다.
+
+```
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
+```
+
 This instruction returns a list of Booleans. To determine which fractions of predictions are correct, we can cast the values to numeric variables (floating point) and do the following operation:
+
+이 코드는 Boolean으로 된 리스트를 반환한다. 어떤 예측값이 정확한지 결정하기 위해, 우리는 숫자로 된 변수(부동소수점)의 값을 버리고 다음 작업을 수행 할 수 있다.
+
 
 ```
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
@@ -423,15 +473,27 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
 For example, [True, False, True, True] will turn into [1,0,1,1] and the average will be 0.75 representing the percentage of accuracy. Now we can ask for the accuracy of our test data-set using the mnist.test as the feed_dict argument:
 
+예를 들어, [True, False, True, True] 는 [1,0,1,1]로 될 것이고, 정확도를 확률로 표현한다면 그 평균은 0.75가 될 것이다. 이제 우리는 변수 feed_dict로 mnist.test를 사용하여 테스트 데이터셋의 정확도를 요청할 수 있다.
+
+
 ```
 print sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
 ```
 
 I obtained a value around 91%. Are these results good? I think that they are fantastic, because this means that the reader has been able to program and execute her first neural network using TensorFlow.
 
+나의 경우는 약 91%의 정확도를 얻었다. 이 결과가 좋을까? 내 생각에 이건 굉장한 것이다. 왜냐하면 여러분이 TensorFlow를 사용해 첫번째 신경망을 만들 수 있었기 때문이다.
+
+
 Another problem is that other models may provide better accuracy, and this will be presented in the next chapter with a neural network containing more layers.
 
+또 다른 문제는 다른 모델이 더 나은 정확도를 낼 수 있다는 것이다. 그리고 다음 장에서 더 많은 레이어를 쌓은 신경망을 볼 수 있을 것이다.
+
+
 The reader will find the whole code used in this chapter in the file RedNeuronalSimple.py, in the book’s github [38]. Just to provide a global view of it, I’ll put it here together:
+
+여러분들은 이 책의 github에 있는 RedNeuronalSimple.py 파일에서 이번 장의 전체 코드를 찾을 수 있을 것이다. 지금까지의 과정을 한눈에 볼 수 있는 코드는 다음과 같다.
+
 
 ```
 import input_data
