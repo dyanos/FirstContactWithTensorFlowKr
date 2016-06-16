@@ -47,7 +47,7 @@ This allows developers to experiment with different models on a large scale that
 이것은 개발자들이 실 데이터로 대규모의 모델들을 바꿔가면서 실험해볼 수 있고, 안정적인 시스템과 API를 유지할 수 있다.
 
 The typical pipeline is that a training data is fed to the learner, which outputs a model, which after being validated is ready to be deployed to the TensorFlow serving system. It is quite common to launch and iterate on our model over time, as new data becomes available, or as you improve the model. In fact, in the google post [4] they mention that at Google, many pipelines are running continuously, producing new model versions as new data becomes available.
-전형적인 파이프라인(pipeline)은 학습기에 훈련 데이터를 공급하고 모델을 만든 다음 검증 절차를 거치면 텐서플로우 서빙 시스템에 배포할 준비가 된다. 모델을 런칭하고 반복적으로 수행할 때 새로운 디이터가 들어오거나 모델을 개선하기위해 이와 같은 작업은 일반적이다. 실제로 구글이 포스트에서 언급했듯이 많은 파이프라인이 지속적으로 수행되고 있고 새러운 데이터가 들어옴에 따라 새로운 버전의 모델을 만들고 있다.
+전형적인 파이프라인(pipeline)은 학습기에 훈련 데이터를 공급하고 모델을 만든 다음 검증 절차를 거치면 텐서플로우 서빙 시스템에 배포할 준비가 된다. 모델을 런칭하고 반복적으로 수행할 때 새로운 데이터가 들어오거나 모델을 개선하기위해 이와 같은 작업은 일반적이다. 실제로 구글이 포스트에서 언급했듯이 많은 파이프라인이 지속적으로 수행되고 있고 새로운 데이터가 들어옴에 따라 새로운 버전의 모델을 만들고 있다.
 
 Developers use to communicate with TensorFlow Serving a front-end implementation based on gRPC, a high performance, open source RPC framework from Google.
 개발자는 텐서플로우 서빙과 통신하기 위해서 구글에서 오픈소스로 공개한 고성능 RPC 프레임워크인 gRPC를 사용한다. 
@@ -63,7 +63,7 @@ It is time to get your hands dirty. From now on, I recommend that you interleave
 이제 직접 해 볼 시간이다. 지금부터는 책을 읽으면서 직접 컴퓨터에서 실습을 해보기를 추천한다.
 
 TensorFlow has a Python API (plus a C / C ++) that requires the installation of Python 2.7 (I assume that any engineer who reads this book knows how to do it).
-텐서플로우의 파이썬 API(C/C++도 있음)가 있으며 이것을 사용하려면 파이썬 2.7 버전을 설치해야 한다. (이 책을 읽는 엔지니어라면 어떻게 설치하는지 알고 있을것이라 생각한다.)
+텐서플로우는 파이썬 API(C/C++도 있음)가 있으며 이것을 사용하려면 파이썬 2.7 버전을 설치해야 한다. (이 책을 읽는 엔지니어라면 어떻게 설치하는지 알고 있을것이라 생각한다.)
 
 In general, when you are working in Python, you should use the virtual environment virtualenv. Virtualenv is a tool to keep Python dependencies required in different projects, in different parts of the same computer. If we use virtualenv to install TensorFlow, this will not overwrite existing versions of Python packages from other projects required by TensorFlow.
 일반적으로 파이썬으로 작업을 할 때는 virtualenv이라는 가상환경을 사용해야 한다. Virtualenv는 동일 컴퓨터에서 여러 프로젝트를 작업할 때 파이썬 패키지의 의존성을 독립 관리해주는 툴 이다. 즉 텐서플로우를 설치하기 위해 virtualenv를 사용하면, 텐서플로우에서 필요한 다른 프로젝트에서 같이 설치한 패키지를 덮어쓰지 않는다.
@@ -123,7 +123,7 @@ As I mentioned at the beginning, we will move in this exploration of the planet 
 시작부에서 이야기했듯이, 텐서플로우라는 행성을 탐험하기 위해 약간의 이론만 다루고 많은 실습을 하겠다. 
 
 From now on, it is best to use any text editor to write python code and save it with extension “.py” (eg test.py). To run the code, it will be enough with the command python test.py.
-지금부터 파이썬 코드를 작성하고 “.py” 확장자로 저장(예, test.py)하기 위해서 텍스트 에디터를 사용하는 것이 좋다.
+지금부터는 파이썬 코드를 작성하고 “.py” 확장자로 저장(예, test.py)하기 위해서 텍스트 에디터를 사용하는 것이 좋다.
 
 To get a first impression of what a TensorFlow’s program is, I suggest doing a simple multiplication program; the code looks like this:
 텐서플로우 프로그래밍 무엇인지 처음 느껴보기 위해서 간단한 곱셈 프로그램을 만들어보는 것을 추천한다. 코드는 아래와 같다.
