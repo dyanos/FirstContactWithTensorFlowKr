@@ -195,6 +195,7 @@ print(step, sess.run(loss))
 In this case the print output is:
 이 경우 출력 결과는 이렇다:
 
+```
 (0, 0.015878126)
 (1, 0.0079048825)
 (2, 0.0041520335)
@@ -203,6 +204,7 @@ In this case the print output is:
 (5, 0.001162916)
 (6, 0.00097872759)
 (7, 0.00089203351)
+```
 
 I suggest that reader visualizes the plot at each iteration, allowing us to visually observe how the algorithm is adjusting the parameter values. In our case the 8 snapshots are:
 나는 독자들에게 알고리즘이 매개변수 값들을 어떻게 조정하고 있는지 시각적으로 관찰할 수 있도록, 각 반복 단계에서 도표를 시각화할 것을 추천한다. 
