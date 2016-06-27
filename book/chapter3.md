@@ -1,7 +1,7 @@
 3. CLUSTERING IN TENSORFLOW 텐서 플로우의 군집화
 ===============================
 Linear regression, which has been presented in the previous chapter, is a supervised learning algorithm in which we use the data and output values (or labels) to build a model that fits them. But we haven’t always tagged data, and despite this we also want analyze them in some way. In this case, we can use an unsupervised learning algorithm as clustering. The clustering method is widely used because it is often a good approach for preliminary screening data analysis.
-이전 장에서 설명했던 선형 회귀는, 데이터와 결과물( 또는 라벨들)로 적합(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 데이터가 항상 키워드로 분류되어 있는것은 아니다. 그럼에도, 우리는 이러한 데이터를 어떻게 해서든 분석하고 싶어한다. 이러한 경우 우리는 군집화라는 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
+이전 장에서 설명했던 선형 회귀는, 데이터와 결과물(또는 라벨들)로 적합(fitting)할 모델을 생성하는 지도학습을 말하는 것이었다. 그러나 데이터가 항상 키워드로 분류되어 있는것은 아니다. 그럼에도, 우리는 이러한 데이터를 어떻게 해서든 분석하고 싶어한다. 이러한 경우 우리는 군집화라는 비지도학습 알고리즘을 이용할 수 있다. 군집화 방식이 두루 쓰이고 있는데, 예비 선별하는 데이터 분석에 유용한 방식이기 때문이다. 
 
 In this chapter, I will present the clustering algorithm called K-means. It is surely the most popular and widely used to automatically group the data into coherent subsets so that all the elements in a subset are more similar to each other than with the rest. In this algorithm, we do not have any target or outcome variable to predict estimations.
 이번 장에서, K평균 알고리즘을 설명 할 것이다. 이것은 데이터를 자동적으로 질서있는 집합으로 무리지을 때 가장 인기 있고 폭 넓게 쓰이고 있다. 각 부분 집합들의 모든 요소들은 나머지 집합의 요소들 보다 해당 집합내에서 보다 유사성을 갖는다. 
@@ -23,18 +23,36 @@ TensorFlow programs use a basic data structure called tensor to represent all of
  DT_STRING          | tf.string      | String
  DT_BOOL            | tf.bool        | Boolean
 
+ TensorFlow에서의 타입 | Python에서의 타입 | 설명 
+-----------------------|----------------- -|---------------
+ DT_FLOAT              | tf.float32        | 32 비트의 실수 
+ DT_INT16              | tf.int16          | 16 비트의 정수 
+ DT_INT32              | tf.int32          | 32 비트의 정수
+ DT_INT64              | tf.int64          | 64 비트의 정수
+ DT_STRING             | tf.string         | 문자열  
+ DT_BOOL               | tf.bool           | 논리값(boolean)  
+ 
  In addition, each tensor has a rank, which is the number of its dimensions. For example, the following tensor (defined as a list in Python) has rank 2:
- 참고로, 각기 텐서는 랭크를 갖는데 이것은 그것의 차수를 말한다. 예를 들어 아래 텐서에서 (파이썬 list로 정의된) 랭크 2를 갖는다. 
+ 그리고 각 텐서는 차원을 나타내는 랭크(rank)를 갖는다. 예를 들어 다음의 텐서는 (파이썬 list로 표 현된) 랭크 2를 갖는다. 
 
  t = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
  Tensors can have any rank. A rank 2 tensor is usually considered a matrix, and a rank 1 tensor would be a vector. Rank 0 is considered a scalar value.
- 텐서는 어느 랭크나 가질수 있다. 랭크 2를 갖는 텐서는 행렬을 의미한다. 랭크 1을 갖는 텐서는 벡터라 할 수 있다. 랭크 0 는 스칼라값을 말한다. 
+ 텐서는 어느 랭크나 가질수 있다. 랭크 2를 갖는 텐서는 행렬을 의미한다. 랭크 1을 갖는 텐서는 벡터라 할 수 있다. 랭크 0은  스칼라값을 말한다. 
 
  TensorFlow documentation uses three types of naming conventions to describe the dimension of a tensor: Shape, Rank and Dimension Number. The following table shows the relationship between them in order to make easier the Tensor Flow documentation’s traking easier:
  텐서플로우 문서는 형태, 랭크, 차수 라는 3 가지 형태의 호칭 규칙을 쓰고 있는다.  아래 표는 텐서 플로우 문서를 쉽게 이해할 수 있도록 이들의 관계를 표현한 것이다. 
 
  Shape             | Rank | Dimension Number
+ --------------    |------|--------------------
+ []                |    0 | 0-D
+ [D0]              |    1 | 1-D
+ [D0, D1]          |    2 | 2-D
+ [D0, D1, D2]      |    3 | 3-D
+           ~       |    ~ |  ~
+ [D0, D1,  ~ Dn]   |    n | n-D
+ 
+  형태             | 랭크 | 차원 
  --------------    |------|--------------------
  []                |    0 | 0-D
  [D0]              |    1 | 1-D
@@ -66,6 +84,22 @@ TensorFlow programs use a basic data structure called tensor to represent all of
  tf.transpose   | To transpose dimensions in a tensor
  tf.gather      | To collect portions according to an index
 
+    연산        |    설명
+ ---------------|--------------------------------------------------------------------------
+ tf.shape       | tensor의 형태를 알고싶을 때 
+ tf.size        | tensor의 크기를 알고싶을 때
+ tf.rank        | tensor의 랭크를 알고싶을 때
+ tf.reshape     | tensor안의 요소(element)를 유지한 채 형태를 변경하고자 할 때 
+ tf.squeeze     | tensor에서 크기가 1인 차원을 삭제하고자 할 때 
+ tf.expand_dims | tensor에 차원을 추가하고자 할 때  
+ tf.slice       | tensor의 일부분을 삭제하고자 할 때 
+ tf.split       | tensor를 한 차원을 기준으로 여러개의 tensor로 나누고자 할 때
+ tf.tile        | 한 tensor를 여러번 중복으로 늘려 새 tensor를 만들자 할 때 
+ tf.concat      | 한 tensor를 기준으로 tensor를 이어서 붙이고자 할 때 
+ tf.reverse     | tensor의 지정된 차원을 역으로 바꾸고자 할 때 
+ tf.transpose   | tensor의 지정된 차원을 전치(transpose)시키고자 할 때 
+ tf.gather      | 인덱스에 대응되는 부분을 모으고자 할 때
+ 
  For example, suppose that you want to extend an array of 2×2000 (a 2D tensor) to a cube (3D tensor). We can use the tf.expand_ dims function, which allows us to insert a dimension to a tensor:
  실례로, 2x2000 의 2차원 텐서 어레이를 3차원 텐서 형태로 확장한다고 해보자. 우리는 텐서 안에 차원을 추가해주는 tf.expand_dims 함수를 사용할 수 있다.
 
@@ -134,6 +168,13 @@ tf.ones_like   | Creates a tensor with all elements initialized to 1
 tf.fill        | Creates a tensor with all elements initialized to a scalar value given as argument
 tf.constant    | Creates a tensor of constants with the elements listed as an arguments
  
+    연산       |    설명 
+---------------|-------------------------------------------------------------------------------------
+tf.zeros_like  | 모든 요소를 0으로 초기화한 tensor를 생성
+tf.ones_like   | 모든 요소를 1로 초기화한 tensor를 생성
+tf.fill        | 모든 요소를 인자로 주어진 스칼라 값으로 초기화한 tensor를 생성
+tf.constant    | 인자로 주어진 리스트화 된 원소를 이용하여 상수 tensor를 생성
+
 In TensorFlow, during the training process of the models, the parameters are maintained in the memory as variables. When a variable is created, you can use a tensor defined as a parameter of the function as an initial value, which can be a constant or a random value. TensorFlow offers a collection of operations that produce random tensors with different distributions:
 텐서플로우에서, 모델이 훈련되는 동안에, 파라미터들은 메모리 안에 변수로서 존재한다. 변수가 생성될 때, 함수의 파라미터로 정의된 텐서를 사용할 수 있고, 이 텐서들은 상수나 랜덤값이 될 수 있다. 텐서플로우는 다른 분포를 가지는 임의의 텐서를 만드는 일련의 명령어를 제공한다:
      
@@ -146,6 +187,13 @@ tf.random_uniform   | Random values with a uniform distribution
 tf.random_shuffle   | Randomly mixed tensor elements in the first dimension
 tf.set_random_seed  | Sets the random seed
  
+      연산          | 설명 
+--------------------|------------------------------------------------------------------------------------------------------------------------------------
+tf.random_normal    | 정규 분포를 가지는 난수를 생성 
+tf.truncated_normal | 정규 분포를 가지는 난수를 생성. 단 2표준편차 범위 바깥의 값은 제거.
+tf.random_uniform   | 균등 분포를 가지는 난수를 생성
+tf.random_shuffle   | 첫번째 차원을 기준으로 하여 tensor의 원소를 무작위로 섞음
+tf.set_random_seed  | 난수 seed를 정함 
 
 An important detail is that all of these operations require a specific shape of the tensors as the parameters of the function, and the variable that is created has the same shape. In general, the variables have a fixed shape, but TensorFlow provides mechanisms to reshape it if necessary.
 이 동작들은 함수의 파라미터로써 텐서의 특별한 모습을 필요로 한다. 그리고 만들어지는 변수들도 같은 모습이어야 한다. 일반적으로, 변수들은 고정된 모습을 가지지만, 텐서플로우는 필요한 경우 이들의 형태를 바꿀 수 있는 방법을 제공한다.
@@ -400,6 +448,14 @@ tf.reduce_min  | Computes the minimum of the elements along one dimension
 tf.reduce_max  | Computes the maximum of the elements along one dimension
 tf.reduce_mean | Computes the mean of the elements along one dimension
 
+    연산       |   설명 
+---------------|----------------------------------------------------------
+tf.reduce_sum  | 하나의 차원을 따라 원소들의 합을 구함
+tf.reduce_prod | 하나의 차원을 따라 원소들의 곱을 구함
+tf.reduce_min  | 하나의 차원을 따라 원소들의 최소값을 구함
+tf.reduce_max  | 하나의 차원을 따라 원소들의 최대값을 구함
+tf.reduce_mean | 하나의 차원을 따라 원소들의 평균을 구함
+
 Finally, the assignation is achieved with tf.argmin, which returns the index with the minimum value of the tensor dimension (in our case D0, which remember that was the centroid). We also have the tf.argmax operation:
 마지막으로 tf.argmin으로 부터 획득한 최소값의 텐서 차원(우리의 경우 중심치를 갖고 있는 D0 차원)의 인덱스를 할당하는 것이 달성 되었다. 
 
@@ -407,6 +463,12 @@ Operation  |  Description
 -----------|-------------------------------------------------------------------------------------
 tf.argmin  |  Returns the index of the element with the minimum value along tensor dimension
 tf.argmax  |  Returns the index of the element with the maximum value of the tensor dimension
+
+  연산     |   설명 
+-----------|-------------------------------------------------------------------------------------
+tf.argmin  | tensor의 차원을 따라 구한 최소값의 인덱스를 반환함
+tf.argmax  | tensor의 차원을 따라 구한 최대값의 인덱스를 반환함
+
 
 In fact, the 4 instructions seen above could be summarized in only one code line, as we have seen in the previous section:
 사실 이전 섹션에서 봤던 저 4 가지 명령문은 한줄로 요약될 수 있다. 
