@@ -23,15 +23,17 @@ TensorFlow programs use a basic data structure called tensor to represent all of
  DT_STRING          | tf.string      | String
  DT_BOOL            | tf.bool        | Boolean
  
+ 
 
  TensorFlow에서의 타입 | Python에서의 타입 | 설명 
------------------------|----------------- -|---------------
+-----------------------|-------------------|---------------
  DT_FLOAT              | tf.float32        | 32 비트의 실수 
  DT_INT16              | tf.int16          | 16 비트의 정수 
  DT_INT32              | tf.int32          | 32 비트의 정수
  DT_INT64              | tf.int64          | 64 비트의 정수
  DT_STRING             | tf.string         | 문자열  
  DT_BOOL               | tf.bool           | 논리값(boolean)  
+ 
  
  In addition, each tensor has a rank, which is the number of its dimensions. For example, the following tensor (defined as a list in Python) has rank 2:
  그리고 각 텐서는 차원을 나타내는 랭크(rank)를 갖는다. 예를 들어 다음의 텐서는 (파이썬 list로 표 현된) 랭크 2를 갖는다. 
