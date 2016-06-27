@@ -1,13 +1,13 @@
 5. MULTI-LAYER NEURAL NETWORKS IN TENSORFLOW
 
 In this chapter I will program, with the reader, a simple Deep Learning neural network using the same MNIST digit recognition problem of the previous chapter.
-이 장에서 나는 독자, 이전 장 같은 MNIST 숫자 인식 문제를 사용하여 간단한 깊은 학습 신경 네트워크, 프로그래밍합니다.
+이 장에서 나는 독자, 이전 장에 다룬 바 있는 MNIST 숫자 인식 문제를 이용하여 간단한 형태의 딥러닝 신경망을 프로그래밍 하고자 한다.
 
 As I have advanced, a Deep Learning neural network consists of several layers stacked on top of each other. Specifically, in this chapter we will build a convolutional network, this is, an archetypal example of Deep Learning. Convolution neural networks were introduced and popularized in 1998 by Yann LeCunn and others. These convolutional networks have recently led state of the art performance in image recognition; for example: in our case of digit recognition they achieve an accuracy higher than 99%.
-나는 고급 같이, 깊은 학습 신경망은 서로 위에 쌓인 여러 층으로 이루어져있다. 특히,이 장에서 우리는 이것이, 깊은 학습의 전형적인 예를 컨볼 루션 네트워크를 구축 할 것입니다. 컨볼 루션 신경망을 도입 얀 LeCunn 및 다른 사람에 의해 1998 년에 대중화되었다. 이 길쌈 네트워크는 최근 이미지 인식에서 예술의 성능 상태를 주도; 예를 들면 : 숫자 인식의 우리의 경우에 그들은 99 % 이상의 정확도 높은 얻을 수 있습니다.
+이전에 언급한 바 있지만, 딥러닝 신경망은 겹겹이 쌓인 여러 층의 레이어(layer)로 이루어져있다. 이번 장에서 우리는 딥러닝의 전형적인 예로  컨볼루션 신경망을 구축할 것이다. 컨볼루션 신경망을 도입 Yann LeCunn을 비롯한 여러 연구자들에 의해 1998 년에 대중화되었다. 이 컨볼루션 신경망은 최근 이미지 인식에서 최고의 성능을 보이고 있다; 예를 들면 : 숫자 인식의 우리의 경우에 그들은 99 % 이상의 정확도 높은 얻을 수 있습니다.
 
 In the rest of this chapter, I will use an example code as the backbone, alongside which I will explain the two most important concepts of these networks: convolutions and pooling without entering in the details of the parameters, given the introductory nature of this book. However, the reader will be able to run all the code and I hope that it will allow you understand to global ideas behind convolutional networks.
-이 책의 소개 자연 주어진 매개 변수의 세부 사항을 입력하지 않고 회선 및 풀링이 장의 나머지 부분에서 나는 가장 중요한 두 이러한 네트워크의 개념을 설명 할 함께 백본, 같은 예제 코드를 사용합니다 . 그러나 리더는 모든 코드를 실행할 수 있습니다 나는 당신이 길쌈 네트워크 뒤에 글로벌 아이디어를 이해할 수 있기를 바랍니다.
+이 책의 소개 자연 주어진 매개 변수의 세부 사항을 입력하지 않고 convolutions 및 pooling이 장의 나머지 부분에서 나는 가장 중요한 두 이러한 네트워크의 개념을 설명 할 함께 백본, 같은 예제 코드를 사용합니다 . 그러나 독자는 모든 코드를 실행할 수 있습니다 나는 당신이 컨볼루션 신경망 뒤에 글로벌 아이디어를 이해할 수 있기를 바랍니다.
 
 * Convolutional Neural Networks
 * Convolutional Neural Networks
