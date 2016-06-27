@@ -24,15 +24,15 @@ The first thing to do is to import the NumPy package that we will use to generat
 ```
 import numpy as np
  
- num_points = 1000
- vectors_set = []
- for i in xrange(num_points):
-   x1= np.random.normal(0.0, 0.55)
-   y1= x1 * 0.1 + 0.3 + np.random.normal(0.0, 0.03)
-   vectors_set.append([x1, y1])
+num_points = 1000
+vectors_set = []
+for i in xrange(num_points):
+  x1= np.random.normal(0.0, 0.55)
+  y1= x1 * 0.1 + 0.3 + np.random.normal(0.0, 0.03)
+  vectors_set.append([x1, y1])
    
-   x_data = [v[0] for v in vectors_set]
-   y_data = [v[1] for v in vectors_set]
+x_data = [v[0] for v in vectors_set]
+y_data = [v[1] for v in vectors_set]
 ```
 
 As you can see from the code, we have generated points following the relationship y = 0.1 * x + 0.3, albeit with some variation, using a normal distribution, so the points do not fully correspond to a line, allowing us to make a more interesting example.
