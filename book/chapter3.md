@@ -22,6 +22,7 @@ TensorFlow programs use a basic data structure called tensor to represent all of
  DT_INT64           | tf.int64       | Integer of 64 bits
  DT_STRING          | tf.string      | String
  DT_BOOL            | tf.bool        | Boolean
+ 
 
  TensorFlow에서의 타입 | Python에서의 타입 | 설명 
 -----------------------|----------------- -|---------------
