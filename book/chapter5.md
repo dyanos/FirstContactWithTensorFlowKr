@@ -10,13 +10,13 @@ In the rest of this chapter, I will use an example code as the backbone, alongsi
 이 책의 소개 자연 주어진 매개 변수의 세부 사항을 입력하지 않고 convolutions 및 pooling이 장의 나머지 부분에서 나는 가장 중요한 두 이러한 네트워크의 개념을 설명 할 함께 백본, 같은 예제 코드를 사용합니다 . 그러나 독자는 모든 코드를 실행할 수 있습니다 나는 당신이 컨볼루션 신경망 뒤에 글로벌 아이디어를 이해할 수 있기를 바랍니다.
 
 * Convolutional Neural Networks
-* Convolutional Neural Networks
+* 컨볼루셔널 뉴럴 네트웍
 
 Convolutional Neural Nets (also known as CNN’s or CovNets) are a particular case of Deep Learning and have had a significant impact in the area of computer vision.
-(또한 CNN 나 CovNets라고도 함) 콘볼 루션 신경망은 딥 러닝의 특별한 경우이며, 컴퓨터 비전 분야에 큰 영향을 주었다.
+콘볼루셔널 뉴럴 네트웍(또한 CNN 나 CovNets라고도 함)은 딥 러닝의 특별한 경우이며, 컴퓨터 비전 분야에 큰 영향을 주었다.
 
 A typical feature of CNN’s is that they nearly always have images as inputs, this allows for more efficient implementation and a reduction in the number of required parameters. Let’s have a look at our MNIST digit recognition example: after reading in the MNIST data and defining the placeholders using TensorFlow as we did in the previous example:
-CNN의의 전형적인 기능들은 거의 항상 입력으로 이미지를 가지고있다, 이는 더 효율적인 구현 필요한 파라미터의 수의 감소를 허용한다. MNIST 데이터에 읽고 우리가 앞의 예에서와 마찬가지로 TensorFlow를 사용하여 자리를 정의 후에 : 우리의 MNIST 숫자 인식의 예를 살펴 보자 :
+CNN의 전형적인 기능들은 거의 항상 입력으로 이미지를 가진다는 점인데, 이것은 요구되는 매개변수의 수에서 더 효율적인 구현과 매개변수의 적은 수를 통하여 동작을 허용한다는 점이다. 우리의 MNIST 숫자 인식 예제를 살펴보기로 하자: MNIST데이터에서 읽고, 이전 예제에서 했던 것처럼 텐서플로우를 사용하여 플레이스홀더(Placeholders)를 정의하자.
 
 ```
 import input_data
@@ -29,29 +29,31 @@ y_ = tf.placeholder("float", shape=[None, 10])
 ```
 
 We can reconstruct the original shape of the images of the input data. We can do this as follows:
-우리는 입력 데이터의 화상의 원래의 형상을 재구성 할 수있다. 다음과 같이 우리는이 작업을 수행 할 수 있습니다 :
+우리는 입력 데이터 이미지의 원래의 형상을 재구성 할 수있다. 다음과 같이 우리는 이 작업을 수행 할 수 있다 :
 
 ```
 x_image = tf.reshape(x, [-1,28,28,1])
 ```
 
 Here we changed the input shape to a 4D tensor, the second and third dimension correspond to the width and the height of the image while the last dimension corresponding number of color channels, 1 in this case.
-This way we can think of the input to our neural network being a 2 dimensional space of neurons with size of 28×28 as depicted in the figure.
-마지막 차원이 경우 칼라 채널 수 (1)에 대응하는 동안 여기에 4D 텐서에 입력 형상을 변경 제 2 및 제 3 치수는 폭 및 이미지의 높이에 대응한다. 우리는 그림에 나타낸 바와 같이 우리의 신경 네트워크는 28 × 28의 크기를 가진 뉴런의 2 차원 공간 인에 입력 생각할 수있는이 방법.
+여기서, 입력데이터를 4차원 텐서로 변환했다. 이때 두번째와 세번째 차원은 이미지의 넓이와 높이와 동일하며, 마지막 차원은 색상 채널들의 수와 동일한데, 이 경우에서는 1이다. 
+
+"""This way we can think of the input to our neural network being a 2 dimensional space of neurons with size of 28×28 as depicted in the figure.
+우리는 그림에 나타낸 바와 같이 우리의 신경 네트워크는 28 × 28의 크기를 가진 뉴런들(neurons)의 2 차원 공간에 존재하는 우리의 신경망으로 생각할 수 있다. 인에 입력 생각할 수있는이 방법."""
 
 image072
 
 
 There are two basic principles that define convolution neural networks: the filters and the characteristic maps. These principles can be expressed as groups of specialized neurons, as we will see shortly. But first, we will give a short description of these two principles given their importance in CNN’s.
-필터 및 특성 맵 : 두 가지 기본 회선 신경 네트워크를 정의 원칙이있다. 우리는 곧 볼 수 이러한 원칙은 전문 뉴런의 그룹으로 표현 될 수있다. 하지만 먼저, 우리는 CNN의에서 그 중요성 주어진이 두 가지 원칙에 대한 간단한 설명을 제공합니다.
+컨볼루션 뉴럴 네트워크를 정의하는 두 가지 기본 원칙이 있다:필터 및 특성 맵. 이러한 원칙들은 특수화된 뉴런의 그룹으로 표현 될 수 있다. 우리는 이를 짧게나마 볼 것이다. 하지만 먼저, 우리는 CNN의 중요한 이들 두 가지 원칙에 대한 간단한 설명을 제공 할 것이다.
 
 Intuitively, we could say that the main purpose of a convolutional layer is to detect characteristics or visual features in the images, think of edges, lines, blobs of color, etc. This is taken care of by a hidden layer that is connected by to input layer that we just discussed. In the case of CNN’s, in which we are interested, the input data is not fully connected to the neurons of the first hidden layer; this only happens in a small localized space in the input neurons that store the pixels values of the image. This can be visualized as follows:
-직관적으로, 우리는 길쌈 층의 주요 목적은, 이미지의 특성이나 시각적 특징을 검출이에 의해 연결되어 숨겨진 레이어에 의해 처리되는 등 가장자리, 선, 색의 얼룩, 생각하는 것을 말할 수 있습니다 우리가 논의 입력 층. CNN의 우리가 관심이있는 경우, 입력 데이터는 제 은닉층의 뉴런 완전히 연결되지; 이것은 이미지의 픽셀 값을 저장하는 입력 뉴런의 작은 국부적 공간에서 일어난다. 이는 다음과 같이 시각화 될 수있다 :
+직관적으로, 우리는 컨볼루셔널 레이어(Convolutional Layer)의 주요 목적은, 이미지의 특성이나 시각적 특징을 검출이에 의해 연결되어 숨겨진 레이어에 의해 처리되는 등 가장자리, 선, 색의 얼룩, 생각하는 것을 말할 수 있습니다 우리가 논의 입력 층. CNN의 우리가 관심이있는 경우, 입력 데이터는 제 은닉층의 뉴런 완전히 연결되지; 이것은 이미지의 픽셀 값을 저장하는 입력 뉴런의 작은 국부적 공간에서 일어난다. 이는 다음과 같이 시각화 될 수있다 :
 
 image074
 
 To be more precise, in the given example each neuron of our hidden layer is connected with a small 5×5 region (hence 25 neurons) of the input layer.
-우리 은닉층 각 뉴런은 입력 층의 작은 5 × 5 영역 (따라서 25 뉴런)에 접속되어 소정의 예에서, 더 정확하게한다.
+더 정확하게 하기 위해서, 주어진 예제에서 우리의 은닉층(hidden layer)의 각 뉴런은 입력 층(input layer)의 작은 5 × 5 영역 (따라서 25 뉴런)에 접속되어있다.
 
 We can think of this being a window of size 5×5 that passes over the entire input layer of size 28×28 that contains the input image. The window slides over the entire layer of neurons. For each position of the window there is a neuron in the hidden layer that processes that information.
 우리는이 입력 이미지를 포함하는 28 × 28 크기의 전체 입력 층 통과 크기 5 × 5 윈도우 인 생각할 수있다. 창은 뉴런의 전체 층 위에 슬라이드. 윈도우의 각 위치 정보를 처리 은닉층의 뉴런있다.
@@ -153,7 +155,7 @@ h_pool1 = max_pool_2x2(h_conv1)
 ```
 
 When constructing a deep neural network, we can stack several layers on top of each other. To demonstrate how to do this, I will create a secondary convolutional layer with 64 filters with a 5×5 window. In this case we have to pass 32 as the number of channels that we need as that is the output size of the previous layer:
-깊은 신경 네트워크를 구성 할 때, 우리는 서로의 상단에 여러 레이어 스택 수 있습니다. 이 작업을 수행하는 방법을 설명하기 위해, 나는 5 × 5 창 (64) 필터와 보조 길쌈 레이어를 생성합니다. 이 경우에 우리는 그 이전 층의 출력 크기이기 때문에 필요한 채널 수로 (32)을 통과해야한다 :
+딥 뉴럴 네트워크를 구성 할 때, 우리는 서로의 상단에 여러 레이어 스택 수 있습니다. 이 작업을 수행하는 방법을 설명하기 위해, 나는 5 × 5 창 (64) 필터와 보조 길쌈 레이어를 생성합니다. 이 경우에 우리는 그 이전 층의 출력 크기이기 때문에 필요한 채널 수로 (32)을 통과해야한다 :
 
 ```
 W_conv2 = weight_variable([5, 5, 32, 64])
@@ -163,10 +165,10 @@ h_pool2 = max_pool_2x2(h_conv2)
 ```
 
 The resulting output of the convolution has a dimension of 7×7 as we are applying the 5×5 window to a 12×12 space with a stride size of 1. The next step will be to add a fully connected layer to 7×7 output, which will then be fed to the final softmax layer like we did in the previous chapter.
-우리는 (1)의 보폭 크기가 12 × 12 공간으로 5 × 5 윈도우를 적용​​하는 다음 단계는 7 × 7에 완전히 연결 층을 추가 할 수있는 바와 같이 콘볼 루션의 결과 출력은 7 × 7의 치수를 갖는다 우리가 이전 장에서했던 것처럼 다음 최종 softmax를 층에 공급됩니다 출력.
+콘볼루션의 출력결과는 12x12크기의 공간에 5x5크기의 윈도우를 1의 보폭크기(stride size)으로 적용한 것으로 7x7의 차원을 가진다. 다음 단계로써 완전히 연결된 층에 7x7 출력을 더할 것이다. 이것은 우리가 이전 장에서 했던것과 같이 마지막으로 소프트맥스(softmax) 레이어를 추가할 것(be fed)이기 때문이다.
 
 We will use a layer of 1024 neurons, allowing us to to process the entire image. The tensors for the weights and biases are as follows:
-우리는 우리가 전체 이미지를 처리​​ 할 수​​ 있도록 1024 뉴런의 층을 사용합니다. 다음과 같이 무게와 편견에 대한 텐서는 다음과 같습니다
+우리는 1024개의 뉴런들로 구성된 층을 사용할 것이다. 이것은 전체 이미지를 처리할 수 있도록 한다. 가중치와 바이어스들에 대한 텐서는 다음과 같이 선언 할 수 있다.
 
 ```
 W_fc1 = weight_variable([7 * 7 * 64, 1024])
@@ -174,10 +176,10 @@ b_fc1 = bias_variable([1024])
 ```
 
 Remember that the first dimension of the tensor represents the 64 filters of size 7×7 from the second convolutional layer, while the second parameter is the amount of neurons in the layer and is free to be chosen by us (in our case 1024).
-두번째 매개 변수는 층 뉴런의 양이고, (우리의 경우 1024) 회사에 의해 선택 될 수없는 반면 텐서의 제 차원 번째 컨벌루션 층으로부터 × 7 크기 7 64 필터를 나타내는 것을 기억하라.
+두번째 매개변수가 우리에 의해 선택될 수 없지만, 그 레이어에서 뉴런의 개수를 나타내는 동안, 첫번째 차원은 두번째 컨볼루셔널 레이어로부터 크기 7x7의 64개의 필터들을 나타냄을 기억하라.
 
-Now, we want to flatten the tensor into a vector. We saw in the previous chapter that the softmax needs a flattened image in the form as a vector as input. This is achieved by multiplying the weight matrix W_fc1 with the flattend vector, adding the bias b_fc1 after wich we apply the ReLU activation function:
-이제, 우리는 벡터에 텐서를 평평하게 할 수 있습니다. 우리는 softmax를 입력으로 벡터와 같은 형태로 병합 된 이미지를 필요로 이전 장에서 보았다. 이것은 우리가 ReLU 활성화 함수를 적용한 후 느릅 바이어스 b_fc1를 추가하는 flattend 벡터와 가중치 행렬 W_fc1 곱함으로써 달성된다 :
+Now, we want to flatten the tensor into a vector. We saw in the previous chapter that the softmax needs a flattened image in the form as a vector as input. This is achieved by multiplying the weight matrix W_fc1 with the flattend vector, adding the bias b_fc1 after which we apply the ReLU activation function:
+이제, 우리는 텐서를 벡터로 평평하게 하기를 원한다. 우리는 소프트맥스(softmax)가 벡터와 같은 형태로 병합된 일차원적인 이미지 형태를 필요로 한다는 것을 이전장에서 보았다. 이것은 평평화된 벡터에 가중치 행렬 W_fc1을 곱하고, 바이어스(bias) b_fc1을 곱한 후 ReLU 활성화 함수를 적용하므로써 이루어진다.:
 
 ```
 h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
@@ -186,10 +188,10 @@ h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 ```
 
 The next step will be to reduce the amount of effective parameters in the neural network using a technique called dropout. This consists of removing nodes and their incoming and outgoing connections. The decision of which neurons to drop and which to keep is decided randomly.  To do this in a consistent manner we will assign a probability to the neurons being dropped or not in the code.
-다음 단계는 강하라는 기술을 이용하여 뉴럴 네트워크에서 효과적인 파라미터의 양을 감소시키는 것이다. 이 제거 노드 및 수신 및 발신 연결로 구성되어 있습니다. 의 결정은 드롭 신경과 유지에있는 무작위로 결정된다. 일관된 방식으로이 작업을 수행하려면 우리는 신경 세포에 확률이 코드에서 떨어 뜨리거나하지중인 할당합니다.
+다음 단계는 신경망에서 드랍아웃(dropout)이라 불리우는 기술을 사용하여 효과적인 매개변수의 양을 줄일 것이다. 이것은 노드들과 그들의 입력(수신,incoming)/출력(발신,outgoing) 연결들을 제거하는 것으로 구성된다. 어느 뉴런을 제거(drop)할지, 어떤 것을 유지할지는 무작위로 결정된다. 일관된 방식으로 이 작업을 수행하기 위해서, 우리는 코드에서 떨어뜨릴지 아닐지에 대해서 뉴런에 확률을 할당할 것이다.
 
 Without going into too many details, dropout reduces the risk of the model of overfitting the data. This can happen when the hidden layers have large amount of neurons and thus can lead to very expressive models; in this case it can happen that random noise (or error) is modelled. This is known as overfitting, which is more likely if the model has a lot of parameters compared to the dimension of the input. The best is to avoid this situation, as overfitted models have poor predictive performance.
-너무 많은 세부 사항으로 가지 않고, 드롭 아웃은 데이터를 overfitting의 모델의 위험을 줄일 수 있습니다. 숨겨진 층이 매우 표현 모델로 이어질 수 따라서 큰 신경 세포의 양이있을 때 발생할 수 있습니다; 이 경우에는 랜덤 노이즈 (또는 오류)가 모델링되어 발생할 수 있습니다. 이는 모델은 입력의 크기와 비교하여 파라미터의 많은 경우 가능성이있는 overfitting로 알려져있다. 가장은 과다 적합 모델은 가난한 예측 성능을 가지고, 이러한 상황을 방지하는 것입니다.
+너무 많은 세부 사항의 설명없이, 드롭 아웃(dropout)은 모델이 과적화되는 것에 대한 위험을 줄일 수 있다. 이것은 숨겨진 층이 큰 양의 뉴런들을 가지고 있을때 매우 다체로운(expressive,?) 모델로 이어지는 일이 발생할 수 있다. 이 경우에 랜덤 노이즈 (또는 오류)가 모델링되는 일이 발생할 수 있다. 이는 과적화로 알려져 있다. 이것은 만일 모델이 입력의 차원과 비교하여 더 많은 매개변수를 가진다면 많이 접할 수 있는 상황이다. 이 상황을 피하는 것이 가장 좋다. 왜냐하면 과적화된 모델들은 빈약한 예측 성능을 가진다.
 
 In our model we apply dropout, which consists of using the function dropout tf.nn.dropout before the final softmax layer. To do this we construct a placeholder to store the probability that a neuron is maintained during dropout:
 우리의 모델에서 우리는 최종 softmax를 층 전에 함수 드롭 아웃 tf.nn.dropout를 사용하여 구성 드롭 아웃을 적용 할 수 있습니다. 이를 위해 우리는 신경 세포가 드롭 아웃 동안 유지되는 확률을 저장하는 자리를 만들 :
@@ -199,8 +201,8 @@ keep_prob = tf.placeholder("float")
 h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 ```
 
-Finally, we add the softmax layer to our model like have been done in the previous chapter. Remember that sofmax returns the probability of the input belonging to each class (digits in our case) so that the total probability adds up to 1. The softmax layer code is as follows:
-마지막으로, 우리는 이전 장에서 수행 된 같은 우리의 모델에 softmax를 레이어를 추가합니다. 총 확률은 다음과 같이 softmax를 계층 코드는 1까지 추가 있도록 각 클래스 (우리의 경우 자리)에 속하는 입력의 확률을 반환 sofmax 그 기억 :
+Finally, we add the softmax layer to our model like have been done in the previous chapter. Remember that softmax returns the probability of the input belonging to each class (digits in our case) so that the total probability adds up to 1. The softmax layer code is as follows:
+마지막으로, 우리는 이전 장에서 해왔던 것과 같이 우리의 모델에 소프트맥스 레이어(Softmax Layer)를 추가한다. 소프트맥스는 각각의 클래스(우리의 경우 숫자들)를 나타내는 입력의 확률을 돌려줌을 기억하라. 이는 총 확률을 1이되게 한다. 소프트맥스 레이어 코드는 다음과 같다. :
 
 ```
 W_fc2 = weight_variable([1024, 10])
@@ -213,14 +215,13 @@ y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 * 모델의 교육 및 평가
 
 We are now ready to train the model that we have just defined by adjusting all the weights in the convolution, and fully connected layers to obtain the predictions of the images for which we have a label. If we want to know how well our model performs we must follow the example set in the previous chapter.
-우리는 지금 우리가 레이블이있는 이미지의 예측을 얻기 위해 우리가 회선에있는 모든 가중치를 조정하여 정의한 모델과 완전히 연결 층을 훈련 할 준비가 된 것입니다. 우리가 알고 싶은 경우에 우리의 모델은 우리가 이전 장에서 설정 한 예를 따라야 수행하는 방법을 잘.
+우리는 하나의 레이블(label)에 대한 이미지들의 예측결과를 얻기 위해서 컨볼루션과 모두 연결된 층들에 있는 모든 가중치를 조절하므로써 정의된 모델을 훈련시킬 준비가 되었다. 만일 우리가 우리의 모델이 얼마나 잘 동작되는지 알기를 원한다면, 우리는 이전 장의 예제들을 가지고 확인해봐야 한다.
 
 The following code is very similar to the one in the previous chapter, with one exception: we replace the gradient descent optimizer with the ADAM optimizer, because this algorithm implements a different optimizer that offers certain advantages according to the literature [42].
-다음 코드는 하나를 제외하고, 이전 장에있는 것과 매우 유사하다 :이 알고리즘은 문헌 [42]에 따라 어떤 이점을 제공하는 다른 최적화를 구현하기 때문에 우리의 ADAM 최적화와 경사 하강 최적화를 교체합니다.
+다음 코드는 하나를 제외하고는 이전 장에 있는 것과 매우 유사하다: 우리는 경사하강법 최적화를 ADAM 최적화 기법으로 교채했는데, 이 알고리즘은 문헌 [42]에 따라 확실한 이점들을 제공하는 하나의 다른 최적화이기 때문이다.
 
 We also need to include the additional parameter keep_prob in the feed_dict argument, which controls the probability of the dropout layer that we discussed earlier.
-우리는 또한 우리가 앞에서 설명한 드롭 아웃 층의 확률을 제어하는​​ feed_dict 인수의 추가 매개 변수 keep_prob를 포함해야합니다.
-
+우리는 또한 free_dict 매개변수에 추가적인 매개변수인 keep_prob를 포함할 필요가 있다. 이는 우리가 앞서 논의했던 드랍아웃 층의 확률을 조절하는 것이다.
 
 ```
 cross_entropy = -tf.reduce_sum(y_*tf.log(y_conv))
@@ -234,21 +235,21 @@ sess.run(tf.initialize_all_variables())
 for i in range(20000):
   batch = mnist.train.next_batch(50)
   if i%100 == 0:
-     train_accuracy = sess.run( accuracy, feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
-     print("step %d, training accuracy %g"%(i, train_accuracy))
+    train_accuracy = sess.run( accuracy, feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
+    print("step %d, training accuracy %g"%(i, train_accuracy))
   sess.run(train_step,feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 
 print("test accuracy %g"% sess.run(accuracy, feed_dict={ x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 ```
 
 Like in the previous models, the entire code can be found on the Github page of this book, one can verify that this model achieves 99.2% accuracy.
-이전 모델에서 전체 코드는이 책의 Github에서의 페이지에서 볼 수있는 것처럼, 사람은이 모델이 99.2 %의 정확도를 얻을 수 있는지 확인할 수 있습니다.
+이전 모델에서와 같이, 전체 코드는 이 책의 Github 페이지에서 볼 수 있다. 당신은 이 모델이 99.2 %의 정확도를 얻을 수 있는지 확인할 수 있다.
 
 Here is when the brief introduction to building, training and evaluating deep neural networks using TensorFlow comes to an end. If the reader have managed to run the provided code, he or she has noticed that the training of this network took noticeably longer time than the one in the previous chapters; you can imagine that a network with much more layers will take a lot longer to train. I suggest you to read the next chapter, where is explained how to use a GPU for training, which will vaslty decrease your training time.
-건물, 교육 및 TensorFlow를 사용하여 깊은 신경망을 평가에 대한 간략한 소개가 끝날 때 여기에있다. 독자가 제공된 코드를 실행하는 관리 한 경우, 그 또는 그녀는이 네트워크의 훈련은 이전 장에서보다 눈에 띄게 더 긴 시간이 걸렸 있음을 발견했습니다; 당신은 더 많은 레이어와 네트워크 훈련에 많은 시간이 더 걸릴 것이라고 상상할 수있다. 나는 당신이 vaslty 훈련 시간을 감소 훈련을 위해 GPU를 사용하는 방법을 설명은 다음 장을 읽는 것이 좋습니다.
+여기서 텐서플로우를 사용하여 딥뉴럴 네트워크를 만들고, 훈련시키고, 평가하기(evaluating) 위한 간략한 소개를 끝마치겠다. 만일 독자가 제공된 코드를 실행하기위해 만져봤다면, 당신은 망의 훈련이 이전 장에서의 그것보다 더 긴 시간이 걸렸다는 것을 알아챘을 것이다. 당신은 더 많은 레이어와 네트워크 훈련에 많은 시간이 더 걸릴 것이라고 상상할 수 있다. 나는 당신이 vaslty 훈련 시간을 감소시키기 위해 GPU를 어떻게 사용하지에 대한 내용이 있는 다음 장을 읽기를 추천한다.
 
 The code of this chapter can be found in CNN.py on the github page of this book [43], for studying purposes the code can be found in its entirity below:
-이 장의 코드는 [43], 목적을 코드를 공부에 대해 아래의 전체 내용에서 찾을 수 있습니다이 책의 GitHub의 페이지에 CNN.py에서 찾을 수 있습니다 :
+이 장의 코드는 이 책의 GitHub의 페이지에 있는 CNN.py에서 찾을 수 있다. 학습을 위하여, 아래에서 그 코드의 전체 내용을 볼 수 있다. :
 
 ```
 import input_data
