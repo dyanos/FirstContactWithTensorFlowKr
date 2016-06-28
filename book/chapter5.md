@@ -40,8 +40,8 @@ Here we changed the input shape to a 4D tensor, the second and third dimension c
 
 역자주) MNIST 데이터는 하나의 격자가 0~255 사이의 숫자중 하나의 값으로 정의되어 있다. 
 
-"""This way we can think of the input to our neural network being a 2 dimensional space of neurons with size of 28×28 as depicted in the figure.
-우리는 그림에 나타낸 바와 같이 우리의 신경 네트워크는 28 × 28의 크기를 가진 뉴런들(neurons)의 2 차원 공간에 존재하는 우리의 신경망으로 생각할 수 있다. 인에 입력 생각할 수있는이 방법."""
+This way we can think of the input to our neural network being a 2 dimensional space of neurons with size of 28×28 as depicted in the figure.
+이런 방식으로 우리는 입력을 그림에 나타낸 바와 같이 28 × 28의 크기를 가진 뉴런들(neurons)의 2 차원 공간에 존재하는 우리의 신경망으로 생각할 수 있다. 
 
 image072
 
@@ -50,7 +50,7 @@ There are two basic principles that define convolution neural networks: the filt
 컨볼루션 뉴럴 네트워크를 정의하는 두 가지 기본 원칙이 있다: 필터 및 특성 맵(characteristic maps). 이러한 원칙들은 특수화된 뉴런의 그룹으로 표현 될 수 있다. 우리는 이를 짧게나마 볼 것이다. 하지만 먼저, 우리는 CNN의 중요한 이들 두 가지 원칙에 대한 간단한 설명을 제공 할 것이다.
 
 Intuitively, we could say that the main purpose of a convolutional layer is to detect characteristics or visual features in the images, think of edges, lines, blobs of color, etc. This is taken care of by a hidden layer that is connected by to input layer that we just discussed. In the case of CNN’s, in which we are interested, the input data is not fully connected to the neurons of the first hidden layer; this only happens in a small localized space in the input neurons that store the pixels values of the image. This can be visualized as follows:
-직관적으로, 우리는 컨볼루셔널 레이어(Convolutional Layer)의 주요 목적은, 이미지의 특성이나 시각적 특징을 검출이에 의해 연결되어 숨겨진 레이어에 의해 처리되는 등 가장자리, 선, 색의 얼룩, 생각하는 것을 말할 수 있습니다 우리가 논의 입력 층. CNN의 우리가 관심이있는 경우, 입력 데이터는 제 은닉층의 뉴런 완전히 연결되지; 이것은 이미지의 픽셀 값을 저장하는 입력 뉴런의 작은 국부적 공간에서 일어난다. 이는 다음과 같이 시각화 될 수있다 :
+직관적으로, 우리는 컨볼루셔널 레이어(Convolutional Layer)의 주요 목적이 이미지에서 특성이나 시각적 특징을 검출하는 것임을 말해왔다. 예를 들면, 엣지(edges), 선들, 색상의 얼룩(blob)등이다. 이것은 우리가 방금 논의했던 입력층과 연결된 은닉층에 의해서 다루어진다.(is taken care of by) CNN의 경우에서, 우리가 관심이있는 경우에, 입력 데이터는 첫 은닉층의 뉴런들에 완전히 연결되지 않는다. 이것은 단지 이미지의 픽셀 값을 저장하는 입력 뉴런에서 작은 지역적 공간에서 나타난다. 이는 다음과 같이 시각화 될 수 있다 :
 
 image074
 
@@ -61,15 +61,15 @@ We can think of this being a window of size 5×5 that passes over the entire inp
 우리는 입력 이미지를 포함하는 크기 28x28의 전체 입력층을 통과시키는 크기 5x5의 창을 생각할 수 있다. 창의 각 위치에 대해서, 정보를 처리하는 한 개의 뉴런이 은닉 층에 있다.
 
 We can visualize this by assuming that the window starts in the top left corner of the image; this provides the information to the first neuron of the hidden layer.  The window is then slid right by one pixel; we connect this 5×5 region with the second neuron in the hidden layer. We continue like this until the entire space from top to bottom and from left to right has been convered by the window.
-우리는 창 이미지의 왼쪽 상단에서 시작한다고 가정하여이를 시각화 할 수 있습니다; 이것은 숨겨진 레이어의 첫 번째 뉴런에 정보를 제공한다. 창은 하나의 픽셀에 의해 오른쪽으로 슬라이드; 우리는 숨겨진 레이어에서 두 번째 신경 세포와이 5 × 5 영역을 연결합니다. 우리는 위에서 아래로 전체 공간까지 이런 식으로 계속 왼쪽에서 오른쪽 창에 의해 변환 된 것되었습니다.
+우리는 창 이미지의 왼쪽 상단에서 시작한다고 가정하므로써 이를 시각화 할 수 있다; 이것은 은닉층의 첫 번째 뉴런에 정보를 제공한다. 그 창은 하나의 픽셀만큼 오른쪽으로 이동한다; 우리는 숨겨진 레이어에서 두 번째 신경 세포와이 5 × 5 영역을 연결합니다. 우리는 위에서 아래로 그리고 왼쪽에서 오른쪽으로 전체 공간를 다 다룰때까지(convered, covered) 이것을 계속한다. 
 
 image076
 
 Analyzing the concrete case that we have proposed, we observe that given an input image of size 28×28 and a window of size 5×5 leads to a 24×24 space of neurons in the first hidden layer due to the fact we can only move the window 23 times down and 23 times to the right before hitting the bottom right edge of the input image. This assumes that window is moved just 1 pixel each time, so the new window overlaps with the old one expect in line that has just advanced.
-우리가 제안 구체적인 사례를 분석, 우리는 사실에 기인 사이즈 28 × 28의 입력 화상과 상기 제 은닉층 뉴런의 24 × 24 공간 크기가 5 × 5의 리드 창 주어진 관찰 우리는 단지 수 입력 화상의 우측 하단 모서리를 치기 전에 창을 오른쪽 아래 23 번, 23 번 이동한다. 이 창은 단지 1 픽셀마다 이동하는 것으로 가정하기 때문에 새 창이 이전 단지 고급 라인에 기대와 겹칩니다.
+우리가 제안했던 구체적인 사례를 분석하는 것에 대해서, 우리는 사실에 기인 28 × 28크기의 입력 이미지와 5x5크기의 창으로 주어진 상기 제 은닉층 뉴런의 24 × 24 공간 크기가 5 × 5의 리드 창 주어진 관찰 우리는 단지 수 입력 화상의 우측 하단 모서리를 치기 전에 창을 오른쪽 아래 23 번, 23 번 이동한다. 이 창은 단지 1 픽셀마다 이동하는 것으로 가정하기 때문에 새 창이 이전 단지 고급 라인에 기대와 겹칩니다.
 
-It is, however, possible to move more than 1 pixel at a time in a convlution layer, this parameter is called the ‘stride’ length. Another extension is to pad the edges with zeroes (or other values) so that the window can slide over the edge of the image, which may lead to better results. The parameter to control this feature is know as padding [39], with which you can determine the size of the padding. Given the introductory nature of the book we will not go into further detail about these two parameters.
-그것은 convlution 층을 한 번에 1 개 이상의 화소를 이동하지만, 가능하며,이 파라미터는 "스트라이드"길이라고한다. 윈도우가 더 좋은 결과로 이어질 수있는 이미지의 가장자리 위로 밀어 수 있도록 또 다른 확장 패드에 제로 (또는 다른 값)와 가장자리입니다. 이 기능을 제어하는​​ 파라미터는 패딩의 크기를 결정할 수있는 패딩 [39]으로 알고있다. 우리는이 두 가지 매개 변수에 대한 자세한 세부 사항으로 가지 않을 것이다 책의 소개 성격을 감안할 때.
+It is, however, possible to move more than 1 pixel at a time in a convolution layer, this parameter is called the ‘stride’ length. Another extension is to pad the edges with zeroes (or other values) so that the window can slide over the edge of the image, which may lead to better results. The parameter to control this feature is know as padding [39], with which you can determine the size of the padding. Given the introductory nature of the book we will not go into further detail about these two parameters.
+그것은 컨볼루션 레이어에서 한 번에 1 개 이상의 화소를 이동하는 것이 가능하지만, 이 파라미터는 "스트라이드"길이라고한다. 윈도우가 더 좋은 결과로 이어질 수있는 이미지의 가장자리 위로 밀어 수 있도록 또 다른 확장 패드에 제로 (또는 다른 값)와 가장자리입니다. 이 기능을 제어하는​​ 파라미터는 패딩의 크기를 결정할 수있는 패딩 [39]으로 알고있다. 우리는이 두 가지 매개 변수에 대한 자세한 세부 사항으로 가지 않을 것이다 책의 소개 성격을 감안할 때.
 
 Given our case of study, and following the formalism of the previous chapter, we will need a bias value b and a 5×5 weight matrix W to connect the neurons of the hidden layer with the input layer. A key feature of a CNN is that this weight matrix W and bias b are shared between all the neurons in the hidden layer; we use the same W and b for neurons in the hidden layer. In our case that is 24×24 (576) neurons. The reader should be able to see that this drastically reduces the amount weight parameters that one needs when compared to a fully connected neural network. To be specific, this reduces from 14000 (5x5x24x24) to just 25 (5×5) due to the sharing of the weight matrix W.
 연구의 우리의 경우 감안할 때, 이전 장에서의 형식주의에 따라, 우리는 입력 층과 은닉층의 뉴런을 연결하는 바이어스 값 b를 5 × 5 중량 행렬 W가 필요합니다. CNN과의 주요 기능이 가중치 행렬 W와 바이어스 b는 은닉층의 모든 신경 세포간에 공유된다는 것이다; 우리는 은닉층 뉴런에 대해 동일한 W와 b를 사용합니다. 우리의 경우 그 24 × 24 (576) 뉴런이다. 독자는이 대폭 완전히 연결된 신경망에 비해 하나의 필요한 양 가중치 파라미터를 감소시키는 것으로 볼 수있을 것이다. 즉,이 14000 (5x5x24x24)에서 감소 단지 25 (5 × 5)으로 인해 가중치 매트릭스 (W)의 공유에
@@ -78,7 +78,7 @@ This shared matrix W and the bias b are usually called a kernel or filter in the
 이 공유 행렬 W 바이어스 B는 일반적 CNN의 컨텍스트에서 커널 또는 필터라고한다. 이 필터는 우리의 경우 식별 기능을 찾는 데 사용되는 리터칭 이미지에 대한 그 사용 이미지 처리 프로그램과 유사합니다. 나는 컨볼 루션 작품의 방법 과정에 대한 좋은 아이디어를 얻을 수있는 GIMP [40] 설명서에있는 예제를보고하는 것이 좋습니다.
 
 A matrix and a bias define a kernel. A kernel only detects one certain relevant feature in the image so it is, therefore, recommended to use several kernels, one for each characteristic we would like to detect. This means that a full convolution layer in a CNN consists of several kernels.  The usual way of representing several kernels is as follows:
-행렬과 바이어스는 커널을 정의합니다. 그것은 그래서 커널은 따라서, 우리가 검출하고자하는 각각의 특성에 대해 하나, 몇 가지 커널을 사용하는 것이 좋습니다 이미지에서 하나의 특정 관련 기능을 감지합니다. 이는 CNN에서 완전 컨볼 루션 층은 여러 가지 커널 구성되어 있다는 것을 의미한다. 다음과 같이 몇 가지 커널을 표현하는 일반적인 방법은 다음과 같습니다
+행렬과 바이어스는 하나의 커널(kernel)을 정의한다. 하나의 커널은 단지 이미지에서 하나의 확실한 특정 관련 값(feature)을 검출한다. 그러므로 여러개의 커널들을 사용하는 것을 추천한다. 각각의 특성에 대해 하나, 이는 CNN에서 완전 컨볼루션 레이어가  여러 가지 커널로 구성되어 있다는 것을 의미한다.몇 가지 커널을 표현하는 일반적인 방법은 다음과 같다.
 
 image078
 
@@ -99,7 +99,7 @@ def bias_variable(shape):
 ```
 
 Without going into the details, it is customary to initialize the weights with some random noise and the bias values slightly positive.
-세부 사항에 가지 않고, 어떤 임의의 노이즈와 바이어스 값을 약간 긍정적으로 가중치를 초기화하는 것이 관례입니다.
+세부 사항을 다루지 않고, 몇몇 임의의 노이즈 값을 가지고 가중치를 초기화 하는 것과 작은 양의 수로 바이어스 값들을 초기화 하는 것이 관례이다.
 
 In addition to the convolution layers that we just described, it is usual for the convolution layer to be followed by a so called pooling layer. The pooling layer simply condenses the output from the convolutional layer and creates a compact version of the information that have been put out by the convolutional layer. In our example, we will use a 2×2 region of the convolution layer of which we summarize the data into a single point using pooling:
 컨벌루션 층은 소위 풀링 층 따라야하는 방금 설명한 컨벌루션 층 이외에, 그것은 일반적이다. 풀링 층은 단순히 길쌈 층의 출력을 응축하고 길쌈 층에 의해 넣어 한 정보의 컴팩트 버전을 만듭니다. 이 예에서, 우리는 우리가 풀링을 사용하여 단일 점으로 데이터를 요약하는 회선의 층의 2 × 2 영역을 사용한다 :
@@ -110,7 +110,7 @@ There are several ways to perform pooling to condense the information; in our ex
 정보를 응축 풀링을 수행하는 방법은 여러 가지가 있습니다; 우리의 예에서 우리는 최대-풀링이라는 방법을 사용합니다. 이것은 단지 고려하는 2 × 2 영역에서의 최대 값을 유지하여 집광 정보로 구성된다.
 
 As mentioned above, the convolutional layer consists of many kernels and, therefore, we will apply max-pooling to each of those separately. In general, there can be many layers of pooling and convolutions:
-상술 한 바와 같이, 컨볼 루션 커널 계층은 여러 구성되고, 따라서 개별적으로 그 각각 맥스 풀링 적용된다. 일반적으로 풀링 및 회선의 많은 레이어가있을 수있다 :
+상술 한 바와 같이, 컨볼루션 레이어는 수 많은 커널(kernel)들로 구성되고, 따라서 이들 각각에 개별적으로 맥스 풀링(max-pooling)을 적용할 것이다. 일반적으로 풀링 및 컨볼루션들의 많은 층들이 있을 수 있다 :
 
 image082
 
@@ -124,10 +124,10 @@ Intuitively, we can explain max-pooling as finding out if a particular feature i
 * 모델의 구현
 
 In this section, I will present the example code on how to write a CNN based on the advanced example (Deep MNIST for experts) that can be found on the TensorFlow [41] website. As I said in the beginning, there are many details of the parameters that require a more detailed treatment and theoretical approach than the given in this book. I hence will only give an overview of the code without going into to many details of the TensorFlow parameters.
-이 섹션에서는, 나는 TensorFlow [41] 웹 사이트에서 찾을 수 있습니다 고급 예 (전문가 깊은 MNIST)을 기반으로 CNN을 작성하는 방법에 대한 예제 코드를 발표 할 예정이다. 내가 처음에 말했다 바와 같이,이 책에서 주어진보다 자세한 처리 및 이론적 접근을 필요로하는 매개 변수의 많은 세부 사항이있다. 나는 따라서 만 TensorFlow 매개 변수의 많은 세부 사항에 가지 않고 코드에 대한 개요를 제공합니다.
+이 섹션에서 나는 고급 예제(전문가를 위한 Deep MNIST)에 기초하여 CNN을 어떻게 쓰는지에 대한 예제 코드를 나타낼 것 이다. 이는 TensorFlow [41] 웹 사이트에서 찾을 수 있다. 내가 처음에 말한바와 같이, 이 책에서 주어진 것 보다 더 자세한 처리 및 이론적 접근을 필요로하는 매개변수의 많은 세부 사항이있다. 따라서 나는 TensorFlow의 매개 변수의 수 많은 세부사항을 다루지 않고 코드에 대한 개요를 줄 것이다.
 
 As we have already seen, there are several parameters that we have to define for the convolution and pooling layers.  We will use a stride of size 1 in each dimension (this is the step size of the sliding window) and a zero padding model. The pooling that we will apply will be a max-pooling on block of 2×2. Similar to above, I propose using the following two generic functions to be able to write a cleaner code that involves convolutions and max-pooling.
-우리가 이미 보았 듯이, 우리가 회선 및 풀링 레이어 정의해야합니다 여러 매개 변수가 있습니다. 우리 및 제로 패딩 모델 (이 슬라이딩 윈도우의 스텝 크기), 각 차원의 크기 (1)의 보폭을 사용할 것이다. 우리가 적용 할 풀링은 2 × 2 블록에 최대-풀링 될 것입니다. 위에서와 마찬가지로, 나는 회선 및 최대-풀링을 포함하는 청소기 코드를 작성할 수 있도록 다음과 같은 두 가지 일반적인 기능을 사용하여 제안한다.
+우리가 이미 보았 듯이, 우리가 컨볼루션 및 풀링 층들에 대해 정의해야하는 여러 매개변수가 있다. """우리는 제로 패딩 모델 (이 슬라이딩 윈도우의 스텝 크기), 각 차원의 크기 (1)의 보폭을 사용할 것이다. 우리가 적용 할 풀링은 2 × 2 블록에 최대-풀링 될 것입니다. 위에서와 마찬가지로, 나는 회선 및 최대-풀링을 포함하는 청소기 코드를 작성할 수 있도록 다음과 같은 두 가지 일반적인 기능을 사용하여 제안한다.
 
 ```
 def conv2d(x, W):
