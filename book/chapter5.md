@@ -78,7 +78,7 @@ This shared matrix W and the bias b are usually called a kernel or filter in the
 이 공유 행렬 W 바이어스 B는 일반적 CNN의 컨텍스트에서 커널 또는 필터라고한다. 이 필터는 우리의 경우 식별 기능을 찾는 데 사용되는 리터칭 이미지에 대한 그 사용 이미지 처리 프로그램과 유사합니다. 나는 컨볼 루션 작품의 방법 과정에 대한 좋은 아이디어를 얻을 수있는 GIMP [40] 설명서에있는 예제를보고하는 것이 좋습니다.
 
 A matrix and a bias define a kernel. A kernel only detects one certain relevant feature in the image so it is, therefore, recommended to use several kernels, one for each characteristic we would like to detect. This means that a full convolution layer in a CNN consists of several kernels.  The usual way of representing several kernels is as follows:
-행렬과 바이어스는 하나의 커널(kernel)을 정의한다. 하나의 커널은 단지 이미지에서 하나의 확실한 특정 관련 값(feature)을 검출한다. 그러므로 여러개의 커널들을 사용하는 것을 추천한다. 각각의 특성에 대해 하나, 이는 CNN에서 완전 컨볼루션 레이어가  여러 가지 커널로 구성되어 있다는 것을 의미한다.몇 가지 커널을 표현하는 일반적인 방법은 다음과 같다.
+행렬과 바이어스는 하나의 커널(kernel)을 정의한다. 하나의 커널은 단지 이미지에서 하나의 확실한 특정 관련 값(feature)을 검출한다. 그러므로 여러개의 커널들을 사용하는 것을 추천한다. 각각의 특성에 대해 하나, 이는 CNN에서 완전 컨볼루션 레이어가  여러 가지 커널로 구성되어 있다는 것을 의미한다. 몇 가지 커널을 표현하는 일반적인 방법은 다음과 같다.
 
 image078
 
@@ -99,7 +99,7 @@ def bias_variable(shape):
 ```
 
 Without going into the details, it is customary to initialize the weights with some random noise and the bias values slightly positive.
-세부 사항을 다루지 않고, 몇몇 임의의 노이즈 값을 가지고 가중치를 초기화 하는 것과 작은 양의 수로 바이어스 값들을 초기화 하는 것이 관례이다.
+세부 사항을 다루지 않고, 몇몇 임의의 노이즈 값을 가지고 가중치를 초기화 하는 것과 작은 양의 수로 바이어스 값들로 초기화 하는 것이 관례이다.
 
 In addition to the convolution layers that we just described, it is usual for the convolution layer to be followed by a so called pooling layer. The pooling layer simply condenses the output from the convolutional layer and creates a compact version of the information that have been put out by the convolutional layer. In our example, we will use a 2×2 region of the convolution layer of which we summarize the data into a single point using pooling:
 컨벌루션 층은 소위 풀링 층 따라야하는 방금 설명한 컨벌루션 층 이외에, 그것은 일반적이다. 풀링 층은 단순히 길쌈 층의 출력을 응축하고 길쌈 층에 의해 넣어 한 정보의 컴팩트 버전을 만듭니다. 이 예에서, 우리는 우리가 풀링을 사용하여 단일 점으로 데이터를 요약하는 회선의 층의 2 × 2 영역을 사용한다 :
