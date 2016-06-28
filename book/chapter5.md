@@ -7,13 +7,13 @@ As I have advanced, a Deep Learning neural network consists of several layers st
 이전에 언급한 바 있지만, 딥러닝 뉴럴 네트워(Deep Learning Neural Network)은 겹겹이 쌓인 여러 층의 레이어(layer)로 이루어져있다. 특별하게 이번 장에서 우리는 딥러닝의 전형적인 예로 컨볼루션 뉴럴 네트웍(Convolutional Neural Network)을 구축할 것이다. 컨볼루션 뉴럴 네트웍은 Yann LeCunn과 그의 동료들에 의해서 1998년에 소개되고 대중화되었다. 이 컨볼루션 뉴럴 네트웍은 최근 이미지 인식에서 최고의 성능을 보이고 있다; 예를 들면 앞에서 사용한 숫자 인식 문제에서 그들은 99% 이상의 정확도를 달성했다.
 
 In the rest of this chapter, I will use an example code as the backbone, alongside which I will explain the two most important concepts of these networks: convolutions and pooling without entering in the details of the parameters, given the introductory nature of this book. However, the reader will be able to run all the code and I hope that it will allow you understand to global ideas behind convolutional networks.
-이 책의 소개 자연 주어진 매개 변수의 세부 사항을 입력하지 않고 convolutions 및 pooling이 장의 나머지 부분에서 나는 가장 중요한 두 이러한 네트워크의 개념을 설명 할 함께 백본, 같은 예제 코드를 사용합니다 . 그러나 독자는 모든 코드를 실행할 수 있습니다 나는 당신이 컨볼루션 신경망 뒤에 글로벌 아이디어를 이해할 수 있기를 바랍니다.
+이 장의 나머지에서, 나는 기본뼈대(backbone)로 하나의 예제 코드를 사용할 것이다. 그와 동시에 나는 이 네트워크의 두가지 가장 중요한 개념들을 설명할 것이다: 매개변수들에 대한 상세한 설명없이 Convolution과 Pooling에 대해서 말이다. 그러나 독자는 모든 코드를 실행할 수 있고, 나는 당신이 컨볼루셔널 네트워크 뒤에 숨겨져있는 아이디어(Global Ideas)를 이해할 수 있기를 희망한다.
 
 * Convolutional Neural Networks
 * 컨볼루셔널 뉴럴 네트웍
 
 Convolutional Neural Nets (also known as CNN’s or CovNets) are a particular case of Deep Learning and have had a significant impact in the area of computer vision.
-콘볼루셔널 뉴럴 네트웍(또한 CNN 나 CovNets라고도 함)은 딥 러닝의 특별한 경우이며, 컴퓨터 비전 분야에 큰 영향을 주었다.
+콘볼루셔널 뉴럴 네트웍(또한 CNN 나 CovNets라고도 함)은 딥러닝의 특별한 경우이며, 컴퓨터 비전 분야에 큰 영향을 주었다.
 
 A typical feature of CNN’s is that they nearly always have images as inputs, this allows for more efficient implementation and a reduction in the number of required parameters. Let’s have a look at our MNIST digit recognition example: after reading in the MNIST data and defining the placeholders using TensorFlow as we did in the previous example:
 CNN의 전형적인 기능들은 거의 항상 입력으로 이미지를 가진다는 점인데, 이것은 요구되는 매개변수의 수에서 더 효율적인 구현과 매개변수의 적은 수를 통하여 동작을 허용한다는 점이다. 우리의 MNIST 숫자 인식 예제를 살펴보기로 하자: MNIST데이터에서 읽고, 이전 예제에서 했던 것처럼 텐서플로우를 사용하여 플레이스홀더(Placeholders)를 정의하자.
@@ -29,14 +29,16 @@ y_ = tf.placeholder("float", shape=[None, 10])
 ```
 
 We can reconstruct the original shape of the images of the input data. We can do this as follows:
-우리는 입력 데이터 이미지의 원래의 형상을 재구성 할 수있다. 다음과 같이 우리는 이 작업을 수행 할 수 있다 :
+우리는 입력 데이터 이미지의 원래의 형상을 재구성 할 수 있다. 다음과 같이 우리는 이 작업을 수행 할 수 있다 :
 
 ```
 x_image = tf.reshape(x, [-1,28,28,1])
 ```
 
 Here we changed the input shape to a 4D tensor, the second and third dimension correspond to the width and the height of the image while the last dimension corresponding number of color channels, 1 in this case.
-여기서, 입력데이터를 4차원 텐서로 변환했다. 이때 두번째와 세번째 차원은 이미지의 넓이와 높이와 동일하며, 마지막 차원은 색상 채널들의 수와 동일한데, 이 경우에서는 1이다. 
+여기서, 입력데이터를 4차원 텐서로 변환했다. 이때 두번째와 세번째 차원은 이미지의 넓이와 높이와 동일하며, 마지막 차원은 색상 채널들의 수와 동일한데, 이 경우에서 이 값은 1이다. 
+
+역자주) MNIST 데이터는 하나의 격자가 0~255 사이의 숫자중 하나의 값으로 정의되어 있다. 
 
 """This way we can think of the input to our neural network being a 2 dimensional space of neurons with size of 28×28 as depicted in the figure.
 우리는 그림에 나타낸 바와 같이 우리의 신경 네트워크는 28 × 28의 크기를 가진 뉴런들(neurons)의 2 차원 공간에 존재하는 우리의 신경망으로 생각할 수 있다. 인에 입력 생각할 수있는이 방법."""
@@ -45,7 +47,7 @@ image072
 
 
 There are two basic principles that define convolution neural networks: the filters and the characteristic maps. These principles can be expressed as groups of specialized neurons, as we will see shortly. But first, we will give a short description of these two principles given their importance in CNN’s.
-컨볼루션 뉴럴 네트워크를 정의하는 두 가지 기본 원칙이 있다:필터 및 특성 맵. 이러한 원칙들은 특수화된 뉴런의 그룹으로 표현 될 수 있다. 우리는 이를 짧게나마 볼 것이다. 하지만 먼저, 우리는 CNN의 중요한 이들 두 가지 원칙에 대한 간단한 설명을 제공 할 것이다.
+컨볼루션 뉴럴 네트워크를 정의하는 두 가지 기본 원칙이 있다: 필터 및 특성 맵(characteristic maps). 이러한 원칙들은 특수화된 뉴런의 그룹으로 표현 될 수 있다. 우리는 이를 짧게나마 볼 것이다. 하지만 먼저, 우리는 CNN의 중요한 이들 두 가지 원칙에 대한 간단한 설명을 제공 할 것이다.
 
 Intuitively, we could say that the main purpose of a convolutional layer is to detect characteristics or visual features in the images, think of edges, lines, blobs of color, etc. This is taken care of by a hidden layer that is connected by to input layer that we just discussed. In the case of CNN’s, in which we are interested, the input data is not fully connected to the neurons of the first hidden layer; this only happens in a small localized space in the input neurons that store the pixels values of the image. This can be visualized as follows:
 직관적으로, 우리는 컨볼루셔널 레이어(Convolutional Layer)의 주요 목적은, 이미지의 특성이나 시각적 특징을 검출이에 의해 연결되어 숨겨진 레이어에 의해 처리되는 등 가장자리, 선, 색의 얼룩, 생각하는 것을 말할 수 있습니다 우리가 논의 입력 층. CNN의 우리가 관심이있는 경우, 입력 데이터는 제 은닉층의 뉴런 완전히 연결되지; 이것은 이미지의 픽셀 값을 저장하는 입력 뉴런의 작은 국부적 공간에서 일어난다. 이는 다음과 같이 시각화 될 수있다 :
@@ -53,10 +55,10 @@ Intuitively, we could say that the main purpose of a convolutional layer is to d
 image074
 
 To be more precise, in the given example each neuron of our hidden layer is connected with a small 5×5 region (hence 25 neurons) of the input layer.
-더 정확하게 하기 위해서, 주어진 예제에서 우리의 은닉층(hidden layer)의 각 뉴런은 입력 층(input layer)의 작은 5 × 5 영역 (따라서 25 뉴런)에 접속되어있다.
+더 정확하게 하기 위해서, 주어진 예제에서 우리의 은닉층(hidden layer)의 각 뉴런은 입력 층(input layer)의 작은 5 × 5 영역 (따라서 25 뉴런)에 연결되어있다.
 
 We can think of this being a window of size 5×5 that passes over the entire input layer of size 28×28 that contains the input image. The window slides over the entire layer of neurons. For each position of the window there is a neuron in the hidden layer that processes that information.
-우리는이 입력 이미지를 포함하는 28 × 28 크기의 전체 입력 층 통과 크기 5 × 5 윈도우 인 생각할 수있다. 창은 뉴런의 전체 층 위에 슬라이드. 윈도우의 각 위치 정보를 처리 은닉층의 뉴런있다.
+우리는 입력 이미지를 포함하는 크기 28x28의 전체 입력층을 통과시키는 크기 5x5의 창을 생각할 수 있다. 창의 각 위치에 대해서, 정보를 처리하는 한 개의 뉴런이 은닉 층에 있다.
 
 We can visualize this by assuming that the window starts in the top left corner of the image; this provides the information to the first neuron of the hidden layer.  The window is then slid right by one pixel; we connect this 5×5 region with the second neuron in the hidden layer. We continue like this until the entire space from top to bottom and from left to right has been convered by the window.
 우리는 창 이미지의 왼쪽 상단에서 시작한다고 가정하여이를 시각화 할 수 있습니다; 이것은 숨겨진 레이어의 첫 번째 뉴런에 정보를 제공한다. 창은 하나의 픽셀에 의해 오른쪽으로 슬라이드; 우리는 숨겨진 레이어에서 두 번째 신경 세포와이 5 × 5 영역을 연결합니다. 우리는 위에서 아래로 전체 공간까지 이런 식으로 계속 왼쪽에서 오른쪽 창에 의해 변환 된 것되었습니다.
