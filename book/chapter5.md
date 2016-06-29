@@ -1,10 +1,10 @@
 5. MULTI-LAYER NEURAL NETWORKS IN TENSORFLOW
 
 In this chapter I will program, with the reader, a simple Deep Learning neural network using the same MNIST digit recognition problem of the previous chapter.
-이 장에서 나는 독자, 이전 장에 다룬 바 있는 MNIST 숫자 인식 문제를 이용하여 간단한 형태의 딥러닝 신경망을 프로그래밍 하고자 한다.
+이 장에서 나는 독자, 이전 장에 다룬 바 있는 MNIST 숫자 인식 문제를 이용하여 간단한 형태의 딥러닝 신경망을 프로그래밍 할 것이다.
 
 As I have advanced, a Deep Learning neural network consists of several layers stacked on top of each other. Specifically, in this chapter we will build a convolutional network, this is, an archetypal example of Deep Learning. Convolution neural networks were introduced and popularized in 1998 by Yann LeCunn and others. These convolutional networks have recently led state of the art performance in image recognition; for example: in our case of digit recognition they achieve an accuracy higher than 99%.
-이전에 언급한 바 있지만, 딥러닝 뉴럴 네트워(Deep Learning Neural Network)은 겹겹이 쌓인 여러 층의 레이어(layer)로 이루어져있다. 특별하게 이번 장에서 우리는 딥러닝의 전형적인 예로 컨볼루션 뉴럴 네트웍(Convolutional Neural Network)을 구축할 것이다. 컨볼루션 뉴럴 네트웍은 Yann LeCunn과 그의 동료들에 의해서 1998년에 소개되고 대중화되었다. 이 컨볼루션 뉴럴 네트웍은 최근 이미지 인식에서 최고의 성능을 보이고 있다; 예를 들면 앞에서 사용한 숫자 인식 문제에서 그들은 99% 이상의 정확도를 달성했다.
+이전에도 언급한 바 있지만, 딥러닝 뉴럴 네트워(Deep Learning Neural Network)은 겹겹이 쌓인 여러 층의 레이어(layer)로 이루어져있다. 특별하게 이번 장에서 우리는 딥러닝의 전형적인 예로 컨볼루션 뉴럴 네트웍(Convolutional Neural Network)을 구축할 것이다. 컨볼루션 뉴럴 네트웍은 Yann LeCunn과 그의 동료들에 의해서 1998년에 소개되고 대중화되었다. 이 컨볼루션 뉴럴 네트웍은 최근 이미지 인식에서 최고의 성능을 보이고 있다; 예를 들면 앞에서 사용한 숫자 인식 문제에서 그들은 99% 이상의 정확도를 달성했다.
 
 In the rest of this chapter, I will use an example code as the backbone, alongside which I will explain the two most important concepts of these networks: convolutions and pooling without entering in the details of the parameters, given the introductory nature of this book. However, the reader will be able to run all the code and I hope that it will allow you understand to global ideas behind convolutional networks.
 이 장의 나머지에서, 나는 기본뼈대(backbone)로 하나의 예제 코드를 사용할 것이다. 그와 동시에 나는 이 네트워크의 두가지 가장 중요한 개념들을 설명할 것이다: 매개변수들에 대한 상세한 설명없이 Convolution과 Pooling에 대해서 말이다. 그러나 독자는 모든 코드를 실행할 수 있고, 나는 당신이 컨볼루셔널 네트워크 뒤에 숨겨져있는 아이디어(Global Ideas)를 이해할 수 있기를 희망한다.
@@ -66,27 +66,27 @@ We can visualize this by assuming that the window starts in the top left corner 
 image076
 
 Analyzing the concrete case that we have proposed, we observe that given an input image of size 28×28 and a window of size 5×5 leads to a 24×24 space of neurons in the first hidden layer due to the fact we can only move the window 23 times down and 23 times to the right before hitting the bottom right edge of the input image. This assumes that window is moved just 1 pixel each time, so the new window overlaps with the old one expect in line that has just advanced.
-우리가 제안했던 구체적인 사례를 분석하는 것에 대해서, 우리는 사실에 기인 28 × 28크기의 입력 이미지와 5x5크기의 창으로 주어진 상기 제 은닉층 뉴런의 24 × 24 공간 크기가 5 × 5의 리드 창 주어진 관찰 우리는 단지 수 입력 화상의 우측 하단 모서리를 치기 전에 창을 오른쪽 아래 23 번, 23 번 이동한다. 이 창은 단지 1 픽셀마다 이동하는 것으로 가정하기 때문에 새 창이 이전 단지 고급 라인에 기대와 겹칩니다.
+우리가 제안했던 구체적인 사례를 분석하는 것에 대해서, 우리는 주어진 28 × 28크기의 입력 이미지와 5x5크기의 창이 우리가 창을 입력 이미지의 오른쪽 아래 모서리에 도달하기 전까지 아래로 23번, 오른쪽으로 23번 이동한다는 사실에 기인하여 첫번째 은닉층에 있는 24 × 24 공간 크기의 뉴런들로 이어짐을 관찰한다. 이것은 창이 각 시간별로 1 픽셀씩 이동하고, 한 단계 이동했을때의 새로운 창은 이전의 것과 겹쳐지게 배치되도록 나타난다.
 
 It is, however, possible to move more than 1 pixel at a time in a convolution layer, this parameter is called the ‘stride’ length. Another extension is to pad the edges with zeroes (or other values) so that the window can slide over the edge of the image, which may lead to better results. The parameter to control this feature is know as padding [39], with which you can determine the size of the padding. Given the introductory nature of the book we will not go into further detail about these two parameters.
-그것은 컨볼루션 레이어에서 한 번에 1 개 이상의 화소를 이동하는 것이 가능하지만, 이 파라미터는 "스트라이드"길이라고한다. 윈도우가 더 좋은 결과로 이어질 수있는 이미지의 가장자리 위로 밀어 수 있도록 또 다른 확장 패드에 제로 (또는 다른 값)와 가장자리입니다. 이 기능을 제어하는​​ 파라미터는 패딩의 크기를 결정할 수있는 패딩 [39]으로 알고있다. 우리는이 두 가지 매개 변수에 대한 자세한 세부 사항으로 가지 않을 것이다 책의 소개 성격을 감안할 때.
+그렇지만 컨볼루션 레이어에서 한 번에 1픽셀 이상 이동하는 것이 가능하다. 이때 이 매개변수는 "보폭(stride)"길이라고 한다. 다른 확장은 윈도우가 이미지 가장자리를 지나치도록 이동할 수 있기 때문에, 넘치는 부분에 대해서 0(또는 다른 값으로) 가장자리를 채우는것이다. 이는 더 좋은 결과로 이어질수도 있다. 이 기능을 조절하기 위한 매개변수는 패딩(padding)[39]으로 알려져 있는데, 이는 계산할 수 있다.  책의 주어진 성격상 두 가지 매개변수에 대한 자세한 내용은 다루지 않을 것이다.
 
 Given our case of study, and following the formalism of the previous chapter, we will need a bias value b and a 5×5 weight matrix W to connect the neurons of the hidden layer with the input layer. A key feature of a CNN is that this weight matrix W and bias b are shared between all the neurons in the hidden layer; we use the same W and b for neurons in the hidden layer. In our case that is 24×24 (576) neurons. The reader should be able to see that this drastically reduces the amount weight parameters that one needs when compared to a fully connected neural network. To be specific, this reduces from 14000 (5x5x24x24) to just 25 (5×5) due to the sharing of the weight matrix W.
-연구의 우리의 경우 감안할 때, 이전 장에서의 형식주의에 따라, 우리는 입력 층과 은닉층의 뉴런을 연결하는 바이어스 값 b를 5 × 5 중량 행렬 W가 필요합니다. CNN과의 주요 기능이 가중치 행렬 W와 바이어스 b는 은닉층의 모든 신경 세포간에 공유된다는 것이다; 우리는 은닉층 뉴런에 대해 동일한 W와 b를 사용합니다. 우리의 경우 그 24 × 24 (576) 뉴런이다. 독자는이 대폭 완전히 연결된 신경망에 비해 하나의 필요한 양 가중치 파라미터를 감소시키는 것으로 볼 수있을 것이다. 즉,이 14000 (5x5x24x24)에서 감소 단지 25 (5 × 5)으로 인해 가중치 매트릭스 (W)의 공유에
+주어진 예제(our case of study)와 이전 장에서의 논리에 따라서, 우리는 입력층과 은닉층의 뉴런을 연결하는 바이어스 값 b와 5 × 5 크기의 가중치 행렬 W가 필요하다. CNN의 주요 기능은 이 가중치 행렬 W와 바이어스 b가 은닉층의 모든 뉴런들 사이에 공유된다는 것이다; 우리는 동일한 W와 b를 은닉층에 있는 뉴런들에 대해서 사용한다. 우리의 케이스에서는 24x24(576개의) 뉴런들이 있다. 독자는 완벽히 연결된 뉴럴 네트워크(neural network)와 비교했을때 필요한 가중치 매개변수의 양이 대폭 감소했음을 볼 수 있어야만 한다. 더 자세히하면, 이것은 가중치 행렬 W를 공유하기에 14000(5x5x24x24)개에서 25(5x5)개로 줄어든다.
 
 This shared matrix W and the bias b are usually called a kernel or filter in the context of CNN’s. These filters are similar to those used image processing programs for retouching images, which in our case are used to find discriminating features. I recommend looking at the examples found in the GIMP [40] manual to get a good idea on how process of convolution works.
-이 공유 행렬 W 바이어스 B는 일반적 CNN의 컨텍스트에서 커널 또는 필터라고한다. 이 필터는 우리의 경우 식별 기능을 찾는 데 사용되는 리터칭 이미지에 대한 그 사용 이미지 처리 프로그램과 유사합니다. 나는 컨볼 루션 작품의 방법 과정에 대한 좋은 아이디어를 얻을 수있는 GIMP [40] 설명서에있는 예제를보고하는 것이 좋습니다.
+이 공유된 행렬 W와 바이어스 B는 일반적 CNN에서 커널(kernel) 또는 필터(filter)로 부른다. 이 필터는 리터칭 이미지들에 대해서 이미지 처리 프로그램들에서 사용되는 이들과 유사하다. 우리의 경우에서 이것은 이미지에서 특징적인 부분들을 찾는데 사용된다. 나는 컨볼루션 처리가 어떻게 이루어지는지에 대한 좋은 아이디러를 어기 위해서 GIMP[40] 매뉴얼에서 발견되는 예제들을 찾아보기를 강력하게 추천한다.
 
 A matrix and a bias define a kernel. A kernel only detects one certain relevant feature in the image so it is, therefore, recommended to use several kernels, one for each characteristic we would like to detect. This means that a full convolution layer in a CNN consists of several kernels.  The usual way of representing several kernels is as follows:
-행렬과 바이어스는 하나의 커널(kernel)을 정의한다. 하나의 커널은 단지 이미지에서 하나의 확실한 특정 관련 값(feature)을 검출한다. 그러므로 여러개의 커널들을 사용하는 것을 추천한다. 각각의 특성에 대해 하나, 이는 CNN에서 완전 컨볼루션 레이어가  여러 가지 커널로 구성되어 있다는 것을 의미한다. 몇 가지 커널을 표현하는 일반적인 방법은 다음과 같다.
+행렬과 바이어스는 하나의 커널(kernel)을 정의한다. 하나의 커널은 단지 이미지에서 하나의 확실한 특정 관련 값(feature)을 검출한다. 그러므로 여러개의 커널들을 사용하는 것을 추천한다. 각각의 특성에 대해 하나, 이는 CNN에서 완전 컨볼루션 레이어가  여러 가지 커널로 구성되어 있다는 것을 의미한다. 몇몇 커널을 표현하는 일반적인 방법은 다음과 같다.
 
 image078
 
 The first hidden layer is composed by several kernels. In our example, we use 32 kernels, each one defined by a 5×5 weight matrix W and a bias b that is also shared between the neuros of the hidden layer.
-첫 번째 숨겨진 층은 여러 가지 커널에 의해 구성되어있다. 우리의 예에서 우리는 32 커널, 5 × 5 중량 행렬 W에 의해 정의 된 각각 그 또한 숨겨진 층의 뉴 로스간에 공유 B A 바이어스를 사용합니다.
+첫 번째 은닉층은 여러 가지 커널에 의해 구성되어 있다. 우리의 예에서 32개의 커널이고, 그 각각은 은닉층 뉴런들 사이에서 공유되는 5×5 가중치 행렬 W와 바이어스 b에 의해 정의된다.
 
 In order to simplify the code, I define the following two functions related to the weight matrix W and bias b:
-코드를 단순화하기 위해, I은 중량 매트릭스 W​​ 바이어스 (B)과 관련된 두 개의 함수를 정의
+코드를 단순화하기 위해, 나는 가중치 행렬 W와바이어스 b와 관련된 다음의 두 함수를 정의한다.:
 
 ```
 def weight_variable(shape):
@@ -99,26 +99,26 @@ def bias_variable(shape):
 ```
 
 Without going into the details, it is customary to initialize the weights with some random noise and the bias values slightly positive.
-세부 사항을 다루지 않고, 몇몇 임의의 노이즈 값을 가지고 가중치를 초기화 하는 것과 작은 양의 수로 바이어스 값들로 초기화 하는 것이 관례이다.
+간략하게 설명하자면, 몇몇 임의의 노이즈 값을 가지고 가중치를 초기화 하는 것과 작은 양수(slightly positive)로 바이어스 값들로 초기화 하는 것이 관례이다.
 
 In addition to the convolution layers that we just described, it is usual for the convolution layer to be followed by a so called pooling layer. The pooling layer simply condenses the output from the convolutional layer and creates a compact version of the information that have been put out by the convolutional layer. In our example, we will use a 2×2 region of the convolution layer of which we summarize the data into a single point using pooling:
-컨벌루션 층은 소위 풀링 층 따라야하는 방금 설명한 컨벌루션 층 이외에, 그것은 일반적이다. 풀링 층은 단순히 길쌈 층의 출력을 응축하고 길쌈 층에 의해 넣어 한 정보의 컴팩트 버전을 만듭니다. 이 예에서, 우리는 우리가 풀링을 사용하여 단일 점으로 데이터를 요약하는 회선의 층의 2 × 2 영역을 사용한다 :
+우리가 방금 묘사했던 컨벌루션 레이어에 더하여, 소위 풀링 레이어(pooling layer)라 불리우는 것이 컨볼루션 레이어 다음에 나오는 것이 일반적이다. 풀링 레이어는 단순히 컨볼루션 레이어로 부터의 출력을 응축하고, 컨볼루셔널 레이어에서 나오는 정보의 축약된 정보를 생성한다. 이 예에서, 우리는 우리가 풀링(pooling)을 사용하여 단일 점으로 데이터를 요약하는 것 중에 컨볼루션 레이어의 2×2 영역을 사용할 것이다. :
 
 image080
 
 There are several ways to perform pooling to condense the information; in our example we will use the method called max-pooling. This consists of condensing the information by just retaining the maximum value in the 2×2 region considered.
-정보를 응축 풀링을 수행하는 방법은 여러 가지가 있습니다; 우리의 예에서 우리는 최대-풀링이라는 방법을 사용합니다. 이것은 단지 고려하는 2 × 2 영역에서의 최대 값을 유지하여 집광 정보로 구성된다.
+정보를 응축하는 풀링을 수행하는 방법은 여러 가지가 있다; 우리의 예에서 우리는 최대-풀링(max-pooling)이라는 방법을 사용할 것이다. 이것은 염두해두고 있는 2 × 2 영역에서의 최대 값을 유지하도록 정보를  모으는 것으로 구성된다.
 
 As mentioned above, the convolutional layer consists of many kernels and, therefore, we will apply max-pooling to each of those separately. In general, there can be many layers of pooling and convolutions:
-상술 한 바와 같이, 컨볼루션 레이어는 수 많은 커널(kernel)들로 구성되고, 따라서 이들 각각에 개별적으로 맥스 풀링(max-pooling)을 적용할 것이다. 일반적으로 풀링 및 컨볼루션들의 많은 층들이 있을 수 있다 :
+위에서 언급한 바와 같이, 컨볼루션 레이어는 수 많은 커널(kernel)들로 구성되고, 따라서 이들 각각에 개별적으로 맥스 풀링(max-pooling)을 적용할 것이다. 일반적으로 풀링과 컨볼루션들의 많은 층들이 있을 수 있다 :
 
 image082
 
 This leads that the 24×24 convolution result is transformed to a 12×12 space by the max-pooling layer that correspond to the 12×12 tiles, of which each originates from a 2×2 region. Note that, unlike in the convolutional layer, the data is tiled and not created by a sliding window.
-이 24 × 24 컨볼 루션 결과는 각각 2 × 2 영역으로부터 유래 한의 12 × 12 타일에 대응하는 MAX-풀링 층에 의해 12 × 12 공간으로 변환되는 것으로 이끈다. 길쌈 층 달리, 데이터는 타일 및 슬라이딩 윈도우에 의해 생성되지 않습니다 있습니다.
+이것은 24×24 컨볼루션의 결과가 12x12 타일과 동일한 맥스풀링 레이어에 의해 12×12 공간으로 변환되는 것으로 나타나지는데, 이는 각각이 2x2 영역으로부터 나온 것이다. 컨볼루션 레이어에서 달리, 데이터는 격자화되었지만 슬라이딩 윈도우에 의해 생성되지 않았음을 주목해야한다.
 
 Intuitively, we can explain max-pooling as finding out if a particular feature is present anywhere in the image, the exact location of the feature is not as important as the relative location with respect to others features.
-특정한 특징 어디서나 이미지에 존재하는 경우 직관적으로, 우리가 알아내는 최대로 풀링을 설명 할 수 있으며, 기능의 정확한 위치는 다른 기능에 대하여 상대적인 위치만큼 중요하지 않다.
+직관적으로 우리는 맥스 풀링을 만일 특별한 특징이 이미지의 어디에서나 존재한다면, 특징의 정확한 위치는 다른 특징들에 대하여 상대적인 위치만큼 중요하지 않다는 점을 증명하므로써 설명할 수 있다.
 
 * Implementation of the model
 * 모델의 구현
@@ -138,7 +138,7 @@ def max_pool_2x2(x):
 ```
 
 Now it is time to implement the first convolutional layer followed by a pooling layer. In our example we have 32 filters, each with a window size of 5×5. We must define a tensor to hold this weight matrix W with the shape [5, 5, 1, 32]: the first two dimensions are the size of the window, and the third is the amount of channels, which is 1 in our case. The last one defines how many features we want to use. Furthermore, we will also need to define a bias for every of 32 weight matrices. Using the previously defined functions we can write this in TensorFlow as follows:
-이제 풀링 층 뒤에 제 컨벌루션 층을 구현하는 시간이다. 우리의 예에서 우리는 5 × 5의 창 크기 (32) 필터, 각이있다. 우리는 형상을 가진 (W)이 가중치 행렬을 보유 텐서를 정의한다 [5, 5, 1, 32] : 처음 두 치수는 윈도우의 크기이며, 세 번째는 우리의 경우 1이고 채널의 양이며 . 마지막 하나는 우리가 사용하는 방법을 많은 기능을 정의합니다. 또한, 우리는 또한 32 중량 행렬의 모든에 대한 편견을 정의해야합니다. 다음과 같이 우리가 TensorFlow이 쓸 수 이전에 정의 된 함수를 사용 :
+이제 풀링레이어 뒤에 제 컨벌루션 레이어를 구현하는 시간이다. 우리의 예에서 우리는 각각이 5×5의 창 크기를 가진 32개의 필터를 가지고 있다. 우리는 [5,5,1,32]의 모양을 가진 가중치 행렬 W를 보유한 텐서를 정의해야만 한다.: 처음 두 차원은 윈도우의 크기이며, 세번째는 채널의 크기이며, 우리의 경우에서는 1을 사용한다. 마지막 하나는 우리가 수많은 기능들을 어떻게 사용하기를 원하는지를 정의한다. 더욱이 우리는 32개의 가중치 행렬의 모두에 대해서 바이어스를 정의할 필요 또한 있을 것이다. 이전에 정의했던 함수들을 사용하여, 다음과 같이 우리는 텐서플로우에서 이것을 쓸 수 있다.:
 
 ```
 W_conv1 = weight_variable([5, 5, 1, 32])
@@ -146,10 +146,10 @@ b_conv1 = bias_variable([32])
 ```
 
 The ReLU (Rectified Linear unit) activation function has recently become the default activation function used in the hidden layers of deep neural networks. This simple function consist of returning max(0, x), so it return 0 for negative values and x otherwise.  In our example, we will use this activation function in the hidden layers that follow the convolution layers.
-ReLU (정류 선형 장치) 활성화 기능은 최근에 깊은 신경망의 숨겨진 레이어에 사용되는 기본 활성화 기능이되고있다. 이 간단한 함수는 음수 값 0을 반환하고, 그렇지 않으면 X, 그것 때문에 최대 (X 0) 반환로 구성되어 있습니다. 우리의 예에서 우리는 컨볼 루션 층을 따라 숨겨진 층이 활성화 함수를 사용합니다.
+ReLU (Rectified Linear Unit) 활성화 함수는 최근에 깊은 신경망의 은닉층에 사용되는 기본 활성화 함수로 되고있다. 이 간단한 함수는 max(0,x)의 결과값을 돌려주는 것으로 구성되어 있는데, 만일 x값이 음수 값일 경우 0을 반환하고, 그렇지 않으면 x값을 반환한다. 우리의 예에서 우리는 컨볼루션 레이어를 따라 은닉층에서 이것을 활성화 함수로 사용할 것이다.
 
 The code that we are writing will first apply the convolution to the input images x_image, which returns the results of the convolution of the image in a 2D tensor W_conv1 and then it sums the bias to which finally the ReLU activation function is applied. As a final step, we apply max-pooling to the output:
-우리는 먼저 2D 텐서 W_conv1의 화상의 컨볼 루션의 결과를 반환 입력 이미지 x_image로 콘볼 루션을 적용 작성되고이 바이어스를 합산 코드는 마지막 ReLU 활성화 함수를 적용한다. 마지막 단계로, 우리는 출력에 최대-풀링을 적용
+우리가 쓰고 있는 코드는 첫번째로 컨볼루션을 입력 이미지 x_image에 적용할 것이다. 이는 2차원 텐서 W_conv1을 사용하여 이미지의 컨볼루션의 결과들을 얻고, 여기에 바이어스를 더한 후 최종적으로 ReLU 활성화 함수가 적용될 것이다. 마지막 단계로, 우리는 출력에 최대-풀링을 적용한다.
 
 ```
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
@@ -157,7 +157,7 @@ h_pool1 = max_pool_2x2(h_conv1)
 ```
 
 When constructing a deep neural network, we can stack several layers on top of each other. To demonstrate how to do this, I will create a secondary convolutional layer with 64 filters with a 5×5 window. In this case we have to pass 32 as the number of channels that we need as that is the output size of the previous layer:
-딥 뉴럴 네트워크를 구성 할 때, 우리는 서로의 상단에 여러 레이어 스택 수 있습니다. 이 작업을 수행하는 방법을 설명하기 위해, 나는 5 × 5 창 (64) 필터와 보조 길쌈 레이어를 생성합니다. 이 경우에 우리는 그 이전 층의 출력 크기이기 때문에 필요한 채널 수로 (32)을 통과해야한다 :
+딥 뉴럴 네트워크를 구성 할 때, 우리는 각 층의 상단에 여러 층을 쌓을 수 있다. 어떻게 이 작업을 하는지에 대해서 설명하기 위해, 나는 5×5크기의 창을 가진 64개의 필터로 구성된 두번째 컨볼루션 레이어를 생성할 것이다. 이 경우에서 우리는 그 이전 층의 출력 크기로써 우리에게 필요한 채널의 수로써 32개를 통과시켜야만 한다.:
 
 ```
 W_conv2 = weight_variable([5, 5, 32, 64])
