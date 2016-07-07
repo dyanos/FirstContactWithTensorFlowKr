@@ -1,13 +1,14 @@
 5. MULTI-LAYER NEURAL NETWORKS IN TENSORFLOW
 
 In this chapter I will program, with the reader, a simple Deep Learning neural network using the same MNIST digit recognition problem of the previous chapter.
-이 장에서 나는 이전 장에 다룬 바 있는 MNIST 숫자 인식 문제를 이용하여 간단한 형태의 딥러닝 뉴럴 네트워크(a simple Deep Learning Neural Network)를 프로그래밍 할 것이다.
+
+이번 장에서 나는 이전 장에 다룬 바 있는 MNIST 숫자 인식 문제를 이용하여 간단한 형태의 딥러닝 뉴럴 네트워크 (Deep Learning Neural Network)를 프로그래밍 할 것이다.
 
 As I have advanced, a Deep Learning neural network consists of several layers stacked on top of each other. Specifically, in this chapter we will build a convolutional network, this is, an archetypal example of Deep Learning. Convolution neural networks were introduced and popularized in 1998 by Yann LeCunn and others. These convolutional networks have recently led state of the art performance in image recognition; for example: in our case of digit recognition they achieve an accuracy higher than 99%.
-이전에도 언급한 바 있지만, 딥러닝 뉴럴 네트워(Deep Learning Neural Network)은 겹겹이 쌓인 여러 층의 레이어(layer)로 이루어져있다. 특별하게 이번 장에서 우리는 딥러닝의 전형적인 예의 하나인 컨볼루션 뉴럴 네트워크(Convolutional Neural Network)를 구축할 것이다. 컨볼루션 뉴럴 네트워크는 Yann LeCunn과 그의 동료들에 의해서 1998년에 소개되었고 대중화되었다. 이 컨볼루션 뉴럴 네트워크는 최근 이미지 인식 분야에서 최고의 성능을 보이고 있다; 예를 들면 앞에서 사용한 숫자 인식 문제에서 그것은 99% 이상의 정확도를 달성했다.
+이전에도 언급한 바 있지만, 딥러닝 뉴럴 네트워크(Deep Learning Neural Network)은 겹겹이 쌓인 여러 층의 레이어(layer)로 이루어져있다. 이번 장에서는 특별히 딥러닝의 전형적인 예의 하나인 컨볼루셔널 뉴럴 네트워크 (Convolutional Neural Network)를 구축해 볼 것이다. 컨볼루셔널 뉴럴 네트워크는 Yann LeCunn과 그의 동료들에 의해서 1998년에 소개되어 널리 대중화되었다. 이 컨볼루셔널 뉴럴 네트워크는 최근 이미지 인식 분야에서 최고의 성능을 보이고 있다; 예를 들면 앞에서 사용한 숫자 인식 문제에서 99% 이상의 정확도를 자랑한다.
 
 In the rest of this chapter, I will use an example code as the backbone, alongside which I will explain the two most important concepts of these networks: convolutions and pooling without entering in the details of the parameters, given the introductory nature of this book. However, the reader will be able to run all the code and I hope that it will allow you understand to global ideas behind convolutional networks.
-이 장의 나머지에서 나는 기본뼈대(backbone)로 하나의 예제 코드를 사용할 것이다. 그와 동시에 나는 이 네트워크의 두가지 가장 중요한 개념들을 설명할 것이다: 매개변수들에 대한 상세한 설명없이 Convolution과 Pooling에 대해서 말이다. 그러나 독자는 모든 코드를 실행할 수 있고, 나는 당신이 컨볼루셔널 네트워크 뒤에 숨겨져있는 아이디어(Global Ideas)를 이해할 수 있기를 희망한다.
+이 장의 나머지에서 나는 기본뼈대 (backbone)로 하나의 예제 코드를 사용할 것이다. 그와 동시에 나는 이 네트워크의 두가지 가장 중요한 개념인 컨볼루션 (convolution)과 풀링 (pooling)에 대해서 설명할 것이다. 매개변수들에 대한 상세한 설명은 생략한다. 그러나 독자는 모든 코드를 실행할 수 있고, 컨볼루셔널 네트워크 뒤에 숨겨져있는 아이디어를 이해할 수 있기를 희망한다.
 
 * Convolutional Neural Networks
 * 컨볼루셔널 뉴럴 네트워크
