@@ -41,21 +41,21 @@ Here we changed the input shape to a 4D tensor, the second and third dimension c
 역자주) MNIST 데이터는 하나의 격자가 0~255 사이의 숫자중 하나의 값으로 정의되어 있다. 
 
 This way we can think of the input to our neural network being a 2 dimensional space of neurons with size of 28×28 as depicted in the figure.
-이런 방식으로 우리는 입력을 그림에 나타낸 바와 같이 28 × 28의 크기를 가진 뉴런들(neurons)의 2 차원 공간에 존재하는 우리의 신경망으로 생각할 수 있다. 
+이런 방식으로 우리는 입력을 그림에 나타낸 바와 같이 28 × 28의 크기를 가진 뉴런들(neurons)의 2 차원 공간에 존재하는 우리의 뉴럴 네트워크으로 생각할 수 있다. 
 
 image072
 
 
 There are two basic principles that define convolution neural networks: the filters and the characteristic maps. These principles can be expressed as groups of specialized neurons, as we will see shortly. But first, we will give a short description of these two principles given their importance in CNN’s.
-컨볼루션 뉴럴 네트워크를 정의하는 두 가지 기본 원칙이 있다: 필터 및 특성 맵(characteristic maps). 이러한 원칙들은 특수화된 뉴런의 그룹으로 표현 될 수 있다. 우리는 이를 짧게나마 볼 것이다. 하지만 먼저, 우리는 CNN의 중요한 이들 두 가지 원칙에 대한 간단한 설명을 제공 할 것이다.
+컨볼루션 뉴럴 네트워크를 정의하는 두 가지 기본 원칙이 있다: 필터 및 특성 맵(characteristic maps). 이러한 원칙들은 특수화된 뉴런의 그룹으로 표현 될 수 있다. 우리는 이를 짧게나마 볼 것이다. 하지만 먼저, 우리는 CNN의 중요한 이들 두 가지 원칙에 대한 간단한 설명을 할 것이다.
 
 Intuitively, we could say that the main purpose of a convolutional layer is to detect characteristics or visual features in the images, think of edges, lines, blobs of color, etc. This is taken care of by a hidden layer that is connected by to input layer that we just discussed. In the case of CNN’s, in which we are interested, the input data is not fully connected to the neurons of the first hidden layer; this only happens in a small localized space in the input neurons that store the pixels values of the image. This can be visualized as follows:
-직관적으로, 우리는 컨볼루셔널 레이어(Convolutional Layer)의 주요 목적이 이미지에서 특성이나 시각적 특징을 검출하는 것임을 말해왔다. 예를 들면, 엣지(edges), 선들, 색상의 얼룩(blob)등이다. 이것은 우리가 방금 논의했던 입력층과 연결된 은닉층에 의해서 다루어진다.(is taken care of by) CNN의 경우에서, 우리가 관심이있는 경우에, 입력 데이터는 첫 은닉층의 뉴런들에 완전히 연결되지 않는다. 이것은 단지 이미지의 픽셀 값을 저장하는 입력 뉴런에서 작은 지역적 공간에서 나타난다. 이는 다음과 같이 시각화 될 수 있다 :
+직관적으로, 우리는 컨볼루셔널 레이어(Convolutional Layer)의 주요 목적이 이미지에서 특성이나 시각적 특징을 검출하는 것임을 말해왔다. 예를 들면, 엣지(edges), 선들, 색상의 얼룩(blob)등이다. 이것은 우리가 방금 논의했던 입력층과 연결된 은닉층에 의해서 다루어진다.(is taken care of by) CNN의 경우 입력 데이터는 첫번째 은닉층의 뉴런들과 완전히 연결되어 있지않다. 이것은 단지 이미지의 픽셀 값을 저장하는 입력 뉴런에서 작은 지역적 공간으로 나타난다. 이는 다음과 같이 시각화 될 수 있다 :
 
 image074
 
 To be more precise, in the given example each neuron of our hidden layer is connected with a small 5×5 region (hence 25 neurons) of the input layer.
-더 정확하게 하기 위해서, 주어진 예제에서 우리의 은닉층(hidden layer)의 각 뉴런은 입력 층(input layer)의 작은 5 × 5 영역 (따라서 25 뉴런)에 연결되어있다.
+더 정확하게 하기 위해서, 주어진 예제에서 우리의 은닉층(hidden layer)의 각 뉴런들은 입력 층(input layer)의 작은 5×5 영역 (따라서 25 뉴런)으로 연결되어있다.
 
 We can think of this being a window of size 5×5 that passes over the entire input layer of size 28×28 that contains the input image. The window slides over the entire layer of neurons. For each position of the window there is a neuron in the hidden layer that processes that information.
 우리는 입력 이미지를 포함하는 크기 28x28의 전체 입력층을 통과시키는 크기 5x5의 창을 생각할 수 있다. 창의 각 위치에 대해서, 정보를 처리하는 한 개의 뉴런이 은닉 층에 있다.
